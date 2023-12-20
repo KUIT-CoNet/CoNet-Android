@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/bottom_sheet_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/background_edit_trash"
+    android:clickable="true"
+    android:focusable="true"
+    android:paddingTop="24dp"
+    android:paddingBottom="50dp"
+    app:behavior_hideable="true"
+    app:behavior_peekHeight="50dp"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+    <com.google.android.material.bottomsheet.BottomSheetDragHandleView
+        android:id="@+id/handler_bsdh"
+        android:layout_width="36dp"
+        android:layout_height="3dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:layout_width="36dp"
+        android:layout_height="3dp"
+        android:background="@color/iconDisabled"
+        app:layout_constraintEnd_toEndOf="@id/handler_bsdh"
+        app:layout_constraintStart_toStartOf="@id/handler_bsdh"
+        app:layout_constraintTop_toTopOf="@id/handler_bsdh" />
+
+    <LinearLayout
+        android:id="@+id/edit_ll"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/handler_bsdh"
+        android:orientation="horizontal"
+        android:paddingHorizontal="24dp"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:id="@+id/edit_iv"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:contentDescription="수정"
+            android:src="@drawable/icon_edit" />
+
+
+        <TextView
+            android:id="@+id/edit_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:text="수정"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/trash_ll"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/edit_ll"
+        android:orientation="horizontal"
+        android:paddingHorizontal="24dp"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:id="@+id/trash_iv"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:contentDescription="삭제"
+            android:src="@drawable/icon_trash" />
+
+        <TextView
+            android:id="@+id/trash_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:text="삭제"
+            android:textColor="@android:color/holo_red_light"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

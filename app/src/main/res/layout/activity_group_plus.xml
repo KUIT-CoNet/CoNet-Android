@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="24dp"
+    tools:context=".UI.Group.GroupPlusActivity">
+
+    <ImageView
+        android:id="@+id/close_iv"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:contentDescription="닫기버튼"
+        android:src="@drawable/icon_close"
+        app:layout_constraintBottom_toBottomOf="@id/title_tv"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/title_tv" />
+
+    <TextView
+        android:id="@+id/title_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:fontFamily="@font/pretendard_bold"
+        android:text="모임 추가하기"
+        android:textColor="@color/gray800"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/finish_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/pretendard"
+        android:text="완료"
+        android:textColor="@color/select_enabled"
+        android:textSize="18sp"
+        android:enabled="false"
+        app:layout_constraintBottom_toBottomOf="@id/title_tv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/title_tv" />
+
+    <TextView
+        android:id="@+id/group_name_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:elevation="1dp"
+        android:text="모임 이름"
+        android:textColor="@color/select_focus"
+        app:layout_constraintStart_toStartOf="@id/group_name_til"
+        app:layout_constraintTop_toTopOf="@id/group_name_til" />
+
+    <!--    app:counterTextColor="@color/select_focus"-->
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/group_name_til"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="46dp"
+        app:boxBackgroundMode="filled"
+        app:boxBackgroundColor="@android:color/transparent"
+        app:boxStrokeColor="@color/textfield_stroke"
+        android:paddingTop="24dp"
+        app:counterEnabled="true"
+        app:counterMaxLength="20"
+        app:endIconMode="clear_text"
+        app:errorEnabled="true"
+        app:errorIconDrawable="@drawable/icon_error_end_resize"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title_tv">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/group_name_tf"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:contentDescription="모임이름입력"
+            android:background="@null"
+            android:textSize="18sp"
+            android:fontFamily="@font/pretendard"
+            android:textColor="@color/texthigh" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/group_name_hint_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
+        android:text="모임이름입력"
+        android:textColor="@color/gray200"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@id/group_name_til"
+        app:layout_constraintTop_toTopOf="@id/group_name_til" />
+
+
+    <TextView
+        android:id="@+id/group_picture_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="모임대표 사진"
+        app:layout_constraintStart_toStartOf="@id/group_picture_iv"
+        app:layout_constraintTop_toBottomOf="@id/group_name_til" />
+
+    <ImageView
+        android:id="@+id/group_picture_iv"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_marginTop="8dp"
+        android:adjustViewBounds="true"
+        android:background="@drawable/border_line"
+        android:contentDescription="모임대표사진"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/group_picture_tv" />
+
+    <LinearLayout
+        android:id="@+id/input_picture_ll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="@id/group_picture_iv"
+        app:layout_constraintEnd_toEndOf="@id/group_picture_iv"
+        app:layout_constraintStart_toStartOf="@id/group_picture_iv"
+        app:layout_constraintTop_toTopOf="@id/group_picture_iv">
+
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:contentDescription="모임 사진 추가"
+            android:src="@drawable/icon_image_plus" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="5dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="업로드할 이미지를 첨부해주세요.\n1:1의 정방형 이미지를 추천합니다."
+            android:textColor="@color/gray200" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="26dp" />
+
+        <Button
+            android:id="@+id/image_plus_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:backgroundTint="@color/gray100"
+            android:text="첨부"
+            android:textColor="@color/gray500" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/loading_picture_ll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@id/group_picture_iv"
+        app:layout_constraintEnd_toEndOf="@id/group_picture_iv"
+        app:layout_constraintStart_toStartOf="@id/group_picture_iv"
+        app:layout_constraintTop_toTopOf="@id/group_picture_iv">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="파일이 업로드 되고 있습니다." />
+
+        <ProgressBar
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp" />
+
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

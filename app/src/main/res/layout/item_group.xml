@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/item_cl"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp">
+
+    <ImageView
+        android:id="@+id/item_group_star_iv"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_margin="8dp"
+        android:adjustViewBounds="true"
+        android:src="@drawable/icon_star"
+        android:elevation="3dp"
+        android:contentDescription="즐겨찾기 유무"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@id/item_group_cv"
+        app:layout_constraintTop_toTopOf="@id/item_group_cv" />
+
+    <ImageView
+        android:id="@+id/item_group_star_un_iv"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_margin="8dp"
+        android:adjustViewBounds="true"
+        android:src="@drawable/icon_star_un"
+        android:elevation="3dp"
+        android:contentDescription="즐겨찾기 유무"
+        app:layout_constraintEnd_toEndOf="@id/item_group_cv"
+        app:layout_constraintTop_toTopOf="@id/item_group_cv" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/item_group_cv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:elevation="0dp"
+        android:outlineSpotShadowColor="@color/grayWhite">
+
+        <ImageView
+            android:id="@+id/item_group_iv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:src="@drawable/icon_close"
+            android:contentDescription="모임 사진"
+            android:elevation="0dp"/>
+
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/item_group_title_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:text="예시테스트 작성중입니다. 예시테스트 작성중입니다. 예시테스트 작성중입니다. 예시테스트 작성중입니다. 예시테스트 작성중입니다. 예시테스트 작성중입니다. 예시테스트 작성중입니다. 예시테스트 작성중입니다. 예시테스트 작성중입니다. 예시테스트 작성중입니다. "
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/item_group_cv"
+        android:layout_marginTop="10dp"/>
+
+    <TextView
+        android:id="@+id/new_tag_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:background="@drawable/background_new_tag"
+        android:paddingHorizontal="6dp"
+        android:text="new"
+        android:textColor="@color/purpleMain"
+        android:textSize="10sp"
+        app:layout_constraintStart_toStartOf="@id/item_group_title_tv"
+        app:layout_constraintTop_toBottomOf="@id/item_group_title_tv"
+        android:visibility="invisible"/>
+
+    <TextView
+        android:id="@+id/update_tag_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:background="@drawable/background_update_tag"
+        android:paddingHorizontal="6dp"
+        android:text="update"
+        android:textColor="@color/white"
+        android:textSize="10sp"
+        app:layout_constraintStart_toEndOf="@id/new_tag_tv"
+        app:layout_constraintTop_toBottomOf="@id/item_group_title_tv"
+        android:layout_marginStart="6dp"
+        android:visibility="invisible"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

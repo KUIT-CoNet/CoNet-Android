@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".UI.Group.GroupFragment">
+
+    <TextView
+        android:id="@+id/title_tv"
+        style="@style/TextAppearance.AppCompat.Headline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="26dp"
+        android:text="모임"
+        android:textColor="#242424"
+        android:textSize="26sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/group_count_tv"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_margin="6dp"
+        android:background="@drawable/background_counter"
+        android:gravity="center"
+        android:textColor="@color/purpleMain"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/title_tv"
+        app:layout_constraintStart_toEndOf="@id/title_tv"
+        app:layout_constraintTop_toTopOf="@id/title_tv" />
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/category_tl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/title_tv"
+        app:layout_constraintTop_toBottomOf="@id/title_tv"
+        app:tabGravity="start"
+        app:tabIndicatorColor="@color/purpleMain"
+        app:tabIndicatorHeight="2dp"
+        app:tabMode="fixed"
+        app:tabRippleColor="@android:color/transparent"
+        app:tabSelectedTextColor="@color/texthigh"
+        app:tabTextAppearance="@style/tabTextSizeBold"
+        app:tabTextColor="@color/textDisabled" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/category_tl">
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/group_list_vp"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:padding="12dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/category_tl" />
+
+    </androidx.core.widget.NestedScrollView>
+
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/group_plus_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:background="@color/grayWhite"
+        android:backgroundTint="@color/grayWhite"
+        android:clickable="false"
+        android:contentDescription="모임추가하기"
+        android:outlineSpotShadowColor="@android:color/transparent"
+        android:src="@drawable/icon_plus_small"
+        app:layout_constraintBottom_toBottomOf="@id/main_fab"
+        app:layout_constraintEnd_toEndOf="@id/main_fab"
+        app:layout_constraintStart_toStartOf="@id/main_fab"
+        app:layout_constraintTop_toTopOf="@id/main_fab" />
+
+    <TextView
+        android:id="@+id/group_plus_fab_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="11dp"
+        android:elevation="1dp"
+        android:fontFamily="@font/pretendard"
+        android:text="모임추가"
+        android:textColor="@color/grayWhite"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@id/group_plus_fab"
+        app:layout_constraintEnd_toStartOf="@id/group_plus_fab"
+        app:layout_constraintTop_toTopOf="@id/group_plus_fab" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/group_enroll_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:background="@color/grayWhite"
+        android:backgroundTint="@color/grayWhite"
+        android:clickable="false"
+        android:outlineSpotShadowColor="@android:color/transparent"
+        android:src="@drawable/icon_enroll"
+        app:layout_constraintBottom_toBottomOf="@id/main_fab"
+        app:layout_constraintEnd_toEndOf="@id/main_fab"
+        app:layout_constraintStart_toStartOf="@id/main_fab"
+        app:layout_constraintTop_toTopOf="@id/main_fab" />
+
+    <TextView
+        android:id="@+id/group_enroll_fab_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="11dp"
+        android:elevation="1dp"
+        android:fontFamily="@font/pretendard"
+        android:text="모임참여"
+        android:textColor="@color/grayWhite"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@id/group_enroll_fab"
+        app:layout_constraintEnd_toStartOf="@id/group_enroll_fab"
+        app:layout_constraintTop_toTopOf="@id/group_enroll_fab" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/main_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="24dp"
+        android:background="@color/purpleMain"
+        android:backgroundTint="@color/purpleMain"
+        android:outlineSpotShadowColor="@android:color/transparent"
+        android:src="@drawable/icon_plus"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <View
+        android:id="@+id/fab_background_v"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#CC000000"
+        android:clickable="false"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

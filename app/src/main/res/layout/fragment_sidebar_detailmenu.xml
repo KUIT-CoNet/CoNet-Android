@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 대기 중 약속 프래그먼트 -->
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/gray50">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/gray50">
+        <ImageView
+            android:id="@+id/btn_close"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginTop="85dp"
+            android:layout_marginLeft="25dp"
+            android:src="@drawable/btn_xclose"/>
+
+        <TextView
+            android:id="@+id/tv_oncalltitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/btn_close"
+            android:layout_marginTop="86dp"
+            android:layout_marginLeft="101dp"
+            android:fontFamily="@font/pretendard_bold"
+            android:textSize="18sp"
+            android:textColor="@color/gray800"
+            android:text="대기중인 약속"/>
+
+
+        <FrameLayout
+            android:id="@+id/fl_oncallpromise"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/tv_oncalltitle"
+            android:layout_marginTop="28dp"
+            android:layout_marginHorizontal="24dp"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>

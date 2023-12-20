@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="18dp">
+
+    <LinearLayout
+        android:id="@+id/close_ibtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:contentDescription="닫기"
+            android:src="@drawable/icon_close" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/info_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:fontFamily="@font/pretendard_bold"
+        android:gravity="start"
+        android:text="전달받은 초대코드를\n입력해주세요."
+        android:textColor="@color/texthigh"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="@id/input_code_til"
+        app:layout_constraintTop_toBottomOf="@id/close_ibtn" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/input_code_til"
+        android:layout_width="191dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="33dp"
+        android:layout_marginTop="66dp"
+        app:boxBackgroundColor="@android:color/transparent"
+        app:boxBackgroundMode="filled"
+        app:boxStrokeColor="@color/textfield_stroke"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/info_tv">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/input_code_tf"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:contentDescription="참여코드입력"
+            android:gravity="center"
+            android:paddingVertical="6dp"
+            android:textSize="16sp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/input_code_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="참여코드입력"
+        android:textColor="@color/gray200"
+        app:layout_constraintBottom_toBottomOf="@id/input_code_til"
+        app:layout_constraintEnd_toEndOf="@id/input_code_til"
+        app:layout_constraintStart_toStartOf="@id/input_code_til"
+        app:layout_constraintTop_toTopOf="@id/input_code_til" />
+
+    <ImageView
+        android:id="@+id/error_iv"
+        android:layout_width="8dp"
+        android:layout_height="8dp"
+        android:layout_marginTop="6dp"
+        android:contentDescription="오류"
+        android:src="@drawable/icon_error_end"
+        android:visibility="invisible"
+        app:layout_constraintStart_toStartOf="@id/input_code_til"
+        app:layout_constraintTop_toBottomOf="@id/input_code_til" />
+
+    <TextView
+        android:id="@+id/error_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:text="올바른 초대코드를 입력해주세요"
+        android:textColor="#D7260D"
+        android:textSize="10sp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@id/error_iv"
+        app:layout_constraintStart_toEndOf="@id/error_iv"
+        app:layout_constraintTop_toTopOf="@id/error_iv" />
+
+
+    <Button
+        android:id="@+id/enroll_btn"
+        android:layout_width="191dp"
+        android:layout_height="54dp"
+        android:layout_marginHorizontal="33dp"
+        android:layout_marginTop="32dp"
+        android:backgroundTint="@color/select_btn"
+        android:enabled="false"
+        android:text="참여하기"
+        android:textColor="@color/grayWhite"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/input_code_til" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

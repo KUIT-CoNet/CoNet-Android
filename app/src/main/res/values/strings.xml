@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">CoNet</string>
+
+    <string name="kakao_app_key">ca80d7d552460493e7e06a29b6eafb06</string>
+    <!-- AndroidManifest.xml에서 사용 -->
+    <string name="kakao_app_key2">kakaoca80d7d552460493e7e06a29b6eafb06</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="navigation_drawer_open">Open</string>
+    <string name="navigation_drawer_close">Close</string>
+
+    <string name="plan_name_length">%1$d/20</string>
+</resources>

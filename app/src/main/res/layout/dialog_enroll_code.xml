@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="18dp">
+
+    <LinearLayout
+        android:id="@+id/close_ibtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:contentDescription="닫기"
+            android:src="@drawable/icon_close" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/info_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:fontFamily="@font/pretendard_bold"
+        android:gravity="start"
+        android:text="초대코드가\n발급되었어요."
+        android:textColor="@color/texthigh"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="@id/input_code_til"
+        app:layout_constraintTop_toBottomOf="@id/close_ibtn" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/input_code_til"
+        android:layout_width="191dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="33dp"
+        android:layout_marginTop="66dp"
+        app:boxBackgroundColor="@android:color/transparent"
+        app:boxBackgroundMode="filled"
+        app:boxStrokeColor="@color/enroll_code_stroke"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/info_tv">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/input_code_tf"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:enabled="false"
+            android:gravity="center"
+            android:padding="6dp"
+            android:textSize="16sp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/enroll_code_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/pretendard"
+        android:text="Xy3zE56j"
+        android:textColor="@color/texthigh"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@id/input_code_til"
+        app:layout_constraintEnd_toEndOf="@id/input_code_til"
+        app:layout_constraintStart_toStartOf="@id/input_code_til"
+        app:layout_constraintTop_toTopOf="@id/input_code_til" />
+
+    <TextView
+        android:id="@+id/expiration_period_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="4dp"
+        android:text="초대 코드 유효기간 : 2023.07.17.21:32"
+        android:textColor="@color/textMedium"
+        android:textSize="10sp"
+        app:layout_constraintStart_toStartOf="@id/input_code_til"
+        app:layout_constraintTop_toBottomOf="@id/input_code_til" />
+
+
+    <Button
+        android:id="@+id/enroll_btn"
+        android:layout_width="191dp"
+        android:layout_height="54dp"
+        android:layout_marginHorizontal="33dp"
+        android:layout_marginTop="32dp"
+        android:backgroundTint="@color/purpleMain"
+        android:enabled="false"
+        android:fontFamily="@font/pretendard"
+        android:text="보내기"
+        android:textColor="@color/grayWhite"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/input_code_til" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

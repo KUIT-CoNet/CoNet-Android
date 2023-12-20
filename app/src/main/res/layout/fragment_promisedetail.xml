@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white">
+    <ImageView
+        android:id="@+id/iv_backBtn"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="85dp"
+        android:layout_marginLeft="17dp"
+        android:src="@drawable/icon_back"/>
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="85dp"
+        android:fontFamily="@font/pretendard_bold"
+        android:textSize="18sp"
+        android:textColor="@color/gray800"
+        android:text="상세 페이지"/>
+
+    <ImageView
+        android:id="@+id/iv_menuBtn"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="84dp"
+        android:layout_marginRight="24dp"
+        android:src="@drawable/icon_menu"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_promisename"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/tv_title"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginTop="46dp">
+        <TextView
+            android:id="@+id/tv_promisename"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:fontFamily="@font/pretendard_bold"
+            android:textSize="14sp"
+            android:textColor="@color/gray200"
+            android:text="약속 이름"/>
+        <EditText
+            android:id="@+id/et_promisename"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/tv_promisename"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/pretendard_regular"
+            android:textSize="18sp"
+            android:textColor="@color/gray800"
+            android:text="모임 예시"
+            android:background="@null"
+            android:clickable="false"/>
+        
+        <ImageView
+            android:id="@+id/iv_closeBtn"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            app:layout_constraintTop_toTopOf="@id/et_promisename"
+            app:layout_constraintRight_toRightOf="parent"
+            android:src="@drawable/btn_clear"/>
+
+        <View
+            android:id="@+id/view_line"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            app:layout_constraintTop_toBottomOf="@id/iv_closeBtn"
+            android:layout_marginTop="12dp"
+            android:background="@color/gray200"/>
+
+        <TextView
+            android:id="@+id/tv_textcount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@id/view_line"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginTop="4dp"
+            android:fontFamily="@font/pretendard_regular"
+            android:textSize="12sp"
+            android:textColor="@color/gray200"
+            android:text="4/20"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_promisedate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/cl_promisename"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginTop="6dp">
+        <TextView
+            android:id="@+id/tv_promisedate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:fontFamily="@font/pretendard_bold"
+            android:textSize="14sp"
+            android:textColor="@color/gray200"
+            android:text="약속 날짜"/>
+        <TextView
+            android:id="@+id/tv_promisedateinfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/tv_promisedate"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/pretendard_regular"
+            android:textSize="18sp"
+            android:textColor="@color/gray800"
+            android:text="2023. 07. 15."
+            android:background="@null"
+            android:clickable="false"/>
+
+        <ImageView
+            android:id="@+id/iv_calenderBtn"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            app:layout_constraintTop_toTopOf="@id/tv_promisedateinfo"
+            app:layout_constraintRight_toRightOf="parent"
+            android:src="@drawable/calendar"/>
+
+        <View
+            android:id="@+id/view_line2"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            app:layout_constraintTop_toBottomOf="@id/iv_calenderBtn"
+            android:layout_marginTop="12dp"
+            android:background="@color/gray200"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_promisetime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/cl_promisedate"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginTop="26dp">
+        <TextView
+            android:id="@+id/tv_promisetime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:fontFamily="@font/pretendard_bold"
+            android:textSize="14sp"
+            android:textColor="@color/gray200"
+            android:text="약속 시간"/>
+        <TextView
+            android:id="@+id/tv_promisetimeinfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/tv_promisetime"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/pretendard_regular"
+            android:textSize="18sp"
+            android:textColor="@color/gray800"
+            android:text="10:00"
+            android:background="@null"
+            android:clickable="false"/>
+
+        <ImageView
+            android:id="@+id/iv_timeBtn"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            app:layout_constraintTop_toTopOf="@id/tv_promisetimeinfo"
+            app:layout_constraintRight_toRightOf="parent"
+            android:src="@drawable/clock"/>
+
+        <View
+            android:id="@+id/view_line3"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            app:layout_constraintTop_toBottomOf="@id/iv_timeBtn"
+            android:layout_marginTop="12dp"
+            android:background="@color/gray200"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/tv_promiseparticipant"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/cl_promisetime"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="26dp"
+        android:fontFamily="@font/pretendard_bold"
+        android:textSize="14sp"
+        android:textColor="@color/gray200"
+        android:text="약속 시간"/>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

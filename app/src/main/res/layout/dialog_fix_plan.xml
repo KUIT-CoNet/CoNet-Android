@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#4D000000">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="24dp"
+        app:cardCornerRadius="7dp"
+        app:cardElevation="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/tv_date"
+                android:layout_width="wrap_content"
+                android:layout_height="22dp"
+                android:text="2023년 7월 3일 월요일"
+                android:fontFamily="@font/pretendard_bold"
+                android:textSize="18sp"
+                android:textColor="@color/gray800"
+                android:layout_marginTop="48dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <TextView
+                android:id="@+id/tv_time"
+                android:layout_width="wrap_content"
+                android:layout_height="22dp"
+                android:text="16:00"
+                android:fontFamily="@font/pretendard_bold"
+                android:textSize="18sp"
+                android:textColor="@color/gray800"
+                android:layout_marginTop="6dp"
+                app:layout_constraintTop_toBottomOf="@id/tv_date"
+                app:layout_constraintStart_toStartOf="@id/tv_date"
+                app:layout_constraintEnd_toEndOf="@id/tv_date"/>
+
+            <TextView
+                android:id="@+id/tv_participants"
+                android:layout_width="wrap_content"
+                android:layout_height="22dp"
+                android:text="이안진, 김미보, 김채린, 정아현"
+                android:layout_marginTop="14dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_time"/>
+
+            <TextView
+                android:id="@+id/tv_text"
+                android:layout_width="wrap_content"
+                android:layout_height="22dp"
+                android:text="약속을 확정하시겠습니까?"
+                android:fontFamily="@font/pretendard_bold"
+                android:textSize="18sp"
+                android:textColor="@color/gray800"
+                android:layout_marginTop="45dp"
+                app:layout_constraintTop_toBottomOf="@id/tv_participants"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <View
+                android:id="@+id/view1"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/gray100"
+                android:layout_marginTop="49dp"
+                app:layout_constraintTop_toBottomOf="@id/tv_text"/>
+
+            <TextView
+                android:id="@+id/tv_cancel"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:text="취소"
+                android:fontFamily="@font/pretendard"
+                android:textSize="16sp"
+                android:textColor="@color/gray500"
+                android:paddingVertical="18dp"
+                android:textAlignment="center"
+                app:layout_constraintWidth_percent="0.5"
+                app:layout_constraintTop_toBottomOf="@id/view1"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <TextView
+                android:id="@+id/tv_confirm"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:text="확정"
+                android:fontFamily="@font/pretendard_bold"
+                android:textSize="16sp"
+                android:textColor="@color/purpleMain"
+                android:paddingVertical="18dp"
+                android:textAlignment="center"
+                app:layout_constraintWidth_percent="0.5"
+                app:layout_constraintTop_toBottomOf="@id/view1"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="24dp"
+                android:background="@color/gray100"
+                app:layout_constraintTop_toBottomOf="@id/view1"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

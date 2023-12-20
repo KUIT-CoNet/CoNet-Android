@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/grayWhite"
+    tools:context=".UI.Plan.DetailPastActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="25dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/back_iv"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="24dp"
+                android:contentDescription="뒤로버튼"
+                android:src="@drawable/icon_back"
+                app:layout_constraintBottom_toBottomOf="@id/title_tv"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/title_tv" />
+
+            <TextView
+                android:id="@+id/title_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="42dp"
+                android:fontFamily="@font/pretendard_bold"
+                android:text="상세 페이지"
+                android:textColor="@color/gray800"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/menu_btn"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginEnd="24dp"
+                android:contentDescription="메뉴 버튼"
+                android:src="@drawable/icon_menu"
+                app:layout_constraintBottom_toBottomOf="@id/title_tv"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/title_tv" />
+
+            <TextView
+                android:id="@+id/name_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:elevation="1dp"
+                android:text="약속 이름"
+                android:textColor="@color/select_focus"
+                app:layout_constraintStart_toStartOf="@id/name_til"
+                app:layout_constraintTop_toTopOf="@id/name_til" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/name_til"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="24dp"
+                android:layout_marginTop="46dp"
+                android:clickable="false"
+                app:boxBackgroundColor="@android:color/transparent"
+                app:boxStrokeColor="@color/textfield_stroke"
+                app:counterTextColor="@color/select_focus"
+                app:endIconMode="clear_text"
+                app:errorEnabled="true"
+                app:errorIconDrawable="@drawable/icon_error_end_resize"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/title_tv">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/name_tf"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="약속이름입력"
+                    android:enabled="false"
+                    android:textColor="@color/texthigh"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/date_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:elevation="1dp"
+                android:text="약속 날짜"
+                android:textColor="@color/select_focus"
+                app:layout_constraintStart_toStartOf="@id/date_til"
+                app:layout_constraintTop_toTopOf="@id/date_til" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/date_til"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="24dp"
+                android:layout_marginTop="6dp"
+                android:clickable="false"
+                app:boxBackgroundColor="@android:color/transparent"
+                app:boxStrokeColor="@color/textfield_stroke"
+                app:counterTextColor="@color/select_focus"
+                app:errorEnabled="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/name_til">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/date_tf"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:textColor="@color/texthigh"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/time_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:elevation="1dp"
+                android:text="약속 시간"
+                android:textColor="@color/select_focus"
+                app:layout_constraintStart_toStartOf="@id/time_til"
+                app:layout_constraintTop_toTopOf="@id/time_til" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/time_til"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="24dp"
+                android:layout_marginTop="6dp"
+                app:boxBackgroundColor="@android:color/transparent"
+                app:boxStrokeColor="@color/textfield_stroke"
+                app:counterTextColor="@color/select_focus"
+                app:errorEnabled="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/date_til">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/time_tf"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:textColor="@color/texthigh"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/participants_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="참여자"
+                android:textColor="@color/select_focus"
+                app:layout_constraintStart_toStartOf="@id/name_tv"
+                app:layout_constraintTop_toBottomOf="@id/time_til" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/participants_rv"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginHorizontal="24dp"
+                android:layout_marginTop="14dp"
+                android:clickable="false"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/participants_tv"
+                app:spanCount="2" />
+
+            <View
+                android:id="@+id/line_view"
+                android:layout_width="match_parent"
+                android:layout_height="12dp"
+                android:layout_marginTop="13dp"
+                android:background="@color/gray50"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/participants_rv" />
+
+            <TextView
+                android:id="@+id/history_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:fontFamily="@font/pretendard_bold"
+                android:text="히스토리"
+                android:textColor="@color/texthigh"
+                android:textSize="18sp"
+                app:layout_constraintStart_toStartOf="@id/back_iv"
+                app:layout_constraintTop_toBottomOf="@id/line_view" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/history_cl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/history_tv"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/picture_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="26dp"
+                    android:text="사진"
+                    android:textColor="@color/select_focus"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/picture_iv1"
+                    android:layout_width="match_parent"
+                    android:layout_height="345dp"
+                    android:layout_marginHorizontal="24dp"
+                    android:layout_marginTop="8dp"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/picture_tv" />
+
+                <View
+                    android:id="@+id/picture_plus_view"
+                    android:layout_width="88dp"
+                    android:layout_height="88dp"
+                    android:layout_marginTop="6dp"
+                    android:background="@drawable/border_line"
+                    app:layout_constraintStart_toStartOf="@id/picture_tv"
+                    app:layout_constraintTop_toBottomOf="@id/picture_tv" />
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginTop="24dp"
+                    android:src="@drawable/icon_image_x"
+                    app:layout_constraintEnd_toEndOf="@id/picture_plus_view"
+                    app:layout_constraintStart_toStartOf="@id/picture_plus_view"
+                    app:layout_constraintTop_toTopOf="@id/picture_plus_view" />
+
+                <TextView
+                    android:id="@+id/count_picture_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="52dp"
+                    android:text="사진 없음"
+                    android:textSize="10sp"
+                    app:layout_constraintEnd_toEndOf="@id/picture_plus_view"
+                    app:layout_constraintStart_toStartOf="@id/picture_plus_view"
+                    app:layout_constraintTop_toTopOf="@id/picture_plus_view" />
+
+                <TextView
+                    android:id="@+id/content_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="26dp"
+                    android:text="내용"
+                    android:textColor="@color/select_focus"
+                    app:layout_constraintStart_toStartOf="@id/picture_tv"
+                    app:layout_constraintTop_toBottomOf="@id/picture_plus_view" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/content_til"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="24dp"
+                    app:boxBackgroundColor="@android:color/transparent"
+                    app:boxBackgroundMode="outline"
+                    app:boxCornerRadiusTopEnd="0dp"
+                    app:boxCornerRadiusTopStart="0dp"
+                    app:boxStrokeColor="@color/textfield_stroke"
+                    app:counterTextColor="@color/select_focus"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/content_tv">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/content_tf"
+                        android:layout_width="match_parent"
+                        android:layout_height="163dp"
+                        android:background="@null"
+                        android:contentDescription="약속내용입력"
+                        android:enabled="false"
+                        android:gravity="top"
+                        android:padding="25dp"
+                        android:textColor="@color/texthigh"
+                        android:textSize="14sp"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:id="@+id/content_hint_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="25dp"
+                    android:clickable="false"
+                    android:fontFamily="@font/pretendard"
+                    android:text="내용 없음"
+                    android:textColor="@color/textDisabled"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toStartOf="@id/content_til"
+                    app:layout_constraintTop_toTopOf="@id/content_til" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/no_history_cl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/history_tv"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/enroll_history_btn_iv"
+                    android:layout_width="160dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="20dp"
+                    android:src="@drawable/btn_enroll_history"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

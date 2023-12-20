@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--버튼이 선택 안 되어있는 경우-->
+    <item>
+        <shape android:shape="oval">
+            <stroke android:color="@color/gray200"
+                android:width="2dp"/>
+            <solid android:color="@color/grayWhite"/>
+        </shape>
+    </item>
+
+</selector>

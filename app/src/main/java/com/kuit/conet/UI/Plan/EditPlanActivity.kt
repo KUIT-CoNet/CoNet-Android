@@ -1,0 +1,119 @@
+package com.kuit.conet.UI.Plan
+
+import android.annotation.SuppressLint
+import android.content.Intent
+import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.util.Log
+import android.view.View
+import androidx.appcompat.app.AppCompatActivity
+import com.kuit.conet.Network.ResponseUpdateWaiting
+import com.kuit.conet.Network.RetrofitInterface
+import com.kuit.conet.Network.UpdateWaiting
+import com.kuit.conet.Network.getRetrofit
+import com.kuit.conet.R
+import com.kuit.conet.databinding.ActivityEditPlanBinding
+import retrofit2.Call
+import retrofit2.Response
+
+class EditPlanActivity: AppCompatActivity() {
+    lateinit var binding : ActivityEditPlanBinding
+    var isNameChange = false
+    var planId =0
+    @SuppressLint("ResourceAsColor")
+    override fun onCreate(savedInstanceState: Bundle?) {
+        binding = ActivityEditPlanBinding.inflate(layoutInflater)
+        super.onCreate(savedInstanceState)
+        setContentView(binding.root)
+
+        val planName = intent.getStringExtra("planName")
+        val planDate = intent.getStringExtra("planDate")
+        planId = intent.getIntExtra("planId", 0)
+
+        binding.planNameEt.setText(planName.toString())
+        binding.planNameLength.text = "${planName!!.length}/20"
+        binding.tvPlanDate.text = planDate.toString().replace("-",".")
+
+        binding.btnBackIv.setOnClickListener {
+            finish()
+        }
+
+        binding.planNameEt.addTextChangedListener(object : TextWatcher{
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                Log.d("texting","입력전")
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                Log.d("texting","입력중")
+                binding.planNameLength.text=getString(R.string.plan_name_length, p0!!.length)
+                binding.planUnderlineLl.setBackgroundResource(R.color.purpleMain)
+                binding.btnTextCancle.visibility = View.VISIBLE
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+                Log.d("texting","입력끝")
+                if(p0!!.length > 0){
+                    binding.btnTextCancle.visibility = View.VISIBLE
+                    //원래 이름과 같은지 판별
+                    isNameChange = !p0.toString().equals(planName)
+                }
+                else {
+                    binding.btnTextCancle.visibility = View.GONE
+                    isNameChange=false
+                }
+                binding.planUnderlineLl.setBackgroundResource(R.color.gray200)
+                changeBtn(isNameChange, planId)
+            }
+
+        })
+
+        binding.btnTextCancle.setOnClickListener {
+            binding.planNameEt.setText(null)
+        }
+    }
+
+    fun changeBtn(isNameChange: Boolean, planId: Int){
+        if(isNameChange){
+            binding.btnCl.setBackgroundResource(R.color.purpleMain)
+
+            binding.btnCv.setOnClickListener {
+                updateWaiting()
+                var intent = Intent(this, PlanTimeActivity::class.java)
+                intent.putExtra("planId", planId)
+                startActivity(intent)
+                finish()
+            }
+        }
+        else {
+            binding.btnCl.setBackgroundResource(R.color.gray200)
+        }
+    }
+
+    private fun updateWaiting() {
+        val updateWaitingService = getRetrofit().create(RetrofitInterface::class.java)
+        updateWaitingService.UpdateWaiting(waitingInfo())
+            .enqueue(object : retrofit2.Callback<ResponseUpdateWaiting>{
+                override fun onResponse(
+                    call: Call<ResponseUpdateWaiting>,
+                    response: Response<ResponseUpdateWaiting>
+                ) {
+                    if (response.isSuccessful){
+                        val resp = response.body()
+                        Log.d("API-updateWaiting/Success", resp.toString())
+                    }
+                }
+
+                override fun onFailure(call: Call<ResponseUpdateWaiting>, t: Throwable) {
+                    Log.d("API-updateWaiting/Fail", t.message.toString())
+                }
+            })
+    }
+
+    private fun waitingInfo(): UpdateWaiting {
+        return UpdateWaiting(
+            planId = intent.getIntExtra("planId",0),
+            planName = binding.planNameEt.text.toString()
+        )
+    }
+}

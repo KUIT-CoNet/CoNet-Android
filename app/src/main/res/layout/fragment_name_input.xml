@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <TextView
+        android:id="@+id/name_text1_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="36dp"
+        android:text="이름을 입력해주세요"
+        android:fontFamily="@font/pretendard_bold"
+        android:textColor="@color/black"
+        android:textSize="26sp"
+        android:layout_marginTop="40dp"
+        android:layout_marginStart="24dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <EditText
+        android:id="@+id/name_et"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_weight="1"
+        android:maxLength="20"
+        android:inputType="text"
+        android:hint="이름 입력"
+        android:textColorHint="@color/gray200"
+        android:layout_marginTop="42dp"
+        android:layout_marginHorizontal="24dp"
+        android:background="@null"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/name_text1_tv"/>
+
+    <ImageView
+        android:id="@+id/btn_text_cancle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@id/tv_underline_ll"
+        app:layout_constraintRight_toRightOf="@id/tv_underline_ll"
+        android:layout_marginBottom="5dp"
+        android:visibility="gone"
+        android:src="@drawable/btn_clear"/>
+
+    <ImageView
+        android:id="@+id/simbol_err_cancle"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        app:layout_constraintBottom_toTopOf="@id/tv_underline_ll"
+        app:layout_constraintRight_toRightOf="@id/tv_underline_ll"
+        android:layout_marginBottom="5dp"
+        android:visibility="gone"
+        android:src="@drawable/error_empty_red"/>
+
+
+    <LinearLayout
+        android:id="@+id/tv_underline_ll"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        app:layout_constraintTop_toBottomOf="@id/name_et"
+        android:layout_marginTop="5dp"
+        android:layout_marginHorizontal="20dp"
+        android:background="@color/gray200"
+        android:orientation="horizontal"/>
+
+    <!--권장사항 문구-->
+    <ImageView
+        android:id="@+id/name_info1_iv"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:src="@drawable/error_purple"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="@id/tv_underline_ll"
+        app:layout_constraintTop_toBottomOf="@id/tv_underline_ll"/>
+
+
+    <TextView
+        android:id="@+id/name_info1_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="16dp"
+        android:text="공백 없이 20자 이내의 한글, 영어, 숫자로 입력해주세요."
+        android:fontFamily="@font/pretendard"
+        android:textSize="12sp"
+        android:layout_marginStart="5dp"
+        app:layout_constraintStart_toEndOf="@id/name_info1_iv"
+        app:layout_constraintTop_toTopOf="@id/name_info1_iv"
+        />
+
+    <ImageView
+        android:id="@+id/name_info2_iv"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:src="@drawable/error_purple"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="@id/name_info1_iv"
+        app:layout_constraintTop_toBottomOf="@id/name_info1_iv"/>
+
+    <TextView
+        android:id="@+id/name_info2_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="16dp"
+        android:text="참여자 간 원활한 소통을 위해 실명을 권장합니다."
+        android:fontFamily="@font/pretendard"
+        android:textSize="12sp"
+        android:layout_marginStart="5dp"
+        app:layout_constraintStart_toEndOf="@id/name_info2_iv"
+        app:layout_constraintTop_toTopOf="@id/name_info2_iv"
+        />
+
+
+    <!--완료 버튼-->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/name_btn_cv"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginBottom="46dp"
+        app:cardBackgroundColor="@color/gray200"
+        app:cardCornerRadius="12dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:cardElevation="0dp">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:text="완료"
+                android:fontFamily="@font/pretendard"
+                android:textColor="@color/grayWhite"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
