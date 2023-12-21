@@ -11,4 +11,9 @@
     <string name="navigation_drawer_close">Close</string>
 
     <string name="plan_name_length">%1$d/20</string>
+
+    <string name="group_title">모임</string>
+    <string name="group_plus_content">모임추가</string>
+    <string name="group_enroll_content">모임참여</string>
+
 </resources>
