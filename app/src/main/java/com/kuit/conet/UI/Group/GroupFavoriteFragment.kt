@@ -54,7 +54,7 @@ class GroupFavoriteFragment: Fragment() {
 
                     favoriteGroupList = response.body()!!.result
 
-                    GroupFragment.binding.groupCountTv.text = favoriteGroupList.count().toString()
+                    GroupFragment.binding.tvGroupCount.text = favoriteGroupList.count().toString()
 
                     val groupAdapter = GroupAdapter(requireContext(), favoriteGroupList)
                     binding.groupListRv.adapter = groupAdapter

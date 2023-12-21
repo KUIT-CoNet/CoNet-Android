@@ -54,7 +54,7 @@ class GroupAllFragment: Fragment() {
 //                    val groupAdapter = GroupAdapter(requireContext(), groupList)
                     val groupAdapter = GroupAdapter(mContext, groupList)
 
-                    GroupFragment.binding.groupCountTv.text = groupList.count().toString()
+                    GroupFragment.binding.tvGroupCount.text = groupList.count().toString()
 
                     binding.groupListRv.adapter = groupAdapter
                     binding.groupListRv.layoutManager = GridLayoutManager(context, 2)

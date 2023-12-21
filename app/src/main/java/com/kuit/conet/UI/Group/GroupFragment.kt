@@ -39,13 +39,13 @@ class GroupFragment : Fragment(), View.OnClickListener, GroupEnrollDialog.GroupP
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.mainFab.setOnClickListener(this)
-        binding.groupEnrollFab.setOnClickListener(this)
-        binding.groupPlusFab.setOnClickListener(this)
+        binding.fabGroupMain.setOnClickListener(this)
+        binding.fabGroupEnroll.setOnClickListener(this)
+        binding.fabGroupPlus.setOnClickListener(this)
 
         val groupVPAdapter = GroupVPAdapter(this@GroupFragment)
-        binding.groupListVp.adapter = groupVPAdapter
-        TabLayoutMediator(binding.categoryTl , binding.groupListVp){ tab, position ->
+        binding.vpGroupList.adapter = groupVPAdapter
+        TabLayoutMediator(binding.tlGroupCategory , binding.vpGroupList){ tab, position ->
             val categoryList = arrayListOf("전체", "즐겨찾기")
             tab.text = categoryList[position]
         }.attach()
@@ -83,8 +83,8 @@ class GroupFragment : Fragment(), View.OnClickListener, GroupEnrollDialog.GroupP
 
 //        val groupVPAdapter = GroupVPAdapter(this)
         groupVPAdapter = GroupVPAdapter(this)
-        binding.groupListVp.adapter = groupVPAdapter
-        TabLayoutMediator(binding.categoryTl , binding.groupListVp){ tab, position ->
+        binding.vpGroupList.adapter = groupVPAdapter
+        TabLayoutMediator(binding.tlGroupCategory , binding.vpGroupList){ tab, position ->
             val categoryList = arrayListOf("전체", "즐겨찾기")
             tab.text = categoryList[position]
         }.attach()
@@ -100,55 +100,55 @@ class GroupFragment : Fragment(), View.OnClickListener, GroupEnrollDialog.GroupP
     }
 
     private fun closeFab(){
-        ObjectAnimator.ofFloat(binding.groupEnrollFab, "translationY", 0f).apply { start() }
-        ObjectAnimator.ofFloat(binding.groupPlusFab, "translationY", 0f).apply { start() }
-        ObjectAnimator.ofFloat(binding.groupEnrollFabTv, "translationY", 0f).apply { start() }
-        ObjectAnimator.ofFloat(binding.groupPlusFabTv, "translationY", 0f).apply { start() }
-        binding.mainFab.startAnimation(rotateAntiClockWiseAnim)
-        binding.groupEnrollFab.isClickable = false
-        binding.groupPlusFab.isClickable = false
-        binding.groupEnrollFabTv.visibility = View.INVISIBLE
-        binding.groupPlusFabTv.visibility = View.INVISIBLE
-        binding.fabBackgroundV.visibility = View.GONE
+        ObjectAnimator.ofFloat(binding.fabGroupEnroll, "translationY", 0f).apply { start() }
+        ObjectAnimator.ofFloat(binding.fabGroupPlus, "translationY", 0f).apply { start() }
+        ObjectAnimator.ofFloat(binding.tvGroupEnrollFabContent, "translationY", 0f).apply { start() }
+        ObjectAnimator.ofFloat(binding.tvGroupPlusFabContent, "translationY", 0f).apply { start() }
+        binding.fabGroupMain.startAnimation(rotateAntiClockWiseAnim)
+        binding.fabGroupEnroll.isClickable = false
+        binding.fabGroupPlus.isClickable = false
+        binding.tvGroupEnrollFabContent.visibility = View.INVISIBLE
+        binding.tvGroupPlusFabContent.visibility = View.INVISIBLE
+//        binding.vFabBackground.visibility = View.GONE
     }
 
     private fun openFab(){
-        ObjectAnimator.ofFloat(binding.groupEnrollFab, "translationY", -200f).apply { start() }
-        ObjectAnimator.ofFloat(binding.groupPlusFab, "translationY", -400f).apply { start() }
-        ObjectAnimator.ofFloat(binding.groupEnrollFabTv, "translationY", -200f).apply { start() }
-        ObjectAnimator.ofFloat(binding.groupPlusFabTv, "translationY", -400f).apply { start() }
-        /*ObjectAnimator.ofFloat(binding.groupEnrollFab, "translationY", -(80f.dpToFloat(requireContext()))).apply { start() }
-        ObjectAnimator.ofFloat(binding.groupPlusFab, "translationY", -(136f.dpToFloat(requireContext()))).apply { start() }
-        ObjectAnimator.ofFloat(binding.groupEnrollFabTv, "translationY", -(80f.dpToFloat(requireContext()))).apply { start() }
-        ObjectAnimator.ofFloat(binding.groupPlusFabTv, "translationY", -(136f.dpToFloat(requireContext()))).apply { start() }*/
-        binding.mainFab.startAnimation(rotateClockWiseAnim)
-        binding.groupEnrollFab.isClickable = true
-        binding.groupPlusFab.isClickable = true
-        binding.groupEnrollFabTv.visibility = View.VISIBLE
-        binding.groupPlusFabTv.visibility = View.VISIBLE
-        binding.fabBackgroundV.visibility = View.VISIBLE
+        ObjectAnimator.ofFloat(binding.fabGroupEnroll, "translationY", -200f).apply { start() }
+        ObjectAnimator.ofFloat(binding.fabGroupPlus, "translationY", -400f).apply { start() }
+        ObjectAnimator.ofFloat(binding.tvGroupEnrollFabContent, "translationY", -200f).apply { start() }
+        ObjectAnimator.ofFloat(binding.tvGroupPlusFabContent, "translationY", -400f).apply { start() }
+        /*ObjectAnimator.ofFloat(binding.fabGroupEnroll, "translationY", -(80f.dpToFloat(requireContext()))).apply { start() }
+        ObjectAnimator.ofFloat(binding.fabGroupPlus, "translationY", -(136f.dpToFloat(requireContext()))).apply { start() }
+        ObjectAnimator.ofFloat(binding.tvGroupEnrollFabContent, "translationY", -(80f.dpToFloat(requireContext()))).apply { start() }
+        ObjectAnimator.ofFloat(binding.tvGroupPlusFabContent, "translationY", -(136f.dpToFloat(requireContext()))).apply { start() }*/
+        binding.fabGroupMain.startAnimation(rotateClockWiseAnim)
+        binding.fabGroupEnroll.isClickable = true
+        binding.fabGroupPlus.isClickable = true
+        binding.tvGroupEnrollFabContent.visibility = View.VISIBLE
+        binding.tvGroupPlusFabContent.visibility = View.VISIBLE
+//        binding.vFabBackground.visibility = View.VISIBLE
 
     }
 
     override fun onClick(v: View?) {
         when(v!!.id){
-            R.id.main_fab -> {
+            R.id.fab_group_main -> {
                 toggleFab()
             }
-            R.id.group_enroll_fab -> {
+            R.id.fab_group_enroll -> {
                 val dlg = GroupEnrollDialog()
                 dlg.setGroupAdapterListener(this)
                 dlg.isCancelable = false
                 dlg.show(parentFragmentManager, "GROUP ENROLL")
                 toggleFab()
             }
-            R.id.group_plus_fab -> {
+            R.id.fab_group_plus -> {
                 val intent = Intent(requireContext(), GroupPlusActivity::class.java)
                 intent.putExtra("option", 0)
                 startActivity(intent)
                 toggleFab()
             }
-            R.id.fab_background_v -> {
+            R.id.v_fab_background -> {
 //                TODO 다른 동작 못하게 막아야 하는데 ...
             }
         }
