@@ -11,7 +11,7 @@ import androidx.fragment.app.DialogFragment
 import com.kuit.conet.Network.ResponseEnrollGroup
 import com.kuit.conet.Network.RetrofitClient
 import com.kuit.conet.Utils.NetworkUtil.getErrorResponse
-import com.kuit.conet.Utils.TAG
+import com.kuit.conet.Utils.NETWORK
 import com.kuit.conet.databinding.DialogGroupEnrollBinding
 import com.kuit.conet.getAccessToken
 import retrofit2.Call
@@ -49,21 +49,21 @@ class GroupEnrollDialog: DialogFragment() {
         }
 
         binding.enrollBtn.setOnClickListener {
-            Log.d(TAG, "참여하기 버튼 클릭함!")
+            Log.d(NETWORK, "참여하기 버튼 클릭함!")
             RetrofitClient.instance.enrollGroup("Bearer ${getAccessToken(requireContext())}", binding.inputCodeTf.text.toString()).enqueue(object: retrofit2.Callback<ResponseEnrollGroup>{
                 override fun onResponse(
                     call: Call<ResponseEnrollGroup>,
                     response: Response<ResponseEnrollGroup>
                 ) {
                     if(response.isSuccessful) {
-                        Log.d(TAG, "GroupEnrollDialog - Retrofit enrollGroup()실행결과 - 성공")
-                        Log.d(TAG, response.toString())
+                        Log.d(NETWORK, "GroupEnrollDialog - Retrofit enrollGroup()실행결과 - 성공")
+                        Log.d(NETWORK, response.toString())
                         listener?.onUpdateGroupList()
                         dismiss()
                     } else{
-                        Log.d(TAG, "GroupEnrollDialog - Retrofit enrollGroup()실행결과 - 성공x")
+                        Log.d(NETWORK, "GroupEnrollDialog - Retrofit enrollGroup()실행결과 - 성공x")
                         val errorText = getErrorResponse(response.errorBody())!!.message
-                        Log.d(TAG, "response.errorbody : ${errorText}")
+                        Log.d(NETWORK, "response.errorbody : ${errorText}")
                         binding.errorIv.visibility = View.VISIBLE
                         binding.errorTv.visibility = View.VISIBLE
                         binding.errorTv.text = errorText
@@ -71,8 +71,8 @@ class GroupEnrollDialog: DialogFragment() {
                 }
 
                 override fun onFailure(call: Call<ResponseEnrollGroup>, t: Throwable) {
-                    Log.d(TAG, "GroupEnrollDialog - Retrofit enrollGroup()실행결과 - 실패")
-                    Log.d(TAG, t.toString())
+                    Log.d(NETWORK, "GroupEnrollDialog - Retrofit enrollGroup()실행결과 - 실패")
+                    Log.d(NETWORK, t.toString())
 
                 }
 
