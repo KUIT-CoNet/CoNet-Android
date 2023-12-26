@@ -73,7 +73,7 @@ class GroupFragment : Fragment(), View.OnClickListener, GroupEnrollDialog.GroupP
                 val dlg = GroupEnrollDialog()
                 dlg.setGroupAdapterListener(this)
                 dlg.isCancelable = false
-                dlg.show(parentFragmentManager, "GROUP ENROLL")
+                dlg.show(parentFragmentManager, GroupEnrollDialog.TAG)
                 toggleFab()
             }
 

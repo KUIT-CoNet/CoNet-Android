@@ -1,34 +1,43 @@
 package com.kuit.conet.UI.Group
 
+import android.content.Context
+import android.graphics.Rect
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.DialogFragment
+import com.google.android.material.textfield.TextInputEditText
 import com.kuit.conet.Network.ResponseEnrollGroup
 import com.kuit.conet.Network.RetrofitClient
 import com.kuit.conet.Utils.NetworkUtil.getErrorResponse
 import com.kuit.conet.Utils.NETWORK
 import com.kuit.conet.databinding.DialogGroupEnrollBinding
+import com.kuit.conet.databinding.FragmentGroupListBinding
 import com.kuit.conet.getAccessToken
 import retrofit2.Call
 import retrofit2.Response
 
-class GroupEnrollDialog: DialogFragment() {
+class GroupEnrollDialog : DialogFragment() {
 
-    private lateinit var binding: DialogGroupEnrollBinding
-
-    private var listener: GroupPlusListener? = null
+    private var _binding: DialogGroupEnrollBinding? = null
+    private val binding: DialogGroupEnrollBinding
+        get() = requireNotNull(_binding) { "GroupEnrollDialog's binding is null" }
+    private var _listener: GroupPlusListener? = null
+    private val listener: GroupPlusListener
+        get() = requireNotNull(_listener) { "GroupEnrollDialog's GroupPlusListener is null" }
 
     interface GroupPlusListener {
         fun onUpdateGroupList()
     }
 
     fun setGroupAdapterListener(listener: GroupPlusListener) {
-        this.listener = listener
+        this._listener = listener
     }
 
     override fun onCreateView(
@@ -37,7 +46,7 @@ class GroupEnrollDialog: DialogFragment() {
         savedInstanceState: Bundle?
     ): View {
         super.onCreateView(inflater, container, savedInstanceState)
-        binding = DialogGroupEnrollBinding.inflate(inflater, container, false)
+        _binding = DialogGroupEnrollBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -50,17 +59,20 @@ class GroupEnrollDialog: DialogFragment() {
 
         binding.enrollBtn.setOnClickListener {
             Log.d(NETWORK, "참여하기 버튼 클릭함!")
-            RetrofitClient.instance.enrollGroup("Bearer ${getAccessToken(requireContext())}", binding.inputCodeTf.text.toString()).enqueue(object: retrofit2.Callback<ResponseEnrollGroup>{
+            RetrofitClient.instance.enrollGroup(
+                "Bearer ${getAccessToken(requireContext())}",
+                binding.inputCodeTf.text.toString()
+            ).enqueue(object : retrofit2.Callback<ResponseEnrollGroup> {
                 override fun onResponse(
                     call: Call<ResponseEnrollGroup>,
                     response: Response<ResponseEnrollGroup>
                 ) {
-                    if(response.isSuccessful) {
+                    if (response.isSuccessful) {
                         Log.d(NETWORK, "GroupEnrollDialog - Retrofit enrollGroup()실행결과 - 성공")
                         Log.d(NETWORK, response.toString())
-                        listener?.onUpdateGroupList()
+                        listener.onUpdateGroupList()
                         dismiss()
-                    } else{
+                    } else {
                         Log.d(NETWORK, "GroupEnrollDialog - Retrofit enrollGroup()실행결과 - 성공x")
                         val errorText = getErrorResponse(response.errorBody())!!.message
                         Log.d(NETWORK, "response.errorbody : ${errorText}")
@@ -79,33 +91,33 @@ class GroupEnrollDialog: DialogFragment() {
             })
         }
 
-        binding.inputCodeTf.addTextChangedListener(object: TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            }
+        binding.inputCodeTf.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
 
             override fun afterTextChanged(s: Editable?) {
-                when(binding.inputCodeTf.text!!.count()){
+                when (binding.inputCodeTf.text!!.count()) {
                     0 -> {
                         binding.errorIv.visibility = View.INVISIBLE
                         binding.errorTv.visibility = View.INVISIBLE
                         binding.inputCodeTv.visibility = View.VISIBLE
                         binding.enrollBtn.isEnabled = false
                     }
-                    in 1..7 ->{
+
+                    in 1..7 -> {
                         binding.errorIv.visibility = View.INVISIBLE
                         binding.errorTv.visibility = View.INVISIBLE
                         binding.inputCodeTv.visibility = View.GONE
                         binding.enrollBtn.isEnabled = false
                     }
-                    8 ->{
+
+                    8 -> {
                         binding.errorIv.visibility = View.INVISIBLE
                         binding.errorTv.visibility = View.INVISIBLE
                         binding.inputCodeTv.visibility = View.GONE
                         binding.enrollBtn.isEnabled = true
                     }
+
                     else -> {
                         binding.errorIv.visibility = View.VISIBLE
                         binding.errorTv.visibility = View.VISIBLE
@@ -118,15 +130,19 @@ class GroupEnrollDialog: DialogFragment() {
         })
 
         binding.inputCodeTf.setOnFocusChangeListener { _, hasFocus ->
-            if(!hasFocus){
-                if(binding.inputCodeTf.error == null){
-                    if(binding.inputCodeTf.text!!.isEmpty()){
+            if (!hasFocus) {
+                if (binding.inputCodeTf.error == null) {
+                    if (binding.inputCodeTf.text!!.isEmpty()) {
                         binding.inputCodeTv.visibility = View.VISIBLE
-                    } else{
+                    } else {
                         binding.inputCodeTv.visibility = View.GONE
                     }
                 }
             }
         }
+    }
+
+    companion object {
+        const val TAG: String = "GroupEnrollDialog"
     }
 }
