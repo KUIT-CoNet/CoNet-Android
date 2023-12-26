@@ -90,9 +90,9 @@ class GroupEnrollDialog : DialogFragment() {
 
             override fun afterTextChanged(s: Editable?) {
 
-                val inputCode = binding.inputCodeTf.text.toString()
+                val inviteCode = binding.inputCodeTf.text.toString()
 
-                if(regex.matches(inputCode)) {      // 올바른 형식을 입력한 경우
+                if(validateInviteCode(inviteCode)) {    // 올바른 형식을 입력한 경우
                     binding.errorIv.visibility = View.INVISIBLE
                     binding.errorTv.visibility = View.INVISIBLE
                     binding.inputCodeTv.visibility = View.GONE
@@ -100,7 +100,7 @@ class GroupEnrollDialog : DialogFragment() {
                     return
                 }
 
-                if (inputCode.isNullOrEmpty()) {    // 아무것도 입력하지 않은 경우
+                if (inviteCode.isNullOrEmpty()) {    // 아무것도 입력하지 않은 경우
                     binding.errorIv.visibility = View.INVISIBLE
                     binding.errorTv.visibility = View.INVISIBLE
                     binding.inputCodeTv.visibility = View.VISIBLE
@@ -115,6 +115,10 @@ class GroupEnrollDialog : DialogFragment() {
                 binding.enrollBtn.isEnabled = false
             }
         })
+    }
+
+    private fun validateInviteCode(inviteCode: String): Boolean {
+        return regex.matches(inviteCode)
     }
 
     companion object {
