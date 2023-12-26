@@ -1,24 +1,18 @@
 package com.kuit.conet.UI.Group
 
-import android.content.Context
-import android.graphics.Rect
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.DialogFragment
-import com.google.android.material.textfield.TextInputEditText
 import com.kuit.conet.Network.ResponseEnrollGroup
 import com.kuit.conet.Network.RetrofitClient
 import com.kuit.conet.Utils.NetworkUtil.getErrorResponse
 import com.kuit.conet.Utils.NETWORK
 import com.kuit.conet.databinding.DialogGroupEnrollBinding
-import com.kuit.conet.databinding.FragmentGroupListBinding
 import com.kuit.conet.getAccessToken
 import retrofit2.Call
 import retrofit2.Response
@@ -85,7 +79,6 @@ class GroupEnrollDialog : DialogFragment() {
                 override fun onFailure(call: Call<ResponseEnrollGroup>, t: Throwable) {
                     Log.d(NETWORK, "GroupEnrollDialog - Retrofit enrollGroup()실행결과 - 실패")
                     Log.d(NETWORK, t.toString())
-
                 }
 
             })
@@ -96,53 +89,36 @@ class GroupEnrollDialog : DialogFragment() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
 
             override fun afterTextChanged(s: Editable?) {
-                when (binding.inputCodeTf.text!!.count()) {
-                    0 -> {
-                        binding.errorIv.visibility = View.INVISIBLE
-                        binding.errorTv.visibility = View.INVISIBLE
-                        binding.inputCodeTv.visibility = View.VISIBLE
-                        binding.enrollBtn.isEnabled = false
-                    }
 
-                    in 1..7 -> {
-                        binding.errorIv.visibility = View.INVISIBLE
-                        binding.errorTv.visibility = View.INVISIBLE
-                        binding.inputCodeTv.visibility = View.GONE
-                        binding.enrollBtn.isEnabled = false
-                    }
+                val inputCode = binding.inputCodeTf.text.toString()
 
-                    8 -> {
-                        binding.errorIv.visibility = View.INVISIBLE
-                        binding.errorTv.visibility = View.INVISIBLE
-                        binding.inputCodeTv.visibility = View.GONE
-                        binding.enrollBtn.isEnabled = true
-                    }
-
-                    else -> {
-                        binding.errorIv.visibility = View.VISIBLE
-                        binding.errorTv.visibility = View.VISIBLE
-                        binding.errorTv.text = "올바른 초대코드를 입력해주세요."
-                        binding.inputCodeTv.visibility = View.GONE
-                        binding.enrollBtn.isEnabled = false
-                    }
+                if(regex.matches(inputCode)) {      // 올바른 형식을 입력한 경우
+                    binding.errorIv.visibility = View.INVISIBLE
+                    binding.errorTv.visibility = View.INVISIBLE
+                    binding.inputCodeTv.visibility = View.GONE
+                    binding.enrollBtn.isEnabled = true
+                    return
                 }
+
+                if (inputCode.isNullOrEmpty()) {    // 아무것도 입력하지 않은 경우
+                    binding.errorIv.visibility = View.INVISIBLE
+                    binding.errorTv.visibility = View.INVISIBLE
+                    binding.inputCodeTv.visibility = View.VISIBLE
+                    binding.enrollBtn.isEnabled = false
+                    return
+                }
+
+                binding.errorIv.visibility = View.VISIBLE
+                binding.errorTv.visibility = View.VISIBLE
+                binding.errorTv.text = "올바른 초대코드를 입력해주세요."
+                binding.inputCodeTv.visibility = View.GONE
+                binding.enrollBtn.isEnabled = false
             }
         })
-
-        binding.inputCodeTf.setOnFocusChangeListener { _, hasFocus ->
-            if (!hasFocus) {
-                if (binding.inputCodeTf.error == null) {
-                    if (binding.inputCodeTf.text!!.isEmpty()) {
-                        binding.inputCodeTv.visibility = View.VISIBLE
-                    } else {
-                        binding.inputCodeTv.visibility = View.GONE
-                    }
-                }
-            }
-        }
     }
 
     companion object {
         const val TAG: String = "GroupEnrollDialog"
+        val regex: Regex = Regex("^[a-zA-Z0-9]{8}$")    // 영어(소문자, 대문자), 숫자 7자만 가능, 그외 불가
     }
 }
