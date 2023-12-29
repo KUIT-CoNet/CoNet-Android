@@ -16,4 +16,8 @@
     <string name="group_plus_content">모임추가</string>
     <string name="group_enroll_content">모임참여</string>
 
+    <string name="invite_code_input">전달받은 초대코드를\n입력해주세요.</string>
+    <string name="hint_invite_code_input">참여코드입력</string>
+    <string name="group_enroll">참여하기</string>
+
 </resources>

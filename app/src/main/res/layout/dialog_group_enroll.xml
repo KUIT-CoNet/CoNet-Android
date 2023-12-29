@@ -5,35 +5,30 @@
     android:layout_height="wrap_content"
     android:padding="18dp">
 
-    <LinearLayout
-        android:id="@+id/close_ibtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <ImageView
+        android:id="@+id/iv_dialog_group_enroll_close"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:contentDescription="닫기"
+        android:src="@drawable/icon_close"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:contentDescription="닫기"
-            android:src="@drawable/icon_close" />
-    </LinearLayout>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/info_tv"
+        android:id="@+id/tv_dialog_group_enroll_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:fontFamily="@font/pretendard_bold"
         android:gravity="start"
-        android:text="전달받은 초대코드를\n입력해주세요."
+        android:text="@string/invite_code_input"
         android:textColor="@color/texthigh"
         android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="@id/input_code_til"
-        app:layout_constraintTop_toBottomOf="@id/close_ibtn" />
+        app:layout_constraintStart_toStartOf="@id/til_dialog_group_enroll_input_code"
+        app:layout_constraintTop_toBottomOf="@id/iv_dialog_group_enroll_close" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/input_code_til"
+        android:id="@+id/til_dialog_group_enroll_input_code"
         android:layout_width="191dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="33dp"
@@ -43,14 +38,14 @@
         app:boxStrokeColor="@color/textfield_stroke"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/info_tv">
+        app:layout_constraintTop_toBottomOf="@id/tv_dialog_group_enroll_info">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/input_code_tf"
+            android:id="@+id/tf_dialog_group_enroll_input_code"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@null"
-            android:contentDescription="참여코드입력"
+            android:contentDescription="@string/hint_invite_code_input"
             android:gravity="center"
             android:paddingVertical="6dp"
             android:textSize="16sp" />
@@ -58,54 +53,53 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
-        android:id="@+id/input_code_tv"
+        android:id="@+id/tv_dialog_group_enroll_input_code_hint"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="참여코드입력"
+        android:text="@string/hint_invite_code_input"
         android:textColor="@color/gray200"
-        app:layout_constraintBottom_toBottomOf="@id/input_code_til"
-        app:layout_constraintEnd_toEndOf="@id/input_code_til"
-        app:layout_constraintStart_toStartOf="@id/input_code_til"
-        app:layout_constraintTop_toTopOf="@id/input_code_til" />
+        app:layout_constraintBottom_toBottomOf="@id/til_dialog_group_enroll_input_code"
+        app:layout_constraintEnd_toEndOf="@id/til_dialog_group_enroll_input_code"
+        app:layout_constraintStart_toStartOf="@id/til_dialog_group_enroll_input_code"
+        app:layout_constraintTop_toTopOf="@id/til_dialog_group_enroll_input_code" />
 
     <ImageView
-        android:id="@+id/error_iv"
+        android:id="@+id/iv_dialog_group_enroll_error"
         android:layout_width="8dp"
         android:layout_height="8dp"
         android:layout_marginTop="6dp"
         android:contentDescription="오류"
         android:src="@drawable/icon_error_end"
         android:visibility="invisible"
-        app:layout_constraintStart_toStartOf="@id/input_code_til"
-        app:layout_constraintTop_toBottomOf="@id/input_code_til" />
+        app:layout_constraintStart_toStartOf="@id/til_dialog_group_enroll_input_code"
+        app:layout_constraintTop_toBottomOf="@id/til_dialog_group_enroll_input_code" />
 
     <TextView
-        android:id="@+id/error_tv"
+        android:id="@+id/tv_dialog_group_enroll_error"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
-        android:text="올바른 초대코드를 입력해주세요"
         android:textColor="#D7260D"
         android:textSize="10sp"
         android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@id/error_iv"
-        app:layout_constraintStart_toEndOf="@id/error_iv"
-        app:layout_constraintTop_toTopOf="@id/error_iv" />
+        app:layout_constraintBottom_toBottomOf="@id/iv_dialog_group_enroll_error"
+        app:layout_constraintStart_toEndOf="@id/iv_dialog_group_enroll_error"
+        app:layout_constraintTop_toTopOf="@id/iv_dialog_group_enroll_error" />
 
 
-    <Button
-        android:id="@+id/enroll_btn"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_dialog_group_enroll"
         android:layout_width="191dp"
         android:layout_height="54dp"
         android:layout_marginHorizontal="33dp"
         android:layout_marginTop="32dp"
         android:backgroundTint="@color/select_btn"
         android:enabled="false"
-        android:text="참여하기"
+        android:text="@string/group_enroll"
         android:textColor="@color/grayWhite"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/input_code_til" />
+        app:layout_constraintTop_toBottomOf="@id/til_dialog_group_enroll_input_code" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

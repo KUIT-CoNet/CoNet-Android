@@ -47,15 +47,15 @@ class GroupEnrollDialog : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.closeIbtn.setOnClickListener {
+        binding.ivDialogGroupEnrollClose.setOnClickListener {
             dismiss()
         }
 
-        binding.enrollBtn.setOnClickListener {
+        binding.btnDialogGroupEnroll.setOnClickListener {
             Log.d(NETWORK, "참여하기 버튼 클릭함!")
             RetrofitClient.instance.enrollGroup(
                 "Bearer ${getAccessToken(requireContext())}",
-                binding.inputCodeTf.text.toString()
+                binding.tfDialogGroupEnrollInputCode.text.toString()
             ).enqueue(object : retrofit2.Callback<ResponseEnrollGroup> {
                 override fun onResponse(
                     call: Call<ResponseEnrollGroup>,
@@ -70,9 +70,9 @@ class GroupEnrollDialog : DialogFragment() {
                         Log.d(NETWORK, "GroupEnrollDialog - Retrofit enrollGroup()실행결과 - 성공x")
                         val errorText = getErrorResponse(response.errorBody())!!.message
                         Log.d(NETWORK, "response.errorbody : ${errorText}")
-                        binding.errorIv.visibility = View.VISIBLE
-                        binding.errorTv.visibility = View.VISIBLE
-                        binding.errorTv.text = errorText
+                        binding.ivDialogGroupEnrollError.visibility = View.VISIBLE
+                        binding.tvDialogGroupEnrollError.visibility = View.VISIBLE
+                        binding.tvDialogGroupEnrollError.text = errorText
                     }
                 }
 
@@ -84,35 +84,35 @@ class GroupEnrollDialog : DialogFragment() {
             })
         }
 
-        binding.inputCodeTf.addTextChangedListener(object : TextWatcher {
+        binding.tfDialogGroupEnrollInputCode.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
 
             override fun afterTextChanged(s: Editable?) {
 
-                val inviteCode = binding.inputCodeTf.text.toString()
+                val inviteCode = binding.tfDialogGroupEnrollInputCode.text.toString()
 
                 if(validateInviteCode(inviteCode)) {    // 올바른 형식을 입력한 경우
-                    binding.errorIv.visibility = View.INVISIBLE
-                    binding.errorTv.visibility = View.INVISIBLE
-                    binding.inputCodeTv.visibility = View.GONE
-                    binding.enrollBtn.isEnabled = true
+                    binding.ivDialogGroupEnrollError.visibility = View.INVISIBLE
+                    binding.tvDialogGroupEnrollError.visibility = View.INVISIBLE
+                    binding.tvDialogGroupEnrollInputCodeHint.visibility = View.GONE
+                    binding.btnDialogGroupEnroll.isEnabled = true
                     return
                 }
 
                 if (inviteCode.isNullOrEmpty()) {    // 아무것도 입력하지 않은 경우
-                    binding.errorIv.visibility = View.INVISIBLE
-                    binding.errorTv.visibility = View.INVISIBLE
-                    binding.inputCodeTv.visibility = View.VISIBLE
-                    binding.enrollBtn.isEnabled = false
+                    binding.ivDialogGroupEnrollError.visibility = View.INVISIBLE
+                    binding.tvDialogGroupEnrollError.visibility = View.INVISIBLE
+                    binding.tvDialogGroupEnrollInputCodeHint.visibility = View.VISIBLE
+                    binding.btnDialogGroupEnroll.isEnabled = false
                     return
                 }
 
-                binding.errorIv.visibility = View.VISIBLE
-                binding.errorTv.visibility = View.VISIBLE
-                binding.errorTv.text = "올바른 초대코드를 입력해주세요."
-                binding.inputCodeTv.visibility = View.GONE
-                binding.enrollBtn.isEnabled = false
+                binding.ivDialogGroupEnrollError.visibility = View.VISIBLE
+                binding.tvDialogGroupEnrollError.visibility = View.VISIBLE
+                binding.tvDialogGroupEnrollError.text = "올바른 초대코드를 입력해주세요."
+                binding.tvDialogGroupEnrollInputCodeHint.visibility = View.GONE
+                binding.btnDialogGroupEnroll.isEnabled = false
             }
         })
     }
