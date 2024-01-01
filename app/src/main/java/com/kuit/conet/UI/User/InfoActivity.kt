@@ -9,7 +9,6 @@ import android.util.Log
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat.requireContext
 import com.bumptech.glide.Glide
 import com.kuit.conet.*
 import com.kuit.conet.Network.EditUserImage
@@ -39,7 +38,7 @@ class InfoActivity : AppCompatActivity() {
                         .error(R.drawable.profile_purple)
                         .fallback(R.drawable.profile_purple)
                         .circleCrop()
-                        .into(binding.infoPhotoIv)
+                        .into(binding.ivInfoPhoto)
                     sendImage(file)
                 }
             }
@@ -53,29 +52,29 @@ class InfoActivity : AppCompatActivity() {
         val name = getUsername(this)
         val imageUrl = getUserImg(this)
         val email = getUserEmail(this)
-        binding.tvUsername.text = name
+        binding.tvInfoUsername.text = name
         Glide.with(this)
             .load(imageUrl) // 불러올 이미지 url
             .placeholder(R.drawable.profile_purple) // 이미지 로딩 시작하기 전 표시할 이미지
             .error(R.drawable.profile_purple) // 로딩 에러 발생 시 표시할 이미지
             .fallback(R.drawable.profile_purple) // 로드할 url 이 비어있을(null 등) 경우 표시할 이미지
             .circleCrop() // 동그랗게 자르기 동그란 맘속에 피어난 How is the life...
-            .into(binding.infoPhotoIv) // 이미지를 넣을 뷰
+            .into(binding.ivInfoPhoto) // 이미지를 넣을 뷰
 
-        binding.infoAccountTv.text = email
+        binding.tvInfoAccount.text = email
 
-        binding.infoBtnBackIv.setOnClickListener {
+        binding.ivInfoBackBtn.setOnClickListener {
             finish()
         }
 
-        binding.myInfoCv.setOnClickListener {
+        binding.cvInfoMy.setOnClickListener {
             val intent = Intent(this, NameChangeActivity::class.java)
             intent.putExtra("name",name)
             startActivity(intent)
             finish()
         }
 
-        binding.infoWithdrawTv.setOnClickListener {
+        binding.tvInfoWithdrawal.setOnClickListener {
             val withdrawDialog = WithdrawDialog()
 
             supportFragmentManager.beginTransaction()
@@ -83,7 +82,7 @@ class InfoActivity : AppCompatActivity() {
                 .commit()
         }
 
-        binding.infoPhotoIv.setOnClickListener {
+        binding.ivInfoPhoto.setOnClickListener {
             openGallery()
         }
 
