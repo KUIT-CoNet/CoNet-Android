@@ -67,7 +67,7 @@ class GroupAllFragment : Fragment() {
                     } else {
                         Log.d(
                             NETWORK, "GroupAllFragment - getTeam()실행 결과 - 안좋음\n" +
-                                    "response - ${response}"
+                                    "response - $response"
                         )
                     }
                 }

@@ -69,7 +69,7 @@ class GroupEnrollDialog : DialogFragment() {
                     } else {
                         Log.d(NETWORK, "GroupEnrollDialog - Retrofit enrollGroup()실행결과 - 성공x")
                         val errorText = getErrorResponse(response.errorBody())!!.message
-                        Log.d(NETWORK, "response.errorbody : ${errorText}")
+                        Log.d(NETWORK, "response.errorbody : $errorText")
                         binding.ivDialogGroupEnrollError.visibility = View.VISIBLE
                         binding.tvDialogGroupEnrollError.visibility = View.VISIBLE
                         binding.tvDialogGroupEnrollError.text = errorText
@@ -92,7 +92,7 @@ class GroupEnrollDialog : DialogFragment() {
 
                 val inviteCode = binding.tfDialogGroupEnrollInputCode.text.toString()
 
-                if(validateInviteCode(inviteCode)) {    // 올바른 형식을 입력한 경우
+                if (validateInviteCode(inviteCode)) {    // 올바른 형식을 입력한 경우
                     binding.ivDialogGroupEnrollError.visibility = View.INVISIBLE
                     binding.tvDialogGroupEnrollError.visibility = View.INVISIBLE
                     binding.tvDialogGroupEnrollInputCodeHint.visibility = View.GONE
@@ -100,7 +100,7 @@ class GroupEnrollDialog : DialogFragment() {
                     return
                 }
 
-                if (inviteCode.isNullOrEmpty()) {    // 아무것도 입력하지 않은 경우
+                if (inviteCode.isEmpty()) {    // 아무것도 입력하지 않은 경우
                     binding.ivDialogGroupEnrollError.visibility = View.INVISIBLE
                     binding.tvDialogGroupEnrollError.visibility = View.INVISIBLE
                     binding.tvDialogGroupEnrollInputCodeHint.visibility = View.VISIBLE

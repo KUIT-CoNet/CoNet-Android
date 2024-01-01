@@ -130,13 +130,13 @@ class GroupAdapter(
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GroupAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding: ItemGroupBinding =
             ItemGroupBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding, context)
     }
 
-    override fun onBindViewHolder(holder: GroupAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(itemList[position])
     }
 

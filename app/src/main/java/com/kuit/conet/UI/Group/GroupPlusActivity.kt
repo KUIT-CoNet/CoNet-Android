@@ -340,12 +340,13 @@ class GroupPlusActivity : AppCompatActivity(), View.OnClickListener {
         var columnIndex = 0
         val proj = arrayOf(MediaStore.Images.Media.DATA)
         val cursor = contentResolver.query(uri, proj, null, null, null)
-        val filePath = cursor.use {// This Cursor should be freed up after use with #close()에 대한 처리문이다.
-            if (cursor!!.moveToFirst()) {
-                columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+        val filePath =
+            cursor.use {// This Cursor should be freed up after use with #close()에 대한 처리문이다.
+                if (cursor!!.moveToFirst()) {
+                    columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+                }
+                cursor.getString(columnIndex)
             }
-            cursor.getString(columnIndex)
-        }
 
         return filePath
     }

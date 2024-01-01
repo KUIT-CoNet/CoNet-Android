@@ -100,7 +100,8 @@ class GroupFragment : Fragment(), View.OnClickListener, GroupEnrollDialog.GroupP
     private fun closeFab() {
         ObjectAnimator.ofFloat(binding.fabGroupEnroll, "translationY", 0f).apply { start() }
         ObjectAnimator.ofFloat(binding.fabGroupPlus, "translationY", 0f).apply { start() }
-        ObjectAnimator.ofFloat(binding.tvGroupEnrollFabContent, "translationY", 0f).apply { start() }
+        ObjectAnimator.ofFloat(binding.tvGroupEnrollFabContent, "translationY", 0f)
+            .apply { start() }
         ObjectAnimator.ofFloat(binding.tvGroupPlusFabContent, "translationY", 0f).apply { start() }
 
         binding.fabGroupMain.startAnimation(rotateAntiClockWiseAnim)
@@ -114,8 +115,10 @@ class GroupFragment : Fragment(), View.OnClickListener, GroupEnrollDialog.GroupP
     private fun openFab() {
         ObjectAnimator.ofFloat(binding.fabGroupEnroll, "translationY", -200f).apply { start() }
         ObjectAnimator.ofFloat(binding.fabGroupPlus, "translationY", -400f).apply { start() }
-        ObjectAnimator.ofFloat(binding.tvGroupEnrollFabContent, "translationY", -200f).apply { start() }
-        ObjectAnimator.ofFloat(binding.tvGroupPlusFabContent, "translationY", -400f).apply { start() }
+        ObjectAnimator.ofFloat(binding.tvGroupEnrollFabContent, "translationY", -200f)
+            .apply { start() }
+        ObjectAnimator.ofFloat(binding.tvGroupPlusFabContent, "translationY", -400f)
+            .apply { start() }
 
         binding.fabGroupMain.startAnimation(rotateClockWiseAnim)
         binding.fabGroupEnroll.isClickable = true
