@@ -127,16 +127,17 @@ class GroupFragment : Fragment(), View.OnClickListener, GroupEnrollDialog.GroupP
 
     override fun onUpdateGroupList() {
         Log.d(TAG, "GroupFragment - onUpdateGroupList() called")
-//        binding.groupListVp.invalidate()
+        /*binding.vpGroupList.invalidate()
 //        refreshFragment(this, childFragmentManager)
-        refreshFragment(this, parentFragmentManager)
+        refreshFragment(this, parentFragmentManager)*/
+//        TODO GroupEnrollDialog에서 돌아올 때 업데이트 된 리스트를 받아오기
     }
 
-    private fun refreshFragment(fragment: Fragment, fragmentManager: FragmentManager) {
+    /*private fun refreshFragment(fragment: Fragment, fragmentManager: FragmentManager) {
         Log.d(TAG, "GroupFragment - refreshFragment() called")
         var ft: FragmentTransaction = fragmentManager.beginTransaction()
         ft.detach(fragment).attach(fragment).commit()
-    }
+    }*/
 
     companion object {
         lateinit var binding: FragmentGroupBinding
