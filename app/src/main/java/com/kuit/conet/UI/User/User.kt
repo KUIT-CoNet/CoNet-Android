@@ -42,31 +42,31 @@ class User : Fragment(){
             saveUsername(requireContext(), userData.name)
             saveUserImgUrl(requireContext(), userData.userImgUrl)
             saveUserEmail(requireContext(), userData.email)
-            binding.myNameTv.text = userData.name
+            binding.tvUserName.text = userData.name
             Glide.with(requireContext())
                 .load(userData.userImgUrl) // 불러올 이미지 url
                 .placeholder(R.drawable.profile_purple) // 이미지 로딩 시작하기 전 표시할 이미지
                 .error(R.drawable.profile_purple) // 로딩 에러 발생 시 표시할 이미지
                 .fallback(R.drawable.profile_purple) // 로드할 url 이 비어있을(null 등) 경우 표시할 이미지
                 .circleCrop() // 동그랗게 자르기 동그란 맘속에 피어난 How is the life...
-                .into(binding.myProfileIv) // 이미지를 넣을 뷰
+                .into(binding.ivUserProfile) // 이미지를 넣을 뷰
         }
-        binding.myInfoCv.setOnClickListener {
+        binding.cvUserInfo.setOnClickListener {
             val intent = Intent(requireContext(), InfoActivity::class.java)
             startActivity(intent)
         }
 
-        binding.myNoticeCv.setOnClickListener {
+        binding.cvUserNotice.setOnClickListener {
             val intent = Intent(requireContext(), NoticeActivity::class.java)
             startActivity(intent)
         }
 
-        binding.myInquiryCv.setOnClickListener{
+        binding.cvUserInquiry.setOnClickListener{
             val intent = Intent(requireContext(), CheckActivity::class.java)
             startActivity(intent)
         }
 
-        binding.myLogoutTv.setOnClickListener {
+        binding.tvUserLogout.setOnClickListener {
             val logoutDialog = LogoutDialog()
             parentFragmentManager.beginTransaction()
                 .replace(R.id.cl_user, logoutDialog)
@@ -84,14 +84,14 @@ class User : Fragment(){
     override fun onStart() {
         super.onStart()
         Log.d("start","프래그먼트 시작")
-        binding.myNameTv.text = getUsername(requireContext())
+        binding.tvUserName.text = getUsername(requireContext())
         Glide.with(requireContext())
             .load(getUserImg(requireContext())) // 불러올 이미지 url
             .placeholder(R.drawable.profile_purple) // 이미지 로딩 시작하기 전 표시할 이미지
             .error(R.drawable.profile_purple) // 로딩 에러 발생 시 표시할 이미지
             .fallback(R.drawable.profile_purple) // 로드할 url 이 비어있을(null 등) 경우 표시할 이미지
             .circleCrop() // 동그랗게 자르기 동그란 맘속에 피어난 How is the life...
-            .into(binding.myProfileIv) // 이미지를 넣을 뷰
+            .into(binding.ivUserProfile) // 이미지를 넣을 뷰
     }
 
 

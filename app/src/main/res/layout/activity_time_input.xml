@@ -146,7 +146,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/clock_check"
+                android:src="@drawable/btn_clock_check"
                 android:layout_margin="9dp"
                 app:layout_constraintStart_toStartOf="@id/mcv_clock"
                 app:layout_constraintTop_toTopOf="@id/mcv_clock"/>

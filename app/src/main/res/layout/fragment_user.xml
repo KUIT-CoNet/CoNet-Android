@@ -7,7 +7,7 @@
     android:id="@+id/cl_user">
 
     <TextView
-        android:id="@+id/my_1_tv"
+        android:id="@+id/tv_user_title"
         android:layout_width="wrap_content"
         android:layout_height="36dp"
         android:text="MY"
@@ -20,17 +20,17 @@
         app:layout_constraintStart_toStartOf="parent"/>
 
     <ImageView
-        android:id="@+id/my_profile_iv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/profile_purple"
+        android:id="@+id/iv_user_profile"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@drawable/ic_profile_gray"
         android:layout_marginTop="32dp"
         android:layout_marginStart="24dp"
-        app:layout_constraintTop_toBottomOf="@id/my_1_tv"
+        app:layout_constraintTop_toBottomOf="@id/tv_user_title"
         app:layout_constraintStart_toStartOf="parent"/>
 
     <TextView
-        android:id="@+id/my_name_tv"
+        android:id="@+id/tv_user_name"
         android:layout_width="wrap_content"
         android:layout_height="26dp"
         android:text="애플카카오"
@@ -38,28 +38,28 @@
         android:textSize="20sp"
         android:textColor="@color/black"
         android:layout_marginStart="20dp"
-        app:layout_constraintStart_toEndOf="@id/my_profile_iv"
-        app:layout_constraintTop_toTopOf="@id/my_profile_iv"
-        app:layout_constraintBottom_toBottomOf="@id/my_profile_iv"/>
+        app:layout_constraintStart_toEndOf="@id/iv_user_profile"
+        app:layout_constraintTop_toTopOf="@id/iv_user_profile"
+        app:layout_constraintBottom_toBottomOf="@id/iv_user_profile"/>
 
     <View
-        android:id="@+id/my_line1_v"
+        android:id="@+id/v_user_line_1"
         android:layout_width="match_parent"
         android:layout_height="18dp"
         android:background="@color/gray50"
         android:layout_marginTop="22dp"
-        app:layout_constraintTop_toBottomOf="@id/my_profile_iv"
+        app:layout_constraintTop_toBottomOf="@id/iv_user_profile"
         app:layout_constraintStart_toStartOf="parent"/>
 
     <!--회원정보-->
     <androidx.cardview.widget.CardView
-        android:id="@+id/cv_info_my"
+        android:id="@+id/cv_user_info"
         android:layout_width="match_parent"
         android:layout_height="24dp"
         android:layout_marginHorizontal="24dp"
         android:layout_marginTop="26dp"
         app:cardElevation="0dp"
-        app:layout_constraintTop_toBottomOf="@id/my_line1_v">
+        app:layout_constraintTop_toBottomOf="@id/v_user_line_1">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -79,7 +79,8 @@
             <ImageView
                 android:layout_width="26dp"
                 android:layout_height="26dp"
-                android:src="@drawable/chevron_right_gray"
+                android:src="@drawable/chevron_right"
+                app:tint="@color/gray200"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
@@ -89,13 +90,13 @@
 
     <!--알림 설정-->
     <androidx.cardview.widget.CardView
-        android:id="@+id/my_alert_cv"
+        android:id="@+id/cv_user_alert"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="24dp"
         android:layout_marginTop="24dp"
         app:cardElevation="0dp"
-        app:layout_constraintTop_toBottomOf="@id/cv_info_my">
+        app:layout_constraintTop_toBottomOf="@id/cv_user_info">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -119,14 +120,13 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:track="@drawable/switch_track_selector"
-                android:thumb="@drawable/switch_thumb"
-                />
+                android:thumb="@drawable/switch_thumb" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 
     <View
-        android:id="@+id/my_line2_v"
+        android:id="@+id/v_user_line_2"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="18dp"
@@ -135,17 +135,17 @@
         android:background="@color/gray100"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/my_alert_cv"/>
+        app:layout_constraintTop_toBottomOf="@id/cv_user_alert"/>
 
     <!--공지사항-->
     <androidx.cardview.widget.CardView
-        android:id="@+id/my_notice_cv"
+        android:id="@+id/cv_user_notice"
         android:layout_width="match_parent"
         android:layout_height="24dp"
         android:layout_marginHorizontal="24dp"
         android:layout_marginTop="22dp"
         app:cardElevation="0dp"
-        app:layout_constraintTop_toBottomOf="@id/my_line2_v">
+        app:layout_constraintTop_toBottomOf="@id/v_user_line_2">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -165,7 +165,8 @@
             <ImageView
                 android:layout_width="26dp"
                 android:layout_height="26dp"
-                android:src="@drawable/chevron_right_gray"
+                android:src="@drawable/chevron_right"
+                app:tint="@color/gray200"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
@@ -175,13 +176,13 @@
 
     <!--문의하기-->
     <androidx.cardview.widget.CardView
-        android:id="@+id/my_inquiry_cv"
+        android:id="@+id/cv_user_inquiry"
         android:layout_width="match_parent"
         android:layout_height="24dp"
         android:layout_marginHorizontal="24dp"
         android:layout_marginTop="26dp"
         app:cardElevation="0dp"
-        app:layout_constraintTop_toBottomOf="@id/my_notice_cv">
+        app:layout_constraintTop_toBottomOf="@id/cv_user_notice">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -201,7 +202,8 @@
             <ImageView
                 android:layout_width="26dp"
                 android:layout_height="26dp"
-                android:src="@drawable/chevron_right_gray"
+                android:src="@drawable/chevron_right"
+                app:tint="@color/gray200"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
@@ -211,7 +213,7 @@
 
     <!--이용약관-->
     <TextView
-        android:id="@+id/my_terms_tv"
+        android:id="@+id/tv_user_terms"
         android:layout_width="wrap_content"
         android:layout_height="20dp"
         android:text="이용약관"
@@ -220,7 +222,7 @@
         android:fontFamily="@font/pretendard_regular"
         android:layout_marginTop="24dp"
         android:layout_marginStart="24dp"
-        app:layout_constraintTop_toBottomOf="@id/my_inquiry_cv"
+        app:layout_constraintTop_toBottomOf="@id/cv_user_inquiry"
         app:layout_constraintStart_toStartOf="parent"/>
 
     <View
@@ -233,11 +235,11 @@
         android:background="@color/gray100"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/my_terms_tv"/>
+        app:layout_constraintTop_toBottomOf="@id/tv_user_terms"/>
 
     <!--로그아웃-->
     <TextView
-        android:id="@+id/my_logout_tv"
+        android:id="@+id/tv_user_logout"
         android:layout_width="wrap_content"
         android:layout_height="20dp"
         android:text="로그아웃"

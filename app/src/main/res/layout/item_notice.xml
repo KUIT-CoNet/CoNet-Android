@@ -18,7 +18,7 @@
             android:id="@+id/iv_profile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/profile_gray"/>
+            android:src="@drawable/ic_profile_gray"/>
 
     </androidx.cardview.widget.CardView>
 
