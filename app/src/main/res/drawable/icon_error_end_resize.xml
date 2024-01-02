@@ -3,5 +3,5 @@
     <item
         android:width="16dp"
         android:height="16dp"
-        android:drawable="@drawable/icon_error_end"/>
+        android:drawable="@drawable/icon_error_empty"/>
 </layer-list>
