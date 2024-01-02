@@ -26,7 +26,7 @@ import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 class WithdrawDialog : Fragment() {
-    lateinit var binding : DialogWithdrawBinding
+    lateinit var binding: DialogWithdrawBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -54,21 +54,20 @@ class WithdrawDialog : Fragment() {
         return binding.root
     }
 
-    fun DeleteUser(){
+    fun DeleteUser() {
 
         val deleteUser = getRetrofit().create(RetrofitInterface::class.java)
         val refreshToken = getRefreshToken(requireContext())
         deleteUser.deleteUser(
             "Bearer $refreshToken"
         ).enqueue(object :
-            retrofit2.Callback<DeleteUser>{
+            retrofit2.Callback<DeleteUser> {
             override fun onResponse(call: Call<DeleteUser>, response: Response<DeleteUser>) {
                 if (response.isSuccessful) {
                     val resp = response.body()// 성공했을 경우 response body불러오기
                     Log.d("SIGNUP/SUCCESS", resp.toString())
-                    Log.d("성공!","success")
-                }
-                else{
+                    Log.d("성공!", "success")
+                } else {
 
                 }
             }
