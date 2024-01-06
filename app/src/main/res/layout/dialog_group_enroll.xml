@@ -87,7 +87,7 @@
         app:layout_constraintTop_toTopOf="@id/iv_dialog_group_enroll_error" />
 
 
-    <com.google.android.material.button.MaterialButton
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_dialog_group_enroll"
         android:layout_width="191dp"
         android:layout_height="54dp"
