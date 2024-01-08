@@ -76,4 +76,8 @@ class ExitGroupDialog(groupMainActivity: GroupMainActivity, groupId : Int) : Dia
         })
    }
 
+    companion object {
+        const val TAG = "ExitGroupDialog"
+    }
+
 }
