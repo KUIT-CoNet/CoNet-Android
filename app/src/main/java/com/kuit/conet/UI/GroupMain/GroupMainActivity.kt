@@ -1,7 +1,6 @@
 package com.kuit.conet.UI.GroupMain
 
 import android.content.Intent
-import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -10,7 +9,6 @@ import com.kuit.conet.Network.ResponseDeleteBookmark
 import com.kuit.conet.Network.ResponseEnrollBookmark
 import com.kuit.conet.Network.RetrofitClient
 import com.kuit.conet.R
-import com.kuit.conet.Utils.SideBar
 import com.kuit.conet.UI.Plan.CreatePlanActivity
 import com.kuit.conet.Utils.*
 import com.kuit.conet.databinding.ActivityGroupMainBinding
