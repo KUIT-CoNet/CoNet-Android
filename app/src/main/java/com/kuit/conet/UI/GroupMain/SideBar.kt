@@ -27,6 +27,8 @@ class SideBar(
 
     interface OnItemClickListener {
         fun onItemClick(option: Int) // 1 : 대기중인 약속, 2: 약속  (이전 - 1 : 대기중인 약속, 2: 확정된 약속, 3:지난 약속 , 4: 히스토리)
+
+        fun exitSidebar()
     }
 
     fun setOnItemClickListener(onItemClickListener: OnItemClickListener) {
@@ -46,8 +48,9 @@ class SideBar(
         binding.tvSidebarGroupName.text = title
         binding.tvSidebarGroupCount.text = memberCount.toString() + "명"
 
-        binding.ivSidebarClose.setOnClickListener(this)
         binding.clSidebar.setOnClickListener(this)
+        binding.ivSidebarClose.setOnClickListener(this)
+        binding.clSidebarBackground.setOnClickListener(this)
         binding.ivSidebarGroupNameEdit.setOnClickListener(this)
         binding.llSidebarInviteCode.setOnClickListener(this)
         binding.llSidebarWaitingPlan.setOnClickListener(this)
@@ -58,7 +61,8 @@ class SideBar(
 
     override fun onClick(v: View?) {
         when (v?.id) {
-            R.id.iv_sidebar_close, R.id.cl_sidebar -> {
+            R.id.iv_sidebar_close, R.id.cl_sidebar_background -> {
+                itemClickListener.exitSidebar()
                 destoryFragment()
             }
             R.id.iv_sidebar_group_name_edit -> {
@@ -95,10 +99,12 @@ class SideBar(
                 destoryFragment()
                 exitGroupDialog.show(parentFragmentManager, ExitGroupDialog.TAG)
             }
+            R.id.cl_sidebar -> {}
         }
     }
 
     override fun onDestroyView() {
+        _itemClickListener = null
         _binding = null
         super.onDestroyView()
     }

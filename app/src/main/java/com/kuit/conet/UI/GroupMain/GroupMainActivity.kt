@@ -153,9 +153,13 @@ class GroupMainActivity : AppCompatActivity() {
                 .commitAllowingStateLoss()
         }
 
-        sideBar?.setOnItemClickListener(object : SideBar.OnItemClickListener{
+        sideBar.setOnItemClickListener(object : SideBar.OnItemClickListener{
             override fun onItemClick(option: Int) {
                 showDetail(option, groupId)
+            }
+
+            override fun exitSidebar() {
+                binding.flSidebar.visibility = View.GONE
             }
         })
 
