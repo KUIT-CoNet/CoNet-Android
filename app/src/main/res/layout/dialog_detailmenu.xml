@@ -56,7 +56,7 @@
             android:id="@+id/iv_delete"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:src="@drawable/iv_redtrash"
+            android:src="@drawable/icon_trash"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
