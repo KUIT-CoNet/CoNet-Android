@@ -79,4 +79,10 @@ class GroupFavoriteFragment : Fragment() {
                 }
             })
     }
+
+    override fun onDestroyView() {
+        _binding = null
+        super.onDestroyView()
+        Log.d(LIFECYCLE, "GroupAllFragment - onDestroyView() called")
+    }
 }

@@ -88,6 +88,12 @@ class GroupFragment : Fragment(), View.OnClickListener, GroupEnrollDialog.GroupP
         }
     }
 
+    override fun onDestroyView() {
+        _binding = null
+        super.onDestroyView()
+        Log.d(LIFECYCLE, "GroupAllFragment - onDestroyView() called")
+    }
+
     private fun toggleFab() {
         if (isFabOpen) {
             closeFab()
