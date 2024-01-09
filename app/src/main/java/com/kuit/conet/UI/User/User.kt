@@ -28,7 +28,7 @@ import kotlin.coroutines.suspendCoroutine
 
 class User : Fragment(){
     lateinit var binding : FragmentUserBinding
-    lateinit var userData : ShowUserInfo
+    private lateinit var userData : ShowUserInfo
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -66,6 +66,10 @@ class User : Fragment(){
             startActivity(intent)
         }
 
+        binding.cvUserTerms.setOnClickListener {
+            //문의하기 노션페이지로 이동?
+        }
+
         binding.tvUserLogout.setOnClickListener {
             val logoutDialog = LogoutDialog()
             parentFragmentManager.beginTransaction()
@@ -95,7 +99,7 @@ class User : Fragment(){
     }
 
 
-    suspend fun callUserInfo() : ShowUserInfo{
+    private suspend fun callUserInfo() : ShowUserInfo{
         return suspendCoroutine {
             continuation ->
             val responseUser = getRetrofit().create(RetrofitInterface::class.java)

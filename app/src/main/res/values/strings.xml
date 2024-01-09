@@ -11,4 +11,11 @@
     <string name="navigation_drawer_close">Close</string>
 
     <string name="plan_name_length">%1$d/20</string>
+
+    <string name="user_info">회원정보</string>
+    <string name="user_notice">공지사항</string>
+    <string name="user_inquiry">문의하기</string>
+    <string name="user_terms">이용약관</string>
+    <string name="user_logout">로그아웃</string>
+    <string name="conet_email">helpconet@gmail.com</string>
 </resources>
