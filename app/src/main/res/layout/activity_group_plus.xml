@@ -8,17 +8,17 @@
     tools:context=".UI.Group.GroupPlusActivity">
 
     <ImageView
-        android:id="@+id/close_iv"
+        android:id="@+id/iv_close"
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:contentDescription="닫기버튼"
         android:src="@drawable/icon_close"
-        app:layout_constraintBottom_toBottomOf="@id/title_tv"
+        app:layout_constraintBottom_toBottomOf="@id/tv_title"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/title_tv" />
+        app:layout_constraintTop_toTopOf="@id/tv_title" />
 
     <TextView
-        android:id="@+id/title_tv"
+        android:id="@+id/tv_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="18dp"
@@ -31,39 +31,39 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/finish_tv"
+        android:id="@+id/tv_finish"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:enabled="false"
         android:fontFamily="@font/pretendard"
-        android:text="완료"
+        android:text="@string/finish"
         android:textColor="@color/select_enabled"
         android:textSize="18sp"
-        android:enabled="false"
-        app:layout_constraintBottom_toBottomOf="@id/title_tv"
+        app:layout_constraintBottom_toBottomOf="@id/tv_title"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/title_tv" />
+        app:layout_constraintTop_toTopOf="@id/tv_title" />
 
     <TextView
-        android:id="@+id/group_name_tv"
+        android:id="@+id/tv_group_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:elevation="1dp"
-        android:text="모임 이름"
+        android:text="@string/group_name"
         android:textColor="@color/select_focus"
-        app:layout_constraintStart_toStartOf="@id/group_name_til"
-        app:layout_constraintTop_toTopOf="@id/group_name_til" />
+        app:layout_constraintStart_toStartOf="@id/til_group_name"
+        app:layout_constraintTop_toTopOf="@id/til_group_name" />
 
     <!--    app:counterTextColor="@color/select_focus"-->
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/group_name_til"
+        android:id="@+id/til_group_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="46dp"
-        app:boxBackgroundMode="filled"
-        app:boxBackgroundColor="@android:color/transparent"
-        app:boxStrokeColor="@color/textfield_stroke"
         android:paddingTop="24dp"
+        app:boxBackgroundColor="@android:color/transparent"
+        app:boxBackgroundMode="filled"
+        app:boxStrokeColor="@color/textfield_stroke"
         app:counterEnabled="true"
         app:counterMaxLength="20"
         app:endIconMode="clear_text"
@@ -71,64 +71,64 @@
         app:errorIconDrawable="@drawable/icon_error_end_resize"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/title_tv">
+        app:layout_constraintTop_toBottomOf="@id/tv_title">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/group_name_tf"
+            android:id="@+id/tf_group_name"
             android:layout_width="match_parent"
             android:layout_height="30dp"
-            android:contentDescription="모임이름입력"
             android:background="@null"
-            android:textSize="18sp"
+            android:contentDescription="@string/group_name_input_hint"
             android:fontFamily="@font/pretendard"
-            android:textColor="@color/texthigh" />
+            android:textColor="@color/texthigh"
+            android:textSize="18sp" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
-        android:id="@+id/group_name_hint_tv"
+        android:id="@+id/tv_group_name_hint"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="24dp"
-        android:text="모임이름입력"
+        android:text="@string/group_name_input_hint"
         android:textColor="@color/gray200"
         android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="@id/group_name_til"
-        app:layout_constraintTop_toTopOf="@id/group_name_til" />
+        app:layout_constraintStart_toStartOf="@id/til_group_name"
+        app:layout_constraintTop_toTopOf="@id/til_group_name" />
 
 
     <TextView
-        android:id="@+id/group_picture_tv"
+        android:id="@+id/tv_group_picture"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
-        android:text="모임대표 사진"
-        app:layout_constraintStart_toStartOf="@id/group_picture_iv"
-        app:layout_constraintTop_toBottomOf="@id/group_name_til" />
+        android:text="@string/group_picture"
+        app:layout_constraintStart_toStartOf="@id/iv_group_picture"
+        app:layout_constraintTop_toBottomOf="@id/til_group_name" />
 
     <ImageView
-        android:id="@+id/group_picture_iv"
+        android:id="@+id/iv_group_picture"
         android:layout_width="match_parent"
         android:layout_height="300dp"
         android:layout_marginTop="8dp"
         android:adjustViewBounds="true"
         android:background="@drawable/border_line"
-        android:contentDescription="모임대표사진"
+        android:contentDescription="@string/group_picture"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/group_picture_tv" />
+        app:layout_constraintTop_toBottomOf="@id/tv_group_picture" />
 
     <LinearLayout
-        android:id="@+id/input_picture_ll"
+        android:id="@+id/ll_group_plus_input_picture"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="@id/group_picture_iv"
-        app:layout_constraintEnd_toEndOf="@id/group_picture_iv"
-        app:layout_constraintStart_toStartOf="@id/group_picture_iv"
-        app:layout_constraintTop_toTopOf="@id/group_picture_iv">
+        app:layout_constraintBottom_toBottomOf="@id/iv_group_picture"
+        app:layout_constraintEnd_toEndOf="@id/iv_group_picture"
+        app:layout_constraintStart_toStartOf="@id/iv_group_picture"
+        app:layout_constraintTop_toTopOf="@id/iv_group_picture">
 
         <ImageView
             android:layout_width="32dp"
@@ -144,7 +144,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="업로드할 이미지를 첨부해주세요.\n1:1의 정방형 이미지를 추천합니다."
+            android:text="@string/group_picture_hint"
             android:textColor="@color/gray200" />
 
         <View
@@ -156,27 +156,27 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:backgroundTint="@color/gray100"
-            android:text="첨부"
+            android:text="@string/attach"
             android:textColor="@color/gray500" />
 
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/loading_picture_ll"
+        android:id="@+id/ll_group_plus_loading_picture"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="vertical"
         android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@id/group_picture_iv"
-        app:layout_constraintEnd_toEndOf="@id/group_picture_iv"
-        app:layout_constraintStart_toStartOf="@id/group_picture_iv"
-        app:layout_constraintTop_toTopOf="@id/group_picture_iv">
+        app:layout_constraintBottom_toBottomOf="@id/iv_group_picture"
+        app:layout_constraintEnd_toEndOf="@id/iv_group_picture"
+        app:layout_constraintStart_toStartOf="@id/iv_group_picture"
+        app:layout_constraintTop_toTopOf="@id/iv_group_picture">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="파일이 업로드 되고 있습니다." />
+            android:text="@string/file_uploading" />
 
         <ProgressBar
             style="@style/Widget.AppCompat.ProgressBar.Horizontal"
@@ -185,6 +185,5 @@
             android:layout_marginTop="20dp" />
 
     </LinearLayout>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
