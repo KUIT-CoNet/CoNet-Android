@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <FrameLayout
-        android:id="@+id/fl_calendar"
+        android:id="@+id/fl_create_plan"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -13,7 +13,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <ImageView
-                android:id="@+id/btn_back_iv"
+                android:id="@+id/iv_create_back_btn"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:src="@drawable/btn_prev"
@@ -24,7 +24,7 @@
                 app:layout_constraintStart_toStartOf="parent"/>
 
             <TextView
-                android:id="@+id/tv_title"
+                android:id="@+id/tv_create_title"
                 android:layout_width="wrap_content"
                 android:layout_height="22dp"
                 android:text="약속 만들기"
@@ -33,11 +33,11 @@
                 android:textColor="@color/black"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/btn_back_iv"
-                app:layout_constraintBottom_toBottomOf="@id/btn_back_iv"/>
+                app:layout_constraintTop_toTopOf="@id/iv_create_back_btn"
+                app:layout_constraintBottom_toBottomOf="@id/iv_create_back_btn"/>
 
             <TextView
-                android:id="@+id/tv_text1"
+                android:id="@+id/tv_create_text_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="약속 이름"
@@ -45,11 +45,11 @@
                 android:fontFamily="@font/pretendard_bold"
                 android:layout_marginStart="24dp"
                 android:layout_marginBottom="2dp"
-                app:layout_constraintBottom_toTopOf="@id/plan_name_et"
+                app:layout_constraintBottom_toTopOf="@id/et_create_plan_name"
                 app:layout_constraintStart_toStartOf="parent"/>
 
             <EditText
-                android:id="@+id/plan_name_et"
+                android:id="@+id/et_create_plan_name"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:layout_weight="1"
@@ -62,72 +62,54 @@
                 android:background="@null"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_title"/>
+                app:layout_constraintTop_toBottomOf="@id/tv_create_title"/>
 
             <ImageView
-                android:id="@+id/iv_name_text_cancel"
+                android:id="@+id/iv_create_text_cancel"
                 android:layout_width="16dp"
                 android:layout_height="16dp"
-                app:layout_constraintBottom_toTopOf="@id/plan_underline_ll"
-                app:layout_constraintRight_toRightOf="@id/plan_underline_ll"
+                app:layout_constraintBottom_toTopOf="@id/ll_create_underline_1"
+                app:layout_constraintRight_toRightOf="@id/ll_create_underline_1"
                 android:layout_marginBottom="5dp"
                 android:visibility="gone"
                 android:src="@drawable/btn_clear"/>
 
             <FrameLayout
-                android:id="@+id/plan_underline_ll"
+                android:id="@+id/ll_create_underline_1"
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
                 android:layout_marginHorizontal="24dp"
-                app:layout_constraintTop_toBottomOf="@id/plan_name_et"
+                app:layout_constraintTop_toBottomOf="@id/et_create_plan_name"
                 android:orientation="horizontal">
                 <View
-                    android:id="@+id/plan_underline1"
+                    android:id="@+id/v_create_underline_1"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@color/gray200"
                     android:visibility="visible"/>
 
                 <View
-                    android:id="@+id/plan_underline2"
+                    android:id="@+id/v_create_underline_2"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@color/purpleMain"
                     android:visibility="gone"/>
 
             </FrameLayout>
-
-<!--            <LinearLayout-->
-<!--                android:id="@+id/plan_underline_1"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="2dp"-->
-<!--                android:layout_marginHorizontal="24dp"-->
-<!--                app:layout_constraintTop_toBottomOf="@id/plan_name_et"-->
-<!--                android:background="@color/gray200"-->
-<!--                android:orientation="horizontal"/>-->
-<!--            <LinearLayout-->
-<!--                android:id="@+id/plan_underline_2"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="2dp"-->
-<!--                android:layout_marginHorizontal="24dp"-->
-<!--                app:layout_constraintTop_toBottomOf="@id/plan_name_et"-->
-<!--                android:background="@color/purpleMain"-->
-<!--                android:orientation="horizontal"-->
-<!--                android:visibility="gone"/>-->
             
             <TextView
-                android:id="@+id/plan_name_length"
+                android:id="@+id/tv_create_plan_name_length"
                 android:layout_width="wrap_content"
                 android:layout_height="16dp"
                 android:text="%1$d/20"
                 android:fontFamily="@font/pretendard_regular"
                 android:textSize="12sp"
                 android:textColor="@color/gray200"
-                app:layout_constraintEnd_toEndOf="@id/plan_underline_ll"
-                app:layout_constraintTop_toBottomOf="@id/plan_underline_ll"/>
+                app:layout_constraintEnd_toEndOf="@id/ll_create_underline_1"
+                app:layout_constraintTop_toBottomOf="@id/ll_create_underline_1"/>
 
             <TextView
-                android:id="@+id/tv_text2"
+                android:id="@+id/tv_create_text_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="약속 기간 - 시작일"
@@ -135,11 +117,11 @@
                 android:fontFamily="@font/pretendard_bold"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="18dp"
-                app:layout_constraintTop_toBottomOf="@id/plan_name_et"
+                app:layout_constraintTop_toBottomOf="@id/et_create_plan_name"
                 app:layout_constraintStart_toStartOf="parent"/>
 
             <TextView
-                android:id="@+id/tv_plan_date"
+                android:id="@+id/tv_create_plan_date"
                 android:layout_width="match_parent"
                 android:layout_height="22dp"
                 android:text="YYYY. MM. DD."
@@ -148,62 +130,53 @@
                 android:textColor="@color/gray200"
                 android:layout_marginHorizontal="24dp"
                 android:layout_marginTop="10dp"
-                app:layout_constraintTop_toBottomOf="@id/tv_text2"
+                app:layout_constraintTop_toBottomOf="@id/tv_create_text_2"
                 app:layout_constraintStart_toStartOf="parent"/>
 
             <LinearLayout
-                android:id="@+id/tv_underline_ll2"
+                android:id="@+id/ll_create_underline_2"
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
-                app:layout_constraintTop_toBottomOf="@id/tv_plan_date"
+                app:layout_constraintTop_toBottomOf="@id/tv_create_plan_date"
                 android:layout_marginHorizontal="24dp"
                 android:layout_marginTop="8dp"
                 android:background="@color/gray200"
                 android:orientation="horizontal"/>
 
             <ImageView
-                android:id="@+id/iv_calendar"
+                android:id="@+id/iv_create_calendar"
                 android:layout_width="16dp"
                 android:layout_height="16dp"
-                android:src="@drawable/calendar_gray"
+                android:src="@drawable/ic_calendar"
                 android:layout_marginBottom="8dp"
-                app:layout_constraintEnd_toEndOf="@id/tv_underline_ll2"
-                app:layout_constraintBottom_toTopOf="@id/tv_underline_ll2"/>
+                app:layout_constraintEnd_toEndOf="@id/ll_create_underline_2"
+                app:layout_constraintBottom_toTopOf="@id/ll_create_underline_2"
+                app:tint="@color/gray300" />
 
             <ImageView
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:src="@drawable/calendar_black"
-                android:layout_marginBottom="8dp"
-                app:layout_constraintEnd_toEndOf="@id/tv_underline_ll2"
-                app:layout_constraintBottom_toTopOf="@id/tv_underline_ll2"
-                android:visibility="gone"/>
-
-
-            <ImageView
-                android:id="@+id/iv_info"
+                android:id="@+id/iv_create_info"
                 android:layout_width="15dp"
                 android:layout_height="15dp"
                 android:src="@drawable/ic_error_purple"
                 android:layout_marginTop="6dp"
-                app:layout_constraintStart_toStartOf="@id/tv_underline_ll2"
-                app:layout_constraintTop_toBottomOf="@id/tv_underline_ll2"/>
+                app:layout_constraintStart_toStartOf="@id/ll_create_underline_2"
+                app:layout_constraintTop_toBottomOf="@id/ll_create_underline_2"/>
 
 
             <TextView
-                android:id="@+id/name_info1_tv"
+                android:id="@+id/tv_create_info"
                 android:layout_width="wrap_content"
                 android:layout_height="16dp"
                 android:text="약속 기간은 시작일로부터 7일 자동 설정됩니다."
                 android:fontFamily="@font/pretendard"
                 android:textSize="12sp"
                 android:layout_marginStart="5dp"
-                app:layout_constraintStart_toEndOf="@id/iv_info"
-                app:layout_constraintTop_toTopOf="@id/iv_info"
-                app:layout_constraintBottom_toBottomOf="@id/iv_info"/>
+                app:layout_constraintStart_toEndOf="@id/iv_create_info"
+                app:layout_constraintTop_toTopOf="@id/iv_create_info"
+                app:layout_constraintBottom_toBottomOf="@id/iv_create_info"/>
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/btn_cv"
+                android:id="@+id/cv_create_done_btn"
                 android:layout_width="match_parent"
                 android:layout_height="52dp"
                 android:layout_marginHorizontal="24dp"
@@ -213,12 +186,12 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent">
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/btn_cl"
+                    android:id="@+id/cl_create_done_btn"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@color/gray200">
                     <TextView
-                        android:id="@+id/btn_text"
+                        android:id="@+id/tv_create_done_btn"
                         android:layout_width="wrap_content"
                         android:layout_height="20dp"
                         android:text="만들기"
