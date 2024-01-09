@@ -68,7 +68,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="20dp"
-                android:text="회원정보"
+                android:text="@string/user_info"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:fontFamily="@font/pretendard_regular"
@@ -154,7 +154,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="20dp"
-                android:text="공지사항"
+                android:text="@string/user_notice"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:fontFamily="@font/pretendard_regular"
@@ -191,7 +191,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="20dp"
-                android:text="문의하기"
+                android:text="@string/user_inquiry"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:fontFamily="@font/pretendard_regular"
@@ -228,7 +228,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="20dp"
-                android:text="이용약관"
+                android:text="@string/user_terms"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:fontFamily="@font/pretendard_regular"
@@ -265,7 +265,7 @@
         android:id="@+id/tv_user_logout"
         android:layout_width="wrap_content"
         android:layout_height="20dp"
-        android:text="로그아웃"
+        android:text="@string/user_logout"
         android:textColor="@color/black"
         android:textSize="16sp"
         android:fontFamily="@font/pretendard_regular"

@@ -1,21 +1,16 @@
 package com.kuit.conet.UI.User
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
-import com.bumptech.glide.annotation.GlideModule
-import com.bumptech.glide.module.AppGlideModule
 import com.kuit.conet.*
 import com.kuit.conet.Network.*
 import com.kuit.conet.databinding.FragmentUserBinding
-import kakao.k.r
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -62,7 +57,7 @@ class User : Fragment(){
         }
 
         binding.cvUserInquiry.setOnClickListener{
-            val intent = Intent(requireContext(), CheckActivity::class.java)
+            val intent = Intent(requireContext(), InquiryActivity::class.java)
             startActivity(intent)
         }
 

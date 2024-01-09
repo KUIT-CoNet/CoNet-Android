@@ -2,6 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!--11번줄 오류 떠서 추가된 내용-->
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA"></uses-permission>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
@@ -54,7 +59,7 @@
             android:screenOrientation="portrait"
             android:exported="false" />
         <activity
-            android:name=".UI.User.CheckActivity"
+            android:name=".UI.User.InquiryActivity"
             android:screenOrientation="portrait"
             android:exported="false"/>
         <activity
