@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment
 import com.kuit.conet.R
 import com.kuit.conet.UI.Group.GroupPlusActivity
 import com.kuit.conet.UI.GroupMain.DeleteGroupDialog
-import com.kuit.conet.UI.Group.GroupInviteCodeDialog
+import com.kuit.conet.UI.GroupMain.GroupInviteCodeDialog
 import com.kuit.conet.UI.GroupMain.ExitGroupDialog
 import com.kuit.conet.UI.GroupMain.GroupMainActivity
 import com.kuit.conet.UI.History.HistoryMainActivity

@@ -1,4 +1,4 @@
-package com.kuit.conet.UI.Group
+package com.kuit.conet.UI.GroupMain
 
 import android.content.Intent
 import android.os.Bundle

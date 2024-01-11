@@ -18,4 +18,21 @@
     <string name="user_terms">이용약관</string>
     <string name="user_logout">로그아웃</string>
     <string name="conet_email">helpconet@gmail.com</string>
+
+    <string name="group_title">모임</string>
+    <string name="group_plus_content">모임추가</string>
+    <string name="group_enroll_content">모임참여</string>
+
+    <string name="invite_code_input">전달받은 초대코드를\n입력해주세요.</string>
+    <string name="hint_invite_code_input">참여코드입력</string>
+    <string name="group_enroll">참여하기</string>
+
+    <string name="group_name">모임 이름</string>
+    <string name="group_name_input_hint">모임이름입력</string>
+    <string name="group_picture">모임대표 사진</string>
+    <string name="group_picture_hint">업로드할 이미지를 첨부해주세요.\n1:1의 정방형 이미지를 추천합니다.</string>
+    <string name="file_uploading">파일이 업로드 되고 있습니다.</string>
+    <string name="attach">첨부</string>
+
+    <string name="finish">완료</string>
 </resources>
