@@ -33,64 +33,65 @@ class CreatePlanActivity() : AppCompatActivity() {
 
         val groupId = intent.getIntExtra("GroupId", -1)
 
-        binding.planNameLength.text = "0/20"
+        binding.tvCreatePlanNameLength.text = "0/20"
 
-        binding.btnBackIv.setOnClickListener {
+        binding.ivCreateBackBtn.setOnClickListener {
             finish()
         }
 
-        binding.planNameEt.addTextChangedListener(object : TextWatcher{
+        binding.etCreatePlanName.addTextChangedListener(object : TextWatcher{
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 Log.d("texting","입력전")
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 Log.d("texting","입력중")
-                binding.planNameLength.text=getString(R.string.plan_name_length, p0!!.length)
-                binding.planUnderline2.visibility = View.VISIBLE
-                binding.planUnderline1.visibility = View.GONE
+                binding.tvCreatePlanNameLength.text=getString(R.string.plan_name_length, p0!!.length)
+                binding.vCreateUnderline2.visibility = View.VISIBLE
+                binding.vCreateUnderline1.visibility = View.GONE
             }
 
             override fun afterTextChanged(p0: Editable?) {
                 Log.d("texting","입력끝")
                 if(p0!!.isNotEmpty()){
-                    binding.btnTextCancle.visibility = View.VISIBLE
+                    binding.ivCreateTextCancel.visibility = View.VISIBLE
                     isNameInput=true
                 }
                 else {
-                    binding.btnTextCancle.visibility = View.GONE
+                    binding.ivCreateTextCancel.visibility = View.GONE
                     isNameInput=false
                 }
-                binding.planUnderline2.visibility = View.GONE
-                binding.planUnderline1.visibility = View.VISIBLE
+                binding.vCreateUnderline2.visibility = View.GONE
+                binding.vCreateUnderline1.visibility = View.VISIBLE
             }
         })
 
-        binding.btnTextCancle.setOnClickListener {
-            binding.planNameEt.text = null
+        binding.ivCreateTextCancel.setOnClickListener {
+            binding.etCreatePlanName.text = null
             isNameInput=false
         }
 
         val calenderDialog = CalenderDialog()
-        binding.tvPlanDate.setOnClickListener {
+        binding.tvCreatePlanDate.setOnClickListener {
             supportFragmentManager.beginTransaction()
                 .setCustomAnimations(R.anim.to_up, R.anim.from_down)
                 .replace(R.id.fl_calendar, calenderDialog)
                 .commitAllowingStateLoss()
 
-            binding.ivCalendar.setImageResource(R.drawable.calendar_black)
-            binding.tvPlanDate.setTextColor(R.color.black)
+            binding.ivCreateCalendar.setColorFilter(R.color.black)
+            binding.tvCreatePlanDate.setTextColor(R.color.black)
         }
 
         calenderDialog.setOnButtonClickListener(object : CalenderDialog.OnButtonClickListener{
             override fun onButtonClicked(date: String) {
-                binding.tvPlanDate.text = date
-                binding.ivCalendar.setImageResource(R.drawable.calendar_gray)
-                binding.tvPlanDate.setTextColor(R.color.black)
+                binding.tvCreatePlanDate.text = date
+                binding.ivCreateCalendar.setColorFilter(R.color.gray300)
+                //binding.ivCreateCalendar.setImageResource(R.drawable.calendar_gray)
+                binding.tvCreatePlanDate.setTextColor(R.color.black)
                 isDateInput=true
 
-                binding.btnCl.setBackgroundResource(R.color.purpleMain)
-                binding.btnText.text = "다음"
+                binding.clCreateDoneBtn.setBackgroundResource(R.color.purpleMain)
+                binding.tvCreateDoneBtn.text = "다음"
 
                 supportFragmentManager.beginTransaction()
                     .remove(calenderDialog)
@@ -98,12 +99,12 @@ class CreatePlanActivity() : AppCompatActivity() {
             }
         })
 
-        binding.btnCv.setOnClickListener {
+        binding.cvCreateDoneBtn.setOnClickListener {
             if (isDateInput && isNameInput){
                 val coroutineScope = CoroutineScope(Dispatchers.Main)
                 val intent = Intent(this, PlanTimeActivity::class.java)
                 coroutineScope.launch {
-                    MakePlan(binding.planNameEt.text!!.toString(), groupId, binding.tvPlanDate.text!!.toString(), intent)
+                    MakePlan(binding.etCreatePlanName.text!!.toString(), groupId, binding.tvCreatePlanDate.text!!.toString(), intent)
                 }
             }
         }
@@ -131,12 +132,12 @@ class CreatePlanActivity() : AppCompatActivity() {
                         Log.d("성공!","success")
 
                         val planId =  resp!!.result.planId
-                        intent.putExtra("planName", binding.planNameEt.text.toString())
-                        intent.putExtra("planStartPeriod",binding.tvPlanDate.text.toString())
+                        intent.putExtra("planName", binding.etCreatePlanName.text.toString())
+                        intent.putExtra("planStartPeriod",binding.tvCreatePlanDate.text.toString())
                         intent.putExtra("GroupId",groupId)
                         intent.putExtra("planId",planId)
                         startActivity(intent)
-                        Log.d("PlanTimeActivity 실행 완료", "startDate :"+binding.tvPlanDate.text.toString())
+                        Log.d("PlanTimeActivity 실행 완료", "startDate :"+binding.tvCreatePlanDate.text.toString())
                         finish()
                     }
                     else{

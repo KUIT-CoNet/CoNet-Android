@@ -24,9 +24,9 @@ class AllParticipantAdapter(val context: Context, var allList: ArrayList<Members
                 .load(item.image) // 불러올 이미지 url
                 .centerCrop()
                 .apply(RequestOptions.circleCropTransform())
-                .placeholder(R.drawable.profile_gray) // 이미지 로딩 시작하기 전 표시할 이미지
-                .error(R.drawable.profile_gray) // 로딩 에러 발생 시 표시할 이미지
-                .fallback(R.drawable.profile_gray) // 로드할 url 이 비어있을(null 등) 경우 표시할 이미지
+                .placeholder(R.drawable.ic_profile_gray) // 이미지 로딩 시작하기 전 표시할 이미지
+                .error(R.drawable.ic_profile_gray) // 로딩 에러 발생 시 표시할 이미지
+                .fallback(R.drawable.ic_profile_gray) // 로드할 url 이 비어있을(null 등) 경우 표시할 이미지
                 .into(binding.participantImageIv) // 이미지를 넣을 뷰
 
             if(enrollList.find{ it.name == item.name } != null){
