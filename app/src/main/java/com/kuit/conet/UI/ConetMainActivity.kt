@@ -9,69 +9,25 @@ import com.kuit.conet.UI.Home.Home
 import com.kuit.conet.UI.User.User
 import com.kuit.conet.UI.Group.GroupFragment
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.commit
 import com.kuit.conet.databinding.ActivityKonetMainBinding
 
 class ConetMainActivity : AppCompatActivity() {
-    lateinit var binding : ActivityKonetMainBinding
-    var exit_mills : Long = 0 // 시간을 저장하는 전역변수
 
-    /*
-    Home클래스 : 홈 메뉴 구현
-    Users클래스 : 모임 메뉴 구현
-    User클래스 : My메뉴 구현
-    */
+    private lateinit var binding : ActivityKonetMainBinding
+    private val fragmentManager = supportFragmentManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityKonetMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        Log.d("AccessToken", "${getAccessToken(this)}")
-        Log.d("refreshToken", "${getRefreshToken(this)}")
-        Log.d("name", "${getUsername(this)}")
-        Log.d("isoption", "${getIsoption(this)}")
-
         initBottomNavigation()
-    }
-
-    private fun initBottomNavigation() {
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.main_fragment, Home())
-            .commitAllowingStateLoss()
-
-
-        binding.mainBnv.setOnItemSelectedListener {
-            when (it.itemId) {
-                R.id.home_menu -> {
-                    supportFragmentManager.beginTransaction()
-                        .addToBackStack(null)
-                        .replace(R.id.main_fragment, Home())
-                        .commitAllowingStateLoss()
-                    return@setOnItemSelectedListener true
-                }
-
-                R.id.together_menu -> {
-                    supportFragmentManager.beginTransaction()
-
-                        .replace(R.id.main_fragment, GroupFragment())
-                        .commitAllowingStateLoss()
-                    return@setOnItemSelectedListener true
-                }
-                R.id.my_menu -> {
-                    supportFragmentManager.beginTransaction()
-
-                        .replace(R.id.main_fragment, User())
-                        .commitAllowingStateLoss()
-                    return@setOnItemSelectedListener true
-                }
-            }
-            false
-        }
-
         binding.mainBnv.itemIconTintList = null
 
         val callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                val fragment = supportFragmentManager.findFragmentById(R.id.main_fragment) // 프래그 먼트를 띄워주는 프레임 레이아웃 넣어줌 -> 프레임 레이아웃위에 뜬 프레그먼트가 뭔지 알려줌
+                val fragment = fragmentManager.findFragmentById(R.id.main_fragment)
                 if (fragment is Home) { // Home 프레그먼트에서 뒤로 가기 누르면
                     killapp() // 앱 종료
                 } else {
@@ -82,7 +38,42 @@ class ConetMainActivity : AppCompatActivity() {
         onBackPressedDispatcher.addCallback(this, callback) // callback 등록
     }
 
+    private fun initBottomNavigation() {
+        fragmentManager.commit {
+            replace(R.id.main_fragment, Home())
+        }
+
+        binding.mainBnv.setOnItemSelectedListener {
+            when (it.itemId) {
+                R.id.home_menu -> {
+                    fragmentManager.commit {
+                        addToBackStack(null)
+                        replace(R.id.main_fragment, Home())
+                    }
+                    return@setOnItemSelectedListener true
+                }
+
+                R.id.together_menu -> {
+                    fragmentManager.commit {
+                        addToBackStack(null)
+                        replace(R.id.main_fragment, GroupFragment())
+                    }
+                    return@setOnItemSelectedListener true
+                }
+                R.id.my_menu -> {
+                    fragmentManager.commit {
+                        addToBackStack(null)
+                        replace(R.id.main_fragment, User())
+                    }
+                    return@setOnItemSelectedListener true
+                }
+            }
+            false
+        }
+    }
+
     fun killapp(){ // 뒤로가기 2초안에 두번 눌러야 종료되게
+        var exit_mills : Long = 0
         if(System.currentTimeMillis() - exit_mills > 2000){ //System.currentTimeMillis()현재 시간을 밀리초로 변환한것
             exit_mills = System.currentTimeMillis()
             Toast.makeText(this, "뒤로 버튼을 한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT).show()

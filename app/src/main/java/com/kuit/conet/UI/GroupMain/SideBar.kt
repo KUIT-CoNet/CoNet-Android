@@ -110,7 +110,7 @@ class SideBar(
     }
 
     private fun destoryFragment() {
-        val fragment = parentFragmentManager.findFragmentById(R.id.fl_sidebar)
+        val fragment = parentFragmentManager.findFragmentById(R.id.fl_group_image)
         if (fragment != null) {
             parentFragmentManager.beginTransaction()
                 .remove(fragment)
