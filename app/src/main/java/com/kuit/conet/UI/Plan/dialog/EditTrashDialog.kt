@@ -1,4 +1,4 @@
-package com.kuit.conet.UI.Plan
+package com.kuit.conet.UI.Plan.dialog
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,17 +10,20 @@ import com.kuit.conet.databinding.DialogBottomSheetEditTrashBinding
 
 class EditTrashDialog : BottomSheetDialogFragment(), View.OnClickListener {
 
-    private lateinit var binding: DialogBottomSheetEditTrashBinding
+    private var _binding: DialogBottomSheetEditTrashBinding? = null
+    private val binding: DialogBottomSheetEditTrashBinding
+        get() = requireNotNull(_binding) { "EditTrashDialog's binding is null" }
+    private var _listener: OnDialogClickListener? = null
+    private val listener: OnDialogClickListener
+        get() = requireNotNull(_listener) { "EditTrashDialog's listener is null" }
 
     interface OnDialogClickListener {
         fun onEditButtonClick()
         fun onTrashButtonClick()
     }
 
-    private var listener: OnDialogClickListener? = null
-
     fun setOnDialogClickListener(listener: OnDialogClickListener) {
-        this.listener = listener
+        this._listener = listener
     }
 
     override fun onCreateView(
@@ -29,15 +32,15 @@ class EditTrashDialog : BottomSheetDialogFragment(), View.OnClickListener {
         savedInstanceState: Bundle?
     ): View {
         super.onCreateView(inflater, container, savedInstanceState)
-        binding = DialogBottomSheetEditTrashBinding.inflate(layoutInflater, container, false)
+        _binding = DialogBottomSheetEditTrashBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.editLl.setOnClickListener(this)
-        binding.trashLl.setOnClickListener(this)
+        binding.llEdit.setOnClickListener(this)
+        binding.llTrash.setOnClickListener(this)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,12 +53,12 @@ class EditTrashDialog : BottomSheetDialogFragment(), View.OnClickListener {
 
     override fun onClick(v: View?) {
         when(v!!.id){
-            R.id.edit_ll ->{
-                listener?.onEditButtonClick()
+            R.id.ll_edit ->{
+                listener.onEditButtonClick()
                 dismiss()
             }
-            R.id.trash_ll ->{
-                listener?.onTrashButtonClick()
+            R.id.ll_trash ->{
+                listener.onTrashButtonClick()
                 dismiss()
             }
         }
