@@ -1,4 +1,4 @@
-package com.kuit.conet.UI.Plan
+package com.kuit.conet.UI.Plan.dialog
 
 import android.content.Context
 import android.os.Bundle
@@ -17,7 +17,11 @@ import com.kuit.conet.databinding.DialogBottomSheetMembersBinding
 import retrofit2.Call
 import retrofit2.Response
 
-class MembersDialog(private val context: Context, private val participantList: ArrayList<Members>, private val groupId:Int): BottomSheetDialogFragment(){
+class MembersDialog(
+    private val context: Context,
+    private val participantList: ArrayList<Members>,
+    private val groupId: Int
+) : BottomSheetDialogFragment() {
 
     private lateinit var binding: DialogBottomSheetMembersBinding
     private lateinit var allParticipantAdapter: AllParticipantAdapter
@@ -40,40 +44,49 @@ class MembersDialog(private val context: Context, private val participantList: A
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        RetrofitClient.instance.getGroupMembers(groupId).enqueue(object: retrofit2.Callback<ResponseGetGroupMembers>{
-            override fun onResponse(
-                call: Call<ResponseGetGroupMembers>,
-                response: Response<ResponseGetGroupMembers>
-            ) {
-                if(response.isSuccessful){
-                    Log.d(TAG, "MembersDialog - Retrofit getGroupMembers() 실행 결과 - 성공")
+        RetrofitClient.instance.getGroupMembers(groupId)
+            .enqueue(object : retrofit2.Callback<ResponseGetGroupMembers> {
+                override fun onResponse(
+                    call: Call<ResponseGetGroupMembers>,
+                    response: Response<ResponseGetGroupMembers>
+                ) {
+                    if (response.isSuccessful) {
+                        Log.d(TAG, "MembersDialog - Retrofit getGroupMembers() 실행 결과 - 성공")
 
-                    val allParticipantList = response.body()!!.result
-                    Log.d(TAG, "내용 : $allParticipantList\n" +
-                            "타입 : ${allParticipantList.javaClass}")
-                    Log.d("내용", "MembersDialog all members\n" +
-                            "allmembers : ${allParticipantList}")
+                        val allParticipantList = response.body()!!.result
+                        Log.d(
+                            TAG, "내용 : $allParticipantList\n" +
+                                    "타입 : ${allParticipantList.javaClass}"
+                        )
+                        Log.d(
+                            "내용", "MembersDialog all members\n" +
+                                    "allmembers : $allParticipantList"
+                        )
 
-                    allParticipantAdapter = AllParticipantAdapter(context, allParticipantList, participantList)
-                    binding.membersRv.adapter = allParticipantAdapter
-                    binding.membersRv.layoutManager = GridLayoutManager(context, 2)
-                } else {
-                    Log.d(TAG, "MembersDialog - Retrofit getGroupMembers() 실행 결과 - 안좋음")
+                        allParticipantAdapter =
+                            AllParticipantAdapter(context, allParticipantList, participantList)
+                        binding.membersRv.adapter = allParticipantAdapter
+                        binding.membersRv.layoutManager = GridLayoutManager(context, 2)
+                    } else {
+                        Log.d(TAG, "MembersDialog - Retrofit getGroupMembers() 실행 결과 - 안좋음")
+                    }
                 }
-            }
-            override fun onFailure(call: Call<ResponseGetGroupMembers>, t: Throwable) {
-                Log.d(TAG, "MembersDialog - Retrofit getGroupMembers() 실행 결과 - 실패")
-                Log.d(TAG, "실패 원인 : $t")
-            }
 
-        })
+                override fun onFailure(call: Call<ResponseGetGroupMembers>, t: Throwable) {
+                    Log.d(TAG, "MembersDialog - Retrofit getGroupMembers() 실행 결과 - 실패")
+                    Log.d(TAG, "실패 원인 : $t")
+                }
+
+            })
 
         binding.plusBtn.setOnClickListener {
 //            TODO 서버에 해당 내용 전달하고 이전 화면에도 적용하기
             val giveList = allParticipantAdapter.updateEnrollList()
             giveList.add(Members(0, "추가하기", null))
-            Log.d("내용", "MembersDialog members 변경\n" +
-                    "members : ${giveList}")
+            Log.d(
+                "내용", "MembersDialog members 변경\n" +
+                        "members : $giveList"
+            )
             listener?.onAdditionalInfoSubmitted(giveList)
             dismiss()
         }

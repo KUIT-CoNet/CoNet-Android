@@ -1,13 +1,11 @@
-package com.kuit.conet.UI.Plan
+package com.kuit.conet.UI.Plan.dialog
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.kuit.conet.R
-import com.kuit.conet.Utils.TAG
 import com.kuit.conet.databinding.DialogBottomSheetTimeBinding
 
 class TimeDialog(var timeInfo: String): BottomSheetDialogFragment() {
