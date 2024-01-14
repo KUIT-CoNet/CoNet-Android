@@ -1,4 +1,4 @@
-package com.kuit.conet.UI.Plan
+package com.kuit.conet.UI.Plan.detail
 
 import android.content.Context
 import android.graphics.Rect
@@ -13,32 +13,33 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.textfield.TextInputEditText
 import com.kuit.conet.Data.Group
 import com.kuit.conet.Network.Members
-import com.kuit.conet.Network.ResponseUpdatePlanDetail
 import com.kuit.conet.Network.ResultGetPlanDetail
-import com.kuit.conet.Network.RetrofitClient
 import com.kuit.conet.R
+import com.kuit.conet.UI.Plan.dialog.DateDialog
+import com.kuit.conet.UI.Plan.dialog.TimeDialog
 import com.kuit.conet.Utils.TAG
 import com.kuit.conet.databinding.ActivityDetailEditFixBinding
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
-import retrofit2.Call
-import retrofit2.Response
 
-class DetailEditFixActivity : AppCompatActivity(), View.OnClickListener, TimeDialog.BottomSheetListener, DateDialog.OnButtonClickListener{
+class DetailEditFixActivity
+    : AppCompatActivity(), View.OnClickListener, TimeDialog.BottomSheetListener, DateDialog.OnButtonClickListener {
 
-    private val binding: ActivityDetailEditFixBinding by lazy { ActivityDetailEditFixBinding.inflate(layoutInflater) }
+    private lateinit var binding: ActivityDetailEditFixBinding
     private lateinit var participantAdapter: ParticipantAdapter
-
     lateinit var data: ResultGetPlanDetail
     lateinit var dateData: ArrayList<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        ActivityDetailEditFixBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         data = intent.getParcelableExtra<ResultGetPlanDetail>("data")!!
-        Log.d(TAG, "DetailEditPastActivity - onCreat() intent로 데이터 받아오기 성공!\n" +
-                "data : $data")
+        Log.d(
+            TAG, "DetailEditPastActivity - onCreat() intent로 데이터 받아오기 성공!\n" +
+                    "data : $data"
+        )
 
         val date = data.date.split(". ")
         dateData = arrayListOf(date[0], date[1], date[2])
@@ -70,10 +71,11 @@ class DetailEditFixActivity : AppCompatActivity(), View.OnClickListener, TimeDia
     }
 
     override fun onClick(v: View?) {
-        when(v!!.id){
+        when (v!!.id) {
             R.id.back_iv -> {
                 finish()
             }
+
             R.id.finish_tv -> {
                 Log.d(TAG, "DetailEditFixActivity - 완료버튼 클릭됨")
                 if (binding.nameTf.text!!.isEmpty()) {
@@ -97,20 +99,24 @@ class DetailEditFixActivity : AppCompatActivity(), View.OnClickListener, TimeDia
 //                    TODO 서버에 해당 내용 전송하기
                     val members: ArrayList<Int> = arrayListOf()
 
-                    Log.d("내용", "DetailEditFixActivity 최종 확인 members\n" +
-                            "members : ${participantAdapter.membersList}")
+                    Log.d(
+                        "내용", "DetailEditFixActivity 최종 확인 members\n" +
+                                "members : ${participantAdapter.membersList}"
+                    )
 
                     for (i in 0 until participantAdapter.membersList.count()) {
-                        if(participantAdapter.membersList[i].name == "추가하기") continue
+                        if (participantAdapter.membersList[i].name == "추가하기") continue
                         members.add(participantAdapter.membersList[i].id)
                     }
                     members.sort()
-                    Log.d("내용", "DetailEditFixActivity 최종 확인 members\n" +
-                            "members : ${members}")
+                    Log.d(
+                        "내용", "DetailEditFixActivity 최종 확인 members\n" +
+                                "members : ${members}"
+                    )
 
 
-                    val jsonString = "{\"planId\":${data.planId},"+
-                            "\"planName\":\"${binding.nameTf.text}\","+
+                    val jsonString = "{\"planId\":${data.planId}," +
+                            "\"planName\":\"${binding.nameTf.text}\"," +
                             "\"date\":\"${dateData[0]}-${dateData[1]}-${dateData[2]}\"," +
                             "\"time\":\"${binding.timeTf.text}\"," +
                             "\"members\":${members}," +
@@ -142,11 +148,13 @@ class DetailEditFixActivity : AppCompatActivity(), View.OnClickListener, TimeDia
                     finish()
                 }
             }
+
             R.id.date_til, R.id.date_tf -> {
                 val dateDialog = DateDialog(dateData[0], dateData[1], dateData[2]) //dateData
                 dateDialog.setOnButtonClickListener(this)
                 dateDialog.show(supportFragmentManager, dateDialog.tag)
             }
+
             R.id.time_til, R.id.time_tf -> {
                 val timeDialog = TimeDialog(data.time)
                 timeDialog.setBottomSheetListener(this)
@@ -168,7 +176,8 @@ class DetailEditFixActivity : AppCompatActivity(), View.OnClickListener, TimeDia
                 v.getGlobalVisibleRect(outRect)
                 if (!outRect.contains(ev.rawX.toInt(), ev.rawY.toInt())) {
                     v.clearFocus()
-                    val imm: InputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    val imm: InputMethodManager =
+                        getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                     imm.hideSoftInputFromWindow(v.getWindowToken(), 0)
                 }
             }
@@ -176,15 +185,17 @@ class DetailEditFixActivity : AppCompatActivity(), View.OnClickListener, TimeDia
         return super.dispatchTouchEvent(ev)
     }
 
-    fun checkEnable(){
-        if(binding.nameTf.text!!.isNotEmpty() && binding.dateTf.text!!.isNotEmpty() && binding.timeTf.text!!.isNotEmpty()&&binding.nameTil.error==null){
+    fun checkEnable() {
+        if (binding.nameTf.text!!.isNotEmpty() && binding.dateTf.text!!.isNotEmpty() && binding.timeTf.text!!.isNotEmpty() && binding.nameTil.error == null) {
             binding.finishTv.isEnabled = true
         }
     }
 
     override fun onButtonClicked(year: String, month: String, date: String) {
-        Log.d(TAG, "DetailEditFixActivity - onButtonClicked Date에서 날짜 받아오기\n" +
-                "year : $year, month : $month, date: $date")
+        Log.d(
+            TAG, "DetailEditFixActivity - onButtonClicked Date에서 날짜 받아오기\n" +
+                    "year : $year, month : $month, date: $date"
+        )
         binding.dateTf.setText("$year. $month. $date")
         dateData = arrayListOf(year, month, date)
         checkEnable()
