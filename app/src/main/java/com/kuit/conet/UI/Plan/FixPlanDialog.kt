@@ -13,7 +13,6 @@ import com.kuit.conet.Network.RetrofitInterface
 import com.kuit.conet.Network.getRetrofit
 import com.kuit.conet.databinding.DialogFixPlanBinding
 import org.threeten.bp.LocalDate
-import org.threeten.bp.format.DateTimeFormatter
 import retrofit2.Call
 import retrofit2.Response
 import kotlin.collections.ArrayList

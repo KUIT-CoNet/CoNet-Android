@@ -24,11 +24,9 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
 import com.google.android.material.textfield.TextInputEditText
-import com.kuit.conet.Network.ResponseRegistHistory
 import com.kuit.conet.Network.ResultGetPlanDetail
-import com.kuit.conet.Network.RetrofitClient
 import com.kuit.conet.R
-import com.kuit.conet.UI.Plan.ParticipantAdapter
+import com.kuit.conet.UI.Plan.detail.ParticipantAdapter
 import com.kuit.conet.Utils.TAG
 import com.kuit.conet.databinding.ActivityRegistHistoryBinding
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -36,8 +34,6 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
-import retrofit2.Call
-import retrofit2.Response
 import java.io.File
 
 class RegistHistoryActivity : AppCompatActivity(), View.OnClickListener  {

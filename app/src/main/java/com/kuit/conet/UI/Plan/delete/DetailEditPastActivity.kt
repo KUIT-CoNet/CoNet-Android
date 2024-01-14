@@ -1,4 +1,4 @@
-package com.kuit.conet.UI.Plan
+package com.kuit.conet.UI.Plan.delete
 
 import android.content.Context
 import android.content.Intent
@@ -28,6 +28,9 @@ import com.google.android.material.textfield.TextInputEditText
 import com.kuit.conet.Data.Group
 import com.kuit.conet.Network.*
 import com.kuit.conet.R
+import com.kuit.conet.UI.Plan.detail.ParticipantAdapter
+import com.kuit.conet.UI.Plan.dialog.DateDialog
+import com.kuit.conet.UI.Plan.dialog.TimeDialog
 import com.kuit.conet.Utils.TAG
 import com.kuit.conet.databinding.ActivityDetailEditPastBinding
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -35,8 +38,6 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
-import retrofit2.Call
-import retrofit2.Response
 import java.io.File
 
 class DetailEditPastActivity : AppCompatActivity(), View.OnClickListener, TimeDialog.BottomSheetListener, DateDialog.OnButtonClickListener {

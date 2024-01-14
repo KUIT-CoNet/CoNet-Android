@@ -1,4 +1,4 @@
-package com.kuit.conet.UI.Plan
+package com.kuit.conet.UI.Plan.dialog
 
 import android.os.Bundle
 import android.util.Log
