@@ -1,58 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/all_cv"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/grayWhite"
     android:elevation="0dp"
-    android:outlineSpotShadowColor="@color/white">
+    android:outlineAmbientShadowColor="@color/grayWhite"
+    android:outlineSpotShadowColor="@color/grayWhite">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/participant_cl"
+        android:id="@+id/cl_participant"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp">
 
         <ImageView
-            android:id="@+id/participant_image_iv"
+            android:id="@+id/iv_participant_image"
             android:layout_width="42dp"
             android:layout_height="42dp"
-            android:src="@drawable/icon_participant"
+            android:src="@drawable/icon_participant_gray"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/participant_name_tv"
+            android:id="@+id/tv_participant_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:fontFamily="@font/pretendard"
-            android:text="참여자 이름"
             android:textColor="@color/texthigh"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/participant_image_iv"
+            app:layout_constraintStart_toEndOf="@id/iv_participant_image"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:id="@+id/minus_iv"
+            android:id="@+id/iv_minus"
             android:layout_width="16dp"
             android:layout_height="16dp"
             android:layout_marginEnd="15dp"
-            android:src="@drawable/icon_minus"
+            android:src="@drawable/icon_minus_circle"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:id="@+id/check_iv"
+            android:id="@+id/iv_check"
             android:layout_width="16dp"
             android:layout_height="16dp"
             android:layout_marginEnd="15dp"
-            android:src="@drawable/icon_check_circle_un"
+            android:src="@drawable/icon_check_circle_gray"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
