@@ -46,4 +46,7 @@
     <string name="group_delete">모임 삭제</string>
     <string name="group_out">모임 나가기</string>
 
+    <string name="group_main_making_plan">약속 만들기</string>
+    <string name="today_plan">오늘의 약속</string>
+
 </resources>
