@@ -14,7 +14,7 @@ class WithdrawDoneActivity : AppCompatActivity()  {
         binding = ActivityWithdrawDoneBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.doneBtnCv.setOnClickListener {
+        binding.cvWithdrawDoneBtn.setOnClickListener {
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
         }

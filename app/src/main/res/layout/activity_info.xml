@@ -15,7 +15,7 @@
             android:layout_height="match_parent">
 
             <ImageView
-                android:id="@+id/info_btn_back_iv"
+                android:id="@+id/iv_info_back_btn"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/chevron_left"
@@ -25,39 +25,39 @@
                 app:layout_constraintStart_toStartOf="parent"/>
 
             <TextView
-                android:id="@+id/info_text1"
+                android:id="@+id/tv_info_title"
                 android:layout_width="wrap_content"
                 android:layout_height="22dp"
-                android:text="회원정보"
+                android:text="@string/user_info"
                 android:textSize="18sp"
                 android:fontFamily="@font/pretendard_bold"
                 android:textColor="@color/black"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/info_btn_back_iv"
-                app:layout_constraintBottom_toBottomOf="@id/info_btn_back_iv"/>
+                app:layout_constraintTop_toTopOf="@id/iv_info_back_btn"
+                app:layout_constraintBottom_toBottomOf="@id/iv_info_back_btn"/>
 
             <ImageView
-                android:id="@+id/info_photo_iv"
+                android:id="@+id/iv_info_photo"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:src="@drawable/icon_profile_gray"
+                android:src="@drawable/ic_profile_gray"
                 android:layout_marginTop="56dp"
-                app:layout_constraintTop_toBottomOf="@id/info_text1"
+                app:layout_constraintTop_toBottomOf="@id/tv_info_title"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
             <ImageView
-                android:id="@+id/info_camera_iv"
+                android:id="@+id/iv_info_camera_btn"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:src="@drawable/btn_camera"
-                app:layout_constraintEnd_toEndOf="@id/info_photo_iv"
-                app:layout_constraintBottom_toBottomOf="@id/info_photo_iv"/>
+                app:layout_constraintEnd_toEndOf="@id/iv_info_photo"
+                app:layout_constraintBottom_toBottomOf="@id/iv_info_photo"/>
 
             <!--이름-->
             <TextView
-                android:id="@+id/info_text1_tv"
+                android:id="@+id/tv_info_title2"
                 android:layout_width="wrap_content"
                 android:layout_height="18dp"
                 android:text="이름"
@@ -65,18 +65,18 @@
                 android:fontFamily="@font/pretendard"
                 android:layout_marginTop="30dp"
                 android:layout_marginStart="24dp"
-                app:layout_constraintTop_toBottomOf="@id/info_photo_iv"
+                app:layout_constraintTop_toBottomOf="@id/iv_info_photo"
                 app:layout_constraintStart_toStartOf="parent"/>
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/my_info_cv"
+                android:id="@+id/cv_info_my"
                 android:layout_width="match_parent"
                 android:layout_height="24dp"
                 android:layout_marginHorizontal="24dp"
                 android:layout_marginTop="6dp"
                 app:cardElevation="0dp"
                 android:background="@null"
-                app:layout_constraintTop_toBottomOf="@id/info_text1_tv">
+                app:layout_constraintTop_toBottomOf="@id/tv_info_title2">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -84,7 +84,7 @@
                     android:background="@null">
 
                     <TextView
-                        android:id="@+id/tv_username"
+                        android:id="@+id/tv_info_username"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="애플카카오"
@@ -99,6 +99,7 @@
                         android:layout_width="26dp"
                         android:layout_height="26dp"
                         android:src="@drawable/chevron_right"
+                        app:tint="@color/gray200"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"/>
@@ -107,18 +108,18 @@
             </androidx.cardview.widget.CardView>
 
             <View
-                android:id="@+id/info_line1_v"
+                android:id="@+id/v_info_line"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@color/gray100"
                 android:layout_marginTop="16dp"
                 android:layout_marginHorizontal="24dp"
-                app:layout_constraintTop_toBottomOf="@id/my_info_cv"
+                app:layout_constraintTop_toBottomOf="@id/cv_info_my"
                 app:layout_constraintStart_toStartOf="parent"/>
 
             <!--연결계정-->
             <TextView
-                android:id="@+id/info_text2_tv"
+                android:id="@+id/tv_info_title3"
                 android:layout_width="wrap_content"
                 android:layout_height="18dp"
                 android:text="연결된 계정"
@@ -126,12 +127,12 @@
                 android:fontFamily="@font/pretendard"
                 android:layout_marginTop="16dp"
                 android:layout_marginStart="24dp"
-                app:layout_constraintTop_toBottomOf="@id/info_line1_v"
+                app:layout_constraintTop_toBottomOf="@id/v_info_line"
                 app:layout_constraintStart_toStartOf="parent"/>
 
 
             <TextView
-                android:id="@+id/info_account_tv"
+                android:id="@+id/tv_info_account"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="conet@gmail.com"
@@ -141,22 +142,22 @@
                 android:layout_marginHorizontal="24dp"
                 android:layout_marginTop="6dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/info_text2_tv"/>
+                app:layout_constraintTop_toBottomOf="@id/tv_info_title3"/>
 
 
             <ImageView
-                android:id="@+id/info_kakao_iv"
+                android:id="@+id/iv_info_kakao_btn"
                 android:layout_width="34dp"
                 android:layout_height="34dp"
                 android:src="@drawable/btn_kakao_logo"
-                app:layout_constraintTop_toTopOf="@id/info_text2_tv"
-                app:layout_constraintBottom_toBottomOf="@id/info_account_tv"
-                app:layout_constraintEnd_toEndOf="@id/info_account_tv"/>
+                app:layout_constraintTop_toTopOf="@id/tv_info_account"
+                app:layout_constraintBottom_toBottomOf="@id/tv_info_account"
+                app:layout_constraintEnd_toEndOf="@id/tv_info_account"/>
 
             <!--하이퍼링크 구현!!-->
             <!--회원탈퇴-->
             <TextView
-                android:id="@+id/info_withdraw_tv"
+                android:id="@+id/tv_info_withdrawal"
                 android:layout_width="wrap_content"
                 android:layout_height="18dp"
                 android:text="회원탈퇴"
@@ -166,6 +167,16 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <View
+                android:id="@+id/v_info_line2"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:background="@color/gray500"
+                android:layout_marginTop="2dp"
+                app:layout_constraintTop_toBottomOf="@id/tv_info_withdrawal"
+                app:layout_constraintStart_toStartOf="@id/tv_info_withdrawal"
+                app:layout_constraintEnd_toEndOf="@id/tv_info_withdrawal"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </FrameLayout>

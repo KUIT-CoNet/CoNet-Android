@@ -12,7 +12,7 @@ class NoticeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        binding.noticeBtnBackIv.setOnClickListener {
+        binding.ivNoticeBackBtn.setOnClickListener {
             finish()
         }
     }

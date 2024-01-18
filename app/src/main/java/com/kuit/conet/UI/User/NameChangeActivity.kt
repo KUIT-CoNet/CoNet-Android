@@ -23,14 +23,13 @@ class NameChangeActivity : AppCompatActivity() {
         binding = ActivityNameChangeBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        binding.nChangeEt.setText(intent.getStringExtra("name"))
-        //binding.nChangeEt.text = getUsername(this)
-        binding.nChangeBtnBackIv.setOnClickListener {
+        binding.etName.setText(intent.getStringExtra("name"))
+        binding.ivNameBackBtn.setOnClickListener {
             finish()
         }
 
         // 이름 검사(실시간으로)
-        binding.nChangeEt.addTextChangedListener(object : TextWatcher {
+        binding.etName.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 Log.d("texting","입력전")
             }
@@ -45,37 +44,37 @@ class NameChangeActivity : AppCompatActivity() {
                 val matcher = pattern.matcher(p0.toString())
                 //Log.d("texting", "${matcher.find()}")
                 //Log.d("text length","${p0!!.length}")
-                if(binding.btnTextCancle.visibility == View.GONE && p0!!.length > 0){
-                    binding.btnTextCancle.visibility = View.VISIBLE
+                if(binding.ivNameTextCancel.visibility == View.GONE && p0!!.length > 0){
+                    binding.ivNameTextCancel.visibility = View.VISIBLE
                 }
 
 
                 if(matcher.find() || p0!!.length >= 20 || p0!!.length <= 0){
                     Log.d("texting","오류")
-                    binding.nChangeInfo1Iv.setImageResource(R.drawable.error_red)
-                    binding.nChangeInfo1Tv.setTextColor(getColor(R.color.error))
-                    binding.btnTextCancle.visibility = View.GONE
-                    binding.simbolErrCancle.visibility = View.VISIBLE
-                    binding.nChangeBtnCv.setBackgroundResource(R.drawable.button_design_gray)
-                    binding.tvUnderlineLl.setBackgroundResource(R.color.error)
+                    binding.ivNameInfo1.setImageResource(R.drawable.ic_error_red)
+                    binding.tvNameInfo1.setTextColor(getColor(R.color.error))
+                    binding.ivNameTextCancel.visibility = View.GONE
+                    binding.ivNameErrorEmpty.visibility = View.VISIBLE
+                    binding.cvNameDoneBtn.setBackgroundResource(R.drawable.button_design_gray)
+                    binding.llNameUnderline.setBackgroundResource(R.color.error)
                     edit = false
                 }
                 else if(p0.length > 0){
-                    binding.nChangeInfo1Iv.setImageResource(R.drawable.error_purple)
-                    binding.nChangeInfo1Tv.setTextColor(getColor(R.color.gray800))
-                    binding.btnTextCancle.visibility = View.VISIBLE
-                    binding.simbolErrCancle.visibility = View.GONE
-                    binding.nChangeBtnCv.setBackgroundResource(R.drawable.button_design_purple)
-                    binding.tvUnderlineLl.setBackgroundResource(R.color.gray200)
+                    binding.ivNameInfo1.setImageResource(R.drawable.ic_error_purple)
+                    binding.tvNameInfo1.setTextColor(getColor(R.color.gray800))
+                    binding.ivNameTextCancel.visibility = View.VISIBLE
+                    binding.ivNameErrorEmpty.visibility = View.GONE
+                    binding.cvNameDoneBtn.setBackgroundResource(R.drawable.button_design_purple)
+                    binding.llNameUnderline.setBackgroundResource(R.color.gray200)
                     edit = true
                 }
                 else{
-                    binding.nChangeInfo1Iv.setImageResource(R.drawable.error_purple)
-                    binding.nChangeInfo1Tv.setTextColor(getColor(R.color.gray800))
-                    binding.btnTextCancle.visibility = View.GONE
-                    binding.simbolErrCancle.visibility = View.GONE
-                    binding.nChangeBtnCv.setBackgroundResource(R.drawable.button_design_gray)
-                    binding.tvUnderlineLl.setBackgroundResource(R.color.gray200)
+                    binding.ivNameInfo1.setImageResource(R.drawable.ic_error_purple)
+                    binding.tvNameInfo1.setTextColor(getColor(R.color.gray800))
+                    binding.ivNameTextCancel.visibility = View.GONE
+                    binding.ivNameErrorEmpty.visibility = View.GONE
+                    binding.cvNameDoneBtn.setBackgroundResource(R.drawable.button_design_gray)
+                    binding.llNameUnderline.setBackgroundResource(R.color.gray200)
                     edit = false
                 }
 
@@ -83,15 +82,15 @@ class NameChangeActivity : AppCompatActivity() {
 
         })
 
-        binding.btnTextCancle.setOnClickListener {
-            binding.nChangeEt.text = null
+        binding.ivNameTextCancel.setOnClickListener {
+            binding.etName.text = null
         }
 
-        binding.nChangeBtnCv.setOnClickListener { // 완료 시 이름 저장
+        binding.cvNameDoneBtn.setOnClickListener { // 완료 시 이름 저장
 
 
             if(edit){
-                saveUsername(this, binding.nChangeEt.text.toString())
+                saveUsername(this, binding.etName.text.toString())
                 //서버로 정보 보내기
                 editUserName(getUsername(this))
                 //메인 화면으로 이동

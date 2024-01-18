@@ -31,53 +31,53 @@ class EditPlanActivity: AppCompatActivity() {
         val planDate = intent.getStringExtra("planDate")
         planId = intent.getIntExtra("planId", 0)
 
-        binding.planNameEt.setText(planName.toString())
-        binding.planNameLength.text = "${planName!!.length}/20"
-        binding.tvPlanDate.text = planDate.toString().replace("-",".")
+        binding.etEditPlanName.setText(planName.toString())
+        binding.tvEditNameLength.text = "${planName!!.length}/20"
+        binding.tvEditPlanDate.text = planDate.toString().replace("-",".")
 
-        binding.btnBackIv.setOnClickListener {
+        binding.ivEditBackBtn.setOnClickListener {
             finish()
         }
 
-        binding.planNameEt.addTextChangedListener(object : TextWatcher{
+        binding.etEditPlanName.addTextChangedListener(object : TextWatcher{
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 Log.d("texting","입력전")
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 Log.d("texting","입력중")
-                binding.planNameLength.text=getString(R.string.plan_name_length, p0!!.length)
-                binding.planUnderlineLl.setBackgroundResource(R.color.purpleMain)
-                binding.btnTextCancle.visibility = View.VISIBLE
+                binding.tvEditNameLength.text=getString(R.string.plan_name_length, p0!!.length)
+                binding.llEditUnderline1.setBackgroundResource(R.color.purpleMain)
+                binding.ivEditTextCancel.visibility = View.VISIBLE
             }
 
             override fun afterTextChanged(p0: Editable?) {
                 Log.d("texting","입력끝")
                 if(p0!!.length > 0){
-                    binding.btnTextCancle.visibility = View.VISIBLE
+                    binding.ivEditTextCancel.visibility = View.VISIBLE
                     //원래 이름과 같은지 판별
                     isNameChange = !p0.toString().equals(planName)
                 }
                 else {
-                    binding.btnTextCancle.visibility = View.GONE
+                    binding.ivEditTextCancel.visibility = View.GONE
                     isNameChange=false
                 }
-                binding.planUnderlineLl.setBackgroundResource(R.color.gray200)
+                binding.llEditUnderline1.setBackgroundResource(R.color.gray200)
                 changeBtn(isNameChange, planId)
             }
 
         })
 
-        binding.btnTextCancle.setOnClickListener {
-            binding.planNameEt.setText(null)
+        binding.ivEditTextCancel.setOnClickListener {
+            binding.etEditPlanName.setText(null)
         }
     }
 
     fun changeBtn(isNameChange: Boolean, planId: Int){
         if(isNameChange){
-            binding.btnCl.setBackgroundResource(R.color.purpleMain)
+            binding.clEditDoneBtn.setBackgroundResource(R.color.purpleMain)
 
-            binding.btnCv.setOnClickListener {
+            binding.cvEditDoneBtn.setOnClickListener {
                 updateWaiting()
                 var intent = Intent(this, PlanTimeActivity::class.java)
                 intent.putExtra("planId", planId)
@@ -86,7 +86,7 @@ class EditPlanActivity: AppCompatActivity() {
             }
         }
         else {
-            binding.btnCl.setBackgroundResource(R.color.gray200)
+            binding.clEditDoneBtn.setBackgroundResource(R.color.gray200)
         }
     }
 
@@ -113,7 +113,7 @@ class EditPlanActivity: AppCompatActivity() {
     private fun waitingInfo(): UpdateWaiting {
         return UpdateWaiting(
             planId = intent.getIntExtra("planId",0),
-            planName = binding.planNameEt.text.toString()
+            planName = binding.etEditPlanName.text.toString()
         )
     }
 }

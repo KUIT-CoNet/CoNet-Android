@@ -30,9 +30,9 @@ class JoinMembership_naming : Fragment() {
     ): View {
         // Inflate the layout for this fragment
         binding = FragmentNameInputBinding.inflate(inflater, container, false)
-        Log.d("visiable","${binding.simbolErrCancle.visibility}")
+        Log.d("visiable","${binding.ivNameInputTextCancel.visibility}")
         // 이름 검사(실시간으로)
-        binding.nameEt.addTextChangedListener(object : TextWatcher{
+        binding.etNameInput.addTextChangedListener(object : TextWatcher{
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 Log.d("texting","입력전")
             }
@@ -47,43 +47,43 @@ class JoinMembership_naming : Fragment() {
                 val matcher = pattern.matcher(p0.toString())
                 //Log.d("texting", "${matcher.find()}")
                 //Log.d("text length","${p0!!.length}")
-                if(binding.btnTextCancle.visibility == View.GONE && p0!!.length > 0){
-                    binding.btnTextCancle.visibility = View.VISIBLE
+                if(binding.ivNameInputTextCancel.visibility == View.GONE && p0!!.length > 0){
+                    binding.ivNameInputTextCancel.visibility = View.VISIBLE
                 }
 
 
                 if(matcher.find() || p0!!.length >= 20){
                     Log.d("texting","오류")
-                    binding.nameInfo1Iv.setImageResource(R.drawable.error_red)
-                    binding.nameInfo1Tv.setTextColor(ContextCompat.getColor(requireActivity(),
+                    binding.ivNameInputInfo1.setImageResource(R.drawable.ic_error_red)
+                    binding.tvNameInputInfo1.setTextColor(ContextCompat.getColor(requireActivity(),
                         R.color.error
                     ))
-                    binding.btnTextCancle.visibility = View.GONE
-                    binding.simbolErrCancle.visibility = View.VISIBLE
-                    binding.nameBtnCv.setBackgroundResource(R.drawable.button_design_gray)
-                    binding.tvUnderlineLl.setBackgroundResource(R.color.error)
+                    binding.ivNameInputTextCancel.visibility = View.GONE
+                    binding.ivNameInputErrorEmpty.visibility = View.VISIBLE
+                    binding.cvNameInputDoneBtn.setBackgroundResource(R.drawable.button_design_gray)
+                    binding.llNameInputUnderline.setBackgroundResource(R.color.error)
                     edit = false
                 }
                 else if(p0.length > 0){
-                    binding.nameInfo1Iv.setImageResource(R.drawable.error_purple)
-                    binding.nameInfo1Tv.setTextColor(ContextCompat.getColor(requireActivity(),
+                    binding.ivNameInputInfo1.setImageResource(R.drawable.ic_error_purple)
+                    binding.tvNameInputInfo1.setTextColor(ContextCompat.getColor(requireActivity(),
                         R.color.black
                     ))
-                    binding.btnTextCancle.visibility = View.VISIBLE
-                    binding.simbolErrCancle.visibility = View.GONE
-                    binding.nameBtnCv.setBackgroundResource(R.drawable.button_design_purple)
-                    binding.tvUnderlineLl.setBackgroundResource(R.color.gray200)
+                    binding.ivNameInputTextCancel.visibility = View.VISIBLE
+                    binding.ivNameInputErrorEmpty.visibility = View.GONE
+                    binding.cvNameInputDoneBtn.setBackgroundResource(R.drawable.button_design_purple)
+                    binding.llNameInputUnderline.setBackgroundResource(R.color.gray200)
                     edit = true
                 }
                 else{
-                    binding.nameInfo1Iv.setImageResource(R.drawable.error_purple)
-                    binding.nameInfo1Tv.setTextColor(ContextCompat.getColor(requireActivity(),
+                    binding.ivNameInputInfo1.setImageResource(R.drawable.ic_error_purple)
+                    binding.tvNameInputInfo1.setTextColor(ContextCompat.getColor(requireActivity(),
                         R.color.black
                     ))
-                    binding.btnTextCancle.visibility = View.GONE
-                    binding.simbolErrCancle.visibility = View.GONE
-                    binding.nameBtnCv.setBackgroundResource(R.drawable.button_design_gray)
-                    binding.tvUnderlineLl.setBackgroundResource(R.color.gray200)
+                    binding.ivNameInputTextCancel.visibility = View.GONE
+                    binding.ivNameInputErrorEmpty.visibility = View.GONE
+                    binding.cvNameInputDoneBtn.setBackgroundResource(R.drawable.button_design_gray)
+                    binding.llNameInputUnderline.setBackgroundResource(R.color.gray200)
                     edit = false
                 }
 
@@ -91,14 +91,14 @@ class JoinMembership_naming : Fragment() {
 
         })
 
-        binding.btnTextCancle.setOnClickListener {
-            binding.nameEt.setText(null)
+        binding.ivNameInputTextCancel.setOnClickListener {
+            binding.etNameInput.setText(null)
         }
 
-        binding.nameBtnCv.setOnClickListener { // 완료 시 이름 저장
+        binding.cvNameInputDoneBtn.setOnClickListener { // 완료 시 이름 저장
 
             if(edit){
-                saveUsername(requireContext(), binding.nameEt.text.toString())
+                saveUsername(requireContext(), binding.etNameInput.text.toString())
                 //서버로 정보 보내기
                 sendUserInfo(getAccessToken(requireContext()), getUsername(requireContext()), getIsoption(requireContext()))
                 //메인 화면으로 이동

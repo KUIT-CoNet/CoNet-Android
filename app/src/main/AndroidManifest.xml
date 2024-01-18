@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" >
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!--11번줄 오류 떠서 추가된 내용-->
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -17,11 +22,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CoNet"
         android:usesCleartextTraffic="true"
-        tools:targetApi="31" >
+        tools:targetApi="31">
         <activity
             android:name=".UI.Plan.detail.PlanListActivity"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".UI.History.NonResigestedActivity"
             android:exported="false"
@@ -56,7 +61,7 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".UI.User.CheckActivity"
+            android:name=".UI.User.InquiryActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
