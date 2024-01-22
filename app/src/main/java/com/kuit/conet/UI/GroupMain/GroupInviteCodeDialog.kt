@@ -79,4 +79,8 @@ class GroupInviteCodeDialog(val groupId: Int): DialogFragment() {
 
             })
     }
+
+    companion object {
+        const val TAG = "GROUP ENROLL"
+    }
 }

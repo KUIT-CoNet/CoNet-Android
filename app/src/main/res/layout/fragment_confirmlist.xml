@@ -3,13 +3,61 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/cl_promise_date"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    >
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_confirmlist"
-        android:layout_width="0dp"
+    android:layout_height="wrap_content">
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tl_plan_category"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
+        app:tabGravity="start"
+        app:tabIndicatorColor="@color/purpleMain"
+        app:tabIndicatorHeight="2dp"
+        app:tabMode="fixed"
+        app:tabRippleColor="@android:color/transparent"
+        app:tabSelectedTextColor="@color/texthigh"
+        app:tabTextAppearance="@style/tabTextSizeBold"
+        app:tabTextColor="@color/textDisabled" />
+
+    <LinearLayout
+        android:id="@+id/ll_plan_list_check_my"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="@id/tl_plan_category"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tl_plan_category">
+
+        <ImageView
+            android:id="@+id/iv_plan_list_check_my"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:src="@drawable/icon_check_circle_gray" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:fontFamily="@font/pretendard"
+            android:text="내 약속만 보기"
+            android:textColor="@color/textMedium"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tl_plan_category">
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/vp_plan_list"
+            android:layout_width="match_parent"
+            android:layout_height="0dp" />
+
+    </androidx.core.widget.NestedScrollView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

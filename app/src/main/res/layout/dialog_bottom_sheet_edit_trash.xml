@@ -30,60 +30,56 @@
         app:layout_constraintTop_toTopOf="@id/handler_bsdh" />
 
     <LinearLayout
-        android:id="@+id/edit_ll"
+        android:id="@+id/ll_edit"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginTop="20dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/handler_bsdh"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingHorizontal="24dp"
-        android:gravity="center_vertical">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/handler_bsdh">
 
         <ImageView
-            android:id="@+id/edit_iv"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:contentDescription="수정"
+            android:contentDescription="@string/edit"
             android:src="@drawable/icon_edit" />
 
 
         <TextView
-            android:id="@+id/edit_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="6dp"
-            android:text="수정"
+            android:text="@string/edit"
             android:textColor="@color/black"
             android:textSize="16sp" />
 
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/trash_ll"
+        android:id="@+id/ll_trash"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/edit_ll"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingHorizontal="24dp"
-        android:gravity="center_vertical">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ll_edit">
 
         <ImageView
-            android:id="@+id/trash_iv"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:contentDescription="삭제"
+            android:contentDescription="@string/delete"
             android:src="@drawable/icon_trash" />
 
         <TextView
-            android:id="@+id/trash_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="6dp"
-            android:text="삭제"
+            android:text="@string/delete"
             android:textColor="@android:color/holo_red_light"
             android:textSize="16sp" />
 

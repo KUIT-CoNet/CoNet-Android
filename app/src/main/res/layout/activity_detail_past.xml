@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/grayWhite"
-    tools:context=".UI.Plan.DetailPastActivity">
+    tools:context=".UI.Plan.delete.DetailPastActivity">
 
     <ScrollView
         android:layout_width="match_parent"

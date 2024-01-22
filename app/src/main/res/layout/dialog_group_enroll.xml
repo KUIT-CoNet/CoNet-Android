@@ -69,7 +69,7 @@
         android:layout_height="8dp"
         android:layout_marginTop="6dp"
         android:contentDescription="오류"
-        android:src="@drawable/icon_error_end"
+        android:src="@drawable/icon_error_empty"
         android:visibility="invisible"
         app:layout_constraintStart_toStartOf="@id/til_dialog_group_enroll_input_code"
         app:layout_constraintTop_toBottomOf="@id/til_dialog_group_enroll_input_code" />
@@ -87,7 +87,7 @@
         app:layout_constraintTop_toTopOf="@id/iv_dialog_group_enroll_error" />
 
 
-    <com.google.android.material.button.MaterialButton
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_dialog_group_enroll"
         android:layout_width="191dp"
         android:layout_height="54dp"

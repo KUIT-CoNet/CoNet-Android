@@ -63,11 +63,14 @@ class GroupAdapter(
 
             binding.clGroupItem.setOnClickListener {
                 val mIntent = Intent(context, GroupMainActivity::class.java)
-                mIntent.putExtra("GroupName", item.groupName)
-                mIntent.putExtra("GroupImg", item.groupUrl)
-                mIntent.putExtra("GroupMemberCount", item.groupMemberCount)
-                mIntent.putExtra("GroupId", item.groupId)
-                mIntent.putExtra("GroupFavorite", item.favoriteTag)
+                val data = GroupData(
+                    item.groupId,
+                    item.groupName,
+                    item.groupUrl,
+                    item.groupMemberCount,
+                    item.favoriteTag
+                )
+                mIntent.putExtra(INTENT_GROUP, data)
                 startActivity(context, mIntent, null)
             }
 
@@ -142,5 +145,9 @@ class GroupAdapter(
 
     override fun getItemCount(): Int {
         return itemList.size
+    }
+
+    companion object {
+        const val INTENT_GROUP = "GROUP"
     }
 }

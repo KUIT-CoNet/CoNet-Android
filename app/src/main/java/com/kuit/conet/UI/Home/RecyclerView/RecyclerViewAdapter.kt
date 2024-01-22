@@ -7,13 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat.startActivity
-import androidx.core.view.marginLeft
 import androidx.recyclerview.widget.RecyclerView
 import com.kuit.conet.Network.Oncall
 import com.kuit.conet.Network.SidePlanInfo
 import com.kuit.conet.Network.plans
-import com.kuit.conet.UI.Plan.DetailFixActivity
-import com.kuit.conet.UI.Plan.DetailPastActivity
+import com.kuit.conet.UI.Plan.detail.DetailFixActivity
+import com.kuit.conet.UI.Plan.delete.DetailPastActivity
 import com.kuit.conet.UI.Plan.PlanTimeActivity
 import com.kuit.conet.Utils.TAG
 import com.kuit.conet.databinding.ItemCofirmlistBinding

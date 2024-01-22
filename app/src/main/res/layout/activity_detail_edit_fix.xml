@@ -19,7 +19,7 @@
                 android:id="@+id/back_iv"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:contentDescription="뒤로버튼"
+                android:contentDescription="@string/back_button"
                 android:src="@drawable/icon_back"
                 app:layout_constraintBottom_toBottomOf="@id/title_tv"
                 app:layout_constraintStart_toStartOf="parent"
@@ -31,7 +31,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="18dp"
                 android:fontFamily="@font/pretendard_bold"
-                android:text="상세 페이지"
+                android:text="@string/deail_page"
                 android:textColor="@color/gray800"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -42,10 +42,10 @@
                 android:id="@+id/finish_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/pretendard"
-                android:text="완료"
-                android:textColor="@color/select_btn"
                 android:enabled="false"
+                android:fontFamily="@font/pretendard"
+                android:text="@string/finish"
+                android:textColor="@color/select_btn"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="@id/title_tv"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -56,7 +56,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:elevation="1dp"
-                android:text="약속 이름"
+                android:text="@string/plan_name"
                 android:textColor="@color/select_focus"
                 app:layout_constraintStart_toStartOf="@id/name_til"
                 app:layout_constraintTop_toTopOf="@id/name_til" />
@@ -66,13 +66,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="46dp"
+                android:paddingTop="24dp"
                 app:boxBackgroundColor="@android:color/transparent"
+                app:boxBackgroundMode="filled"
                 app:boxStrokeColor="@color/textfield_stroke"
                 app:counterEnabled="true"
                 app:counterMaxLength="20"
                 app:counterTextColor="@color/select_focus"
-                app:boxBackgroundMode="filled"
-                android:paddingTop="24dp"
                 app:endIconMode="clear_text"
                 app:errorEnabled="true"
                 app:errorIconDrawable="@drawable/icon_error_end_resize"
@@ -82,15 +82,15 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/name_tf"
-                    android:backgroundTint="@color/textfield_stroke"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
-                    android:contentDescription="약속이름입력"
-                    android:textCursorDrawable="@color/purpleMain"
                     android:background="@null"
-                    android:textSize="18sp"
+                    android:backgroundTint="@color/textfield_stroke"
+                    android:contentDescription="@string/plan_name_hint"
                     android:fontFamily="@font/pretendard"
-                    android:textColor="@color/texthigh"/>
+                    android:textColor="@color/texthigh"
+                    android:textCursorDrawable="@color/purpleMain"
+                    android:textSize="18sp" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -100,7 +100,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="20dp"
-                android:text="약속이름입력"
+                android:text="@string/plan_name_hint"
                 android:textColor="@color/gray200"
                 android:textSize="16sp"
                 android:visibility="invisible"
@@ -112,7 +112,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:elevation="1dp"
-                android:text="약속 날짜"
+                android:text="@string/plan_date"
                 android:textColor="@color/select_focus"
                 app:layout_constraintStart_toStartOf="@id/date_til"
                 app:layout_constraintTop_toTopOf="@id/date_til" />
@@ -122,11 +122,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
+                android:paddingTop="24dp"
                 app:boxBackgroundColor="@android:color/transparent"
+                app:boxBackgroundMode="filled"
                 app:boxStrokeColor="@color/textfield_stroke"
                 app:counterTextColor="@color/select_focus"
-                app:boxBackgroundMode="filled"
-                android:paddingTop="24dp"
                 app:endIconDrawable="@drawable/icon_calendar_resize"
                 app:endIconMode="custom"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -137,11 +137,11 @@
                     android:id="@+id/date_tf"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
-                    android:focusableInTouchMode="false"
                     android:background="@null"
-                    android:textSize="18sp"
+                    android:focusableInTouchMode="false"
                     android:fontFamily="@font/pretendard"
-                    android:textColor="@color/texthigh"/>
+                    android:textColor="@color/texthigh"
+                    android:textSize="18sp" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -149,7 +149,7 @@
                 android:id="@+id/time_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="약속 시간"
+                android:text="@string/plan_time"
                 android:textColor="@color/select_focus"
                 app:layout_constraintStart_toStartOf="@id/time_til"
                 app:layout_constraintTop_toTopOf="@id/time_til" />
@@ -159,13 +159,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="26dp"
+                android:paddingTop="24dp"
                 app:boxBackgroundColor="@android:color/transparent"
+                app:boxBackgroundMode="filled"
                 app:boxStrokeColor="@color/textfield_stroke"
                 app:counterTextColor="@color/select_focus"
                 app:endIconDrawable="@drawable/icon_clock_resize"
                 app:endIconMode="custom"
-                app:boxBackgroundMode="filled"
-                android:paddingTop="24dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/date_til">
@@ -174,11 +174,11 @@
                     android:id="@+id/time_tf"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
-                    android:focusableInTouchMode="false"
                     android:background="@null"
-                    android:textSize="18sp"
+                    android:focusableInTouchMode="false"
                     android:fontFamily="@font/pretendard"
-                    android:textColor="@color/texthigh"/>
+                    android:textColor="@color/texthigh"
+                    android:textSize="18sp" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -186,8 +186,8 @@
                 android:id="@+id/participants_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="참여자"
                 android:layout_marginTop="26dp"
+                android:text="@string/plan_participant"
                 android:textColor="@color/select_focus"
                 app:layout_constraintStart_toStartOf="@id/name_tv"
                 app:layout_constraintTop_toBottomOf="@id/time_til" />

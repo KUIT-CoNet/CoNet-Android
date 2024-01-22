@@ -1,255 +1,195 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/cl_group_main"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-
+    android:layout_height="match_parent">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="parent">
 
         <FrameLayout
             android:id="@+id/fl_group_image"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingBottom="60dp"
             app:layout_constraintTop_toTopOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
                 <ImageView
                     android:id="@+id/iv_group_image"
                     android:layout_width="match_parent"
                     android:layout_height="393dp"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:src="@drawable/ic_profile_gray" />
-                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:src="@drawable/icon_profile_gray"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <LinearLayout
                     android:id="@+id/cl_btnset"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:layout_marginTop="28dp">
+                    android:layout_marginTop="28dp"
+                    android:paddingHorizontal="24dp"
+                    app:layout_constraintTop_toTopOf="parent">
+
                     <ImageView
                         android:id="@+id/iv_backBtn"
                         android:layout_width="36dp"
                         android:layout_height="36dp"
-                        android:src="@drawable/btn_back_graybackground"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        android:layout_marginLeft="24dp" />
+                        android:src="@drawable/icon_back_circle" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
 
                     <ImageView
                         android:id="@+id/iv_menuBtn"
                         android:layout_width="36dp"
                         android:layout_height="36dp"
-                        android:src="@drawable/btn_menu_graybackground"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintRight_toRightOf="parent"
-                        android:layout_marginRight="24dp" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                        android:src="@drawable/icon_menu_circle" />
+
+                </LinearLayout>
 
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/cv_star"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
+                    android:layout_marginStart="24dp"
                     app:cardCornerRadius="50dp"
-                    android:layout_marginTop="368dp"
-                    android:layout_marginLeft="24dp"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    android:elevation="4dp">
+                    app:layout_constraintBottom_toBottomOf="@id/iv_group_image"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/iv_group_image">
+
                     <ImageView
-                        android:id="@+id/star_un_iv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/icon_star_un"
-                        android:layout_margin="13dp"
-                        android:visibility="gone"/>
+                        android:id="@+id/iv_star_un"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/icon_star_un" />
+
                     <ImageView
-                        android:id="@+id/star_iv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:id="@+id/iv_star"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center"
                         android:src="@drawable/icon_star"
-                        android:layout_margin="13dp"
-                        android:visibility="gone"/>
+                        android:visibility="gone" />
+
                 </androidx.cardview.widget.CardView>
 
                 <TextView
                     android:id="@+id/tv_group_name"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    app:layout_constraintTop_toBottomOf="@id/iv_group_image"
-                    app:layout_constraintLeft_toLeftOf="parent"
+                    android:layout_marginStart="24dp"
                     android:layout_marginTop="37dp"
-                    android:layout_marginLeft="24dp"
                     android:fontFamily="@font/pretendard_bold"
+                    android:maxLines="2"
+                    android:text="iOS 스터디 안녕하세요 안녕하세요 안녕하세요"
+                    android:textColor="@color/black"
                     android:textSize="26sp"
-                    android:text="iOS 스터디"
-                    android:textColor="@color/black"/>
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/cv_make_plan"
+                    app:layout_constraintEnd_toStartOf="@id/tv_plan_maker"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/iv_group_image" />
+
+                <TextView
+                    android:id="@+id/tv_plan_maker"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/iv_group_image"
-                    android:layout_marginTop="38dp"
-                    android:layout_marginRight="24dp"
-                    android:background="@drawable/layout_makeplan">
-                    <TextView
-                        android:id="@+id/tv_make_plan"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintRight_toRightOf="parent"
-                        android:fontFamily="@font/pretendard_medium"
-                        android:textSize="14sp"
-                        android:textColor="@color/gray800"
-                        android:text="약속 만들기"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginBottom="7dp"
-                        android:layout_marginHorizontal="20dp"/>
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                    android:layout_marginEnd="24dp"
+                    android:background="@drawable/layout_makeplan"
+                    android:fontFamily="@font/pretendard_medium"
+                    android:paddingHorizontal="20dp"
+                    android:paddingVertical="8dp"
+                    android:text="@string/group_main_making_plan"
+                    android:textColor="@color/gray800"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/tv_group_name" />
+
                 <ImageView
                     android:id="@+id/iv_user"
                     android:layout_width="16dp"
                     android:layout_height="16dp"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_group_name"
-                    android:src="@drawable/user"
-                    android:layout_marginLeft="24dp"
-                    android:layout_marginTop="6dp"/>
+                    android:layout_marginTop="6dp"
+                    android:src="@drawable/icon_people"
+                    app:layout_constraintStart_toStartOf="@id/tv_group_name"
+                    app:layout_constraintTop_toBottomOf="@id/tv_group_name" />
 
                 <TextView
                     android:id="@+id/tv_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_group_name"
+                    android:layout_marginStart="4dp"
                     android:fontFamily="@font/pretendard_medium"
-                    android:textSize="16sp"
-                    android:textColor="@color/gray500"
                     android:text="n명"
-                    android:layout_marginLeft="44dp"
-                    android:layout_marginTop="2dp"/>
+                    android:textColor="@color/gray500"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="@id/iv_user"
+                    app:layout_constraintStart_toEndOf="@id/iv_user"
+                    app:layout_constraintTop_toTopOf="@id/iv_user" />
 
                 <FrameLayout
                     android:id="@+id/fl_group_calendar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:layout_constraintTop_toBottomOf="@id/tv_count"
-                    android:layout_marginTop="36dp"/>
+                    android:layout_marginTop="36dp"
+                    app:layout_constraintTop_toBottomOf="@id/tv_count" />
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/cl_promise_tv_set"
+                <LinearLayout
+                    android:id="@+id/ll_group_main_today_plan"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:layout_constraintTop_toBottomOf="@id/fl_group_calendar"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    android:layout_marginLeft="24dp"
-                    android:layout_marginTop="36dp">
+                    android:layout_marginTop="36dp"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    app:layout_constraintStart_toStartOf="@id/tv_group_name"
+                    app:layout_constraintTop_toBottomOf="@id/fl_group_calendar">
+
                     <TextView
-                        android:id="@+id/tv_promise_date"
+                        android:id="@+id/tv_group_main_select_day_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/pretendard_bold"
                         android:text="오늘의 약속"
-                        android:textSize="20sp"
-                        android:fontFamily="@font/pretendard_bold"
                         android:textColor="@color/texthigh"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintLeft_toLeftOf="parent"/>
+                        android:textSize="20sp" />
 
                     <TextView
-                        android:id="@+id/tv_promise_count"
+                        android:id="@+id/tv_group_main_select_promise_count"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintLeft_toRightOf="@id/tv_promise_date"
-                        android:text="0"
+                        android:layout_marginStart="6dp"
                         android:background="@drawable/circle_planscount"
-                        android:textSize="12sp"
                         android:fontFamily="@font/pretendard_bold"
-                        android:textColor="@color/purpleMain"
                         android:gravity="center"
-                        android:layout_marginLeft="6dp"
-                        android:layout_marginTop="3dp"/>
+                        android:text="0"
+                        android:textColor="@color/purpleMain"
+                        android:textSize="12sp" />
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                </LinearLayout>
 
                 <FrameLayout
                     android:id="@+id/fl_todolist"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:layout_constraintTop_toBottomOf="@id/cl_promise_tv_set"
+                    android:layout_marginHorizontal="24dp"
                     android:layout_marginTop="16dp"
-                    android:layout_marginHorizontal="24dp"/>
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/cl_promiseall_tv_set"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintTop_toBottomOf="@id/fl_todolist"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    android:layout_marginTop="60dp"
-                    android:layout_marginLeft="24dp">
-                    <TextView
-                        android:id="@+id/tv_promiseall_date"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="대기 중인 약속"
-                        android:textSize="20sp"
-                        android:fontFamily="@font/pretendard_bold"
-                        android:textColor="@color/texthigh"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintLeft_toLeftOf="parent"/>
-
-                    <TextView
-                        android:id="@+id/tv_promiseall_count"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintLeft_toRightOf="@id/tv_promiseall_date"
-                        android:text="0"
-                        android:background="@drawable/circle_planscount"
-                        android:textSize="12sp"
-                        android:fontFamily="@font/pretendard_bold"
-                        android:textColor="@color/purpleMain"
-                        android:gravity="center"
-                        android:layout_marginLeft="6dp"
-                        android:layout_marginTop="3dp"/>
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <FrameLayout
-                    android:id="@+id/fl_oncalllist"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintTop_toBottomOf="@id/cl_promiseall_tv_set"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginHorizontal="24dp"/>
-
+                    app:layout_constraintTop_toBottomOf="@id/ll_group_main_today_plan" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-
         </FrameLayout>
-    </androidx.core.widget.NestedScrollView>
 
-    <FrameLayout
-        android:id="@+id/fl_sidebar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+    </androidx.core.widget.NestedScrollView>
 
     <FrameLayout
         android:id="@+id/fl_sidebar_menu"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"/>
-
+        android:visibility="gone" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

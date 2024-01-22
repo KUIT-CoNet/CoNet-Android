@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/grayWhite">
@@ -17,22 +16,22 @@
             android:padding="24dp">
 
             <ImageView
-                android:id="@+id/back_iv"
+                android:id="@+id/iv_detail_fix_back"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:contentDescription="뒤로버튼"
+                android:contentDescription="@string/back_button"
                 android:src="@drawable/icon_back"
-                app:layout_constraintBottom_toBottomOf="@id/title_tv"
+                app:layout_constraintBottom_toBottomOf="@id/tv_detail_fix_title"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@id/title_tv" />
+                app:layout_constraintTop_toTopOf="@id/tv_detail_fix_title" />
 
             <TextView
-                android:id="@+id/title_tv"
+                android:id="@+id/tv_detail_fix_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="18dp"
                 android:fontFamily="@font/pretendard_bold"
-                android:text="상세 페이지"
+                android:text="@string/deail_page"
                 android:textColor="@color/gray800"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -40,147 +39,147 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:id="@+id/menu_btn"
+                android:id="@+id/iv_detail_fix_menu"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:contentDescription="메뉴 버튼"
+                android:contentDescription="@string/menu_button"
                 android:src="@drawable/icon_menu"
-                app:layout_constraintBottom_toBottomOf="@id/title_tv"
+                app:layout_constraintBottom_toBottomOf="@id/tv_detail_fix_title"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/title_tv" />
+                app:layout_constraintTop_toTopOf="@id/tv_detail_fix_title" />
 
             <TextView
-                android:id="@+id/name_tv"
+                android:id="@+id/tv_detail_fix_plan_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:elevation="1dp"
-                android:text="약속 이름"
+                android:text="@string/plan_name"
                 android:textColor="@color/select_focus"
-                app:layout_constraintStart_toStartOf="@id/name_til"
-                app:layout_constraintTop_toTopOf="@id/name_til" />
+                app:layout_constraintStart_toStartOf="@id/til_detail_fix_plan_name"
+                app:layout_constraintTop_toTopOf="@id/til_detail_fix_plan_name" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/name_til"
+                android:id="@+id/til_detail_fix_plan_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="46dp"
+                android:clickable="false"
                 app:boxBackgroundColor="@android:color/transparent"
                 app:boxStrokeColor="@color/textfield_stroke"
                 app:counterTextColor="@color/select_focus"
                 app:endIconMode="clear_text"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/title_tv"
-                android:clickable="false">
+                app:layout_constraintTop_toBottomOf="@id/tv_detail_fix_title">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/name_tf"
+                    android:id="@+id/tf_detail_fix_plan_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:contentDescription="약속이름입력"
+                    android:contentDescription="@string/plan_name_hint"
                     android:enabled="false"
-                    android:textColor="@color/texthigh"/>
+                    android:textColor="@color/texthigh" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
-                android:id="@+id/name_hint_tv"
+                android:id="@+id/tv_detail_fix_plan_name_hint"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="20dp"
-                android:text="약속이름입력"
+                android:text="@string/plan_name_hint"
                 android:textColor="@color/gray200"
                 android:textSize="16sp"
                 android:visibility="invisible"
-                app:layout_constraintStart_toStartOf="@id/name_til"
-                app:layout_constraintTop_toTopOf="@id/name_til" />
+                app:layout_constraintStart_toStartOf="@id/til_detail_fix_plan_name"
+                app:layout_constraintTop_toTopOf="@id/til_detail_fix_plan_name" />
 
             <TextView
-                android:id="@+id/date_tv"
+                android:id="@+id/tv_detail_fix_plan_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:elevation="1dp"
-                android:text="약속 날짜"
+                android:text="@string/plan_date"
                 android:textColor="@color/select_focus"
-                app:layout_constraintStart_toStartOf="@id/date_til"
-                app:layout_constraintTop_toTopOf="@id/date_til" />
+                app:layout_constraintStart_toStartOf="@id/til_detail_fix_plan_date"
+                app:layout_constraintTop_toTopOf="@id/til_detail_fix_plan_date" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/date_til"
+                android:id="@+id/til_detail_fix_plan_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="26dp"
+                android:clickable="false"
                 app:boxBackgroundColor="@android:color/transparent"
                 app:boxStrokeColor="@color/textfield_stroke"
                 app:counterTextColor="@color/select_focus"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/name_til"
-                android:clickable="false">
+                app:layout_constraintTop_toBottomOf="@id/til_detail_fix_plan_name">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/date_tf"
+                    android:id="@+id/tf_detail_fix_plan_date"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:enabled="false"
-                    android:textColor="@color/texthigh"/>
+                    android:textColor="@color/texthigh" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
-                android:id="@+id/time_tv"
+                android:id="@+id/tv_detail_fix_plan_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:elevation="1dp"
-                android:text="약속 시간"
+                android:text="@string/plan_time"
                 android:textColor="@color/select_focus"
-                app:layout_constraintStart_toStartOf="@id/time_til"
-                app:layout_constraintTop_toTopOf="@id/time_til" />
+                app:layout_constraintStart_toStartOf="@id/til_detail_fix_plan_time"
+                app:layout_constraintTop_toTopOf="@id/til_detail_fix_plan_time" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/time_til"
+                android:id="@+id/til_detail_fix_plan_time"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="26dp"
+                android:clickable="false"
                 app:boxBackgroundColor="@android:color/transparent"
                 app:boxStrokeColor="@color/textfield_stroke"
                 app:counterTextColor="@color/select_focus"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/date_til"
-                android:clickable="false">
+                app:layout_constraintTop_toBottomOf="@id/til_detail_fix_plan_date">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/time_tf"
+                    android:id="@+id/tf_detail_fix_plan_time"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:enabled="false"
-                    android:textColor="@color/texthigh"/>
+                    android:textColor="@color/texthigh" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
-                android:id="@+id/participants_tv"
+                android:id="@+id/tv_detail_fix_plan_participants"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="참여자"
-                android:textColor="@color/select_focus"
                 android:layout_marginTop="26dp"
-                app:layout_constraintStart_toStartOf="@id/name_tv"
-                app:layout_constraintTop_toBottomOf="@id/time_til" />
+                android:text="@string/plan_participant"
+                android:textColor="@color/select_focus"
+                app:layout_constraintStart_toStartOf="@id/tv_detail_fix_plan_name"
+                app:layout_constraintTop_toBottomOf="@id/til_detail_fix_plan_time" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/participants_rv"
+                android:id="@+id/rv_detail_fix_plan_participants"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_marginTop="14dp"
+                android:clickable="false"
                 app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/participants_tv"
-                app:spanCount="2"
-                android:clickable="false"/>
+                app:layout_constraintTop_toBottomOf="@id/tv_detail_fix_plan_participants"
+                app:spanCount="2" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

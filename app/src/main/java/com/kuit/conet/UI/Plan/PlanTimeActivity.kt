@@ -6,8 +6,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import com.kuit.conet.Network.FixPlan
-import com.kuit.conet.Network.ResponseFixPlan
 import com.kuit.conet.Network.RetrofitInterface
 import com.kuit.conet.Network.ShowMemTime
 import com.kuit.conet.Network.getRetrofit
@@ -15,14 +13,12 @@ import com.kuit.conet.Network.posiibleMemberDateTime
 import com.kuit.conet.Network.possibleMember
 import com.kuit.conet.Network.sectionMemberCounts
 import com.kuit.conet.R
-import com.kuit.conet.UI.GroupMain.GroupMainActivity
 import com.kuit.conet.databinding.ActivityPlanTimeBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Response
-import retrofit2.create
 import java.time.LocalDate
 import kotlin.coroutines.suspendCoroutine
 
