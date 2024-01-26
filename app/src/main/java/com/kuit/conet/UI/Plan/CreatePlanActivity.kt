@@ -75,7 +75,7 @@ class CreatePlanActivity() : AppCompatActivity() {
         binding.tvCreatePlanDate.setOnClickListener {
             supportFragmentManager.beginTransaction()
                 .setCustomAnimations(R.anim.to_up, R.anim.from_down)
-                .replace(R.id.fl_calendar, calenderDialog)
+                .replace(R.id.fl_create_plan, calenderDialog)
                 .commitAllowingStateLoss()
 
             binding.ivCreateCalendar.setColorFilter(R.color.black)
