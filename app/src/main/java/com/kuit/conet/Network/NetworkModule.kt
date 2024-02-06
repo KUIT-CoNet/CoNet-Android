@@ -1,5 +1,8 @@
 package com.kuit.conet.Network
 
+import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import kotlinx.serialization.json.Json
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -9,7 +12,9 @@ const val BASE_URL = "http://15.164.196.172:9000/"
 
 object RetrofitClient{
     val retrofit = getRetrofit()
+    val jsonRetrofit = getJsonRetrofit()
     val instance = retrofit.create(RetrofitInterface::class.java)
+    val jsonInstance = jsonRetrofit.create(RetrofitInterface::class.java)
 }
 
 fun okHttpClient() : OkHttpClient {
@@ -23,6 +28,16 @@ fun getRetrofit(): Retrofit {
     val retrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)
         .addConverterFactory(GsonConverterFactory.create())
+        .client(okHttpClient())
+        .build()
+
+    return retrofit
+}
+
+fun getJsonRetrofit(): Retrofit {
+    val retrofit = Retrofit.Builder()
+        .baseUrl(BASE_URL)
+        .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
         .client(okHttpClient())
         .build()
 
