@@ -48,7 +48,7 @@ class GroupFavoriteFragment : Fragment() {
         super.onResume()
         Log.d(LIFECYCLE, "GroupFavoriteFragment - onResume() called")
 
-        RetrofitClient.instance.getBookmarkGroup("Bearer" + getAccessToken(requireContext()))
+        RetrofitClient.jsonInstance.getBookmarkGroup("Bearer" + getAccessToken(requireContext()))
             .enqueue(object : retrofit2.Callback<ResponseGetGroup> {
                 override fun onResponse(
                     call: Call<ResponseGetGroup>,

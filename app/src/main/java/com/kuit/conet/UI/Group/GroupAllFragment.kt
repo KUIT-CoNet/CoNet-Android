@@ -46,7 +46,7 @@ class GroupAllFragment : Fragment() {
         super.onResume()
         Log.d(LIFECYCLE, "GroupAllFragment - onResume() 실행")
 
-        RetrofitClient.instance.getGroup("Bearer " + getAccessToken(requireContext()))
+        RetrofitClient.jsonInstance.getGroup("Bearer " + getAccessToken(requireContext()))
             .enqueue(object : retrofit2.Callback<ResponseGetGroup> {
                 override fun onResponse(
                     call: Call<ResponseGetGroup>,
