@@ -31,11 +31,9 @@ class NonResigestedActivity : AppCompatActivity() {
     }
 
     fun initRecycler(){
-        confirmRecyclerAdapter = ConfirmRecyclerAdapter(this ,3)
+        confirmRecyclerAdapter = ConfirmRecyclerAdapter(this ,3, item)
         binding.lastListRv.adapter = confirmRecyclerAdapter
         binding.lastListRv.layoutManager = LinearLayoutManager(this)
-        confirmRecyclerAdapter.datas = item
-        confirmRecyclerAdapter.notifyDataSetChanged()
     }
 
     fun ShowNonHistoryInfo(){

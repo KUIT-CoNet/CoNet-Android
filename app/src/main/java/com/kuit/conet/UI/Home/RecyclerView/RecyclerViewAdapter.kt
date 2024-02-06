@@ -101,8 +101,7 @@ class TodoRecyclerAdapter(private val context:Context) : RecyclerView.Adapter<To
     }
 }
 
-class ConfirmRecyclerAdapter(private val context: Context, val option: Int) : RecyclerView.Adapter<ConfirmRecyclerAdapter.ViewHolder>(){
-    var datas = mutableListOf<SidePlanInfo>()
+class ConfirmRecyclerAdapter(private val context: Context, val option: Int, var datas:List<SidePlanInfo>) : RecyclerView.Adapter<ConfirmRecyclerAdapter.ViewHolder>(){
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ConfirmRecyclerAdapter.ViewHolder {
         val binding = ItemCofirmlistBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
