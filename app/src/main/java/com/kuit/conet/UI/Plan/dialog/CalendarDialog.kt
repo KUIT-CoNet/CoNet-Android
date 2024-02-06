@@ -36,31 +36,31 @@ class CalenderDialog : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = DialogCalendarBinding.inflate(inflater, container, false)
-        binding.BtnSelectDate.isEnabled = false
-        binding.clSelectDate.setOnClickListener {
+        binding.cvCalendarSelectBtn.isEnabled = false
+        binding.clCalendarSelectDate.setOnClickListener {
             Log.d("click!","클릭감지")
             showDialog()
         }
-        binding.viewCalendar.selectedDate = CalendarDay.today()
-        binding.viewCalendar.setDateTextAppearance(R.style.CalendarDateTextStyle)
-        binding.viewCalendar.setHeaderTextAppearance(R.style.CalendarHeaderTextStyle)
-        binding.viewCalendar.setTitleFormatter { day -> "${day!!.year}년  ${day.month + 1}월" }
-        binding.viewCalendar.setWeekDayTextAppearance(R.style.CalendarWeekdayTextStyle)
-        binding.viewCalendar.addDecorator(sundayDecorator)
-        binding.viewCalendar.addDecorator(onedayDecorator)
+        binding.mcvCalendar.selectedDate = CalendarDay.today()
+        binding.mcvCalendar.setDateTextAppearance(R.style.CalendarDateTextStyle)
+        binding.mcvCalendar.setHeaderTextAppearance(R.style.CalendarHeaderTextStyle)
+        binding.mcvCalendar.setTitleFormatter { day -> "${day!!.year}년  ${day.month + 1}월" }
+        binding.mcvCalendar.setWeekDayTextAppearance(R.style.CalendarWeekdayTextStyle)
+        binding.mcvCalendar.addDecorator(sundayDecorator)
+        binding.mcvCalendar.addDecorator(onedayDecorator)
 
         val selectionDecorator = SelectionDecortor(requireContext(), R.color.purpleCircle)
-        binding.viewCalendar.addDecorator(selectionDecorator)
+        binding.mcvCalendar.addDecorator(selectionDecorator)
 
-        binding.viewCalendar.setOnDateChangedListener { widget, date, selected ->
+        binding.mcvCalendar.setOnDateChangedListener { widget, date, selected ->
             Log.d("호출","호출")
             selectionDecorator.setSelectedDate(date)
-            binding.viewCalendar.invalidateDecorators()
+            binding.mcvCalendar.invalidateDecorators()
             binding.btnSelectCl.isEnabled = true
             binding.btnSelectCl.setBackgroundResource(R.color.purpleMain)
         }
 
-        binding.viewCalendar.setOnMonthChangedListener { widget, date ->
+        binding.mcvCalendar.setOnMonthChangedListener { widget, date ->
             Log.d("monthchange", "$date")
             val year = date.year.toString()
             val month = if(date.month + 1 >= 10) (date.month + 1).toString() else "0" + (date.month + 1)
@@ -71,7 +71,7 @@ class CalenderDialog : Fragment() {
 
         binding.btnSelectCl.setOnClickListener {
 
-            val date = binding.viewCalendar.selectedDate
+            val date = binding.mcvCalendar.selectedDate
             val year = (date.year).toString()
             val month = if(date.month + 1 < 10) "0"+(date.month + 1).toString() else (date.month + 1).toString()
             val day = if(date.day < 10) "0" + (date.day).toString() else (date.day).toString()
@@ -82,7 +82,7 @@ class CalenderDialog : Fragment() {
         }
 
         binding.dialogCalender.setOnClickListener {
-            val date = binding.viewCalendar.selectedDate
+            val date = binding.mcvCalendar.selectedDate
             val year = (date.year).toString()
             val month = if(date.month + 1 < 10) "0"+(date.month + 1).toString() else (date.month + 1).toString()
             val day = (date.day).toString()
@@ -96,19 +96,19 @@ class CalenderDialog : Fragment() {
             }
         }
         val customWeekDayFormatter = CustomWeekDayFormatter(requireContext())
-        binding.viewCalendar.setWeekDayFormatter(customWeekDayFormatter)
+        binding.mcvCalendar.setWeekDayFormatter(customWeekDayFormatter)
         return binding.root
     }
 
     private fun showDialog(){
-        binding.flSelectDate.visibility = View.VISIBLE
+        binding.flCalendarSelectDate.visibility = View.VISIBLE
         val chooseDateDialog = choose_date_dialog()
         chooseDateDialog.setOnButtonClickListener(object :
             choose_date_dialog.OnButtonClickListener {
             override fun onButtonClicked(year: Int, month: Int) {
-                binding.viewCalendar.currentDate = CalendarDay.from(year, month-1, 1)
-                binding.viewCalendar.selectedDate = CalendarDay.from(year, month-1, 1)
-                binding.flSelectDate.visibility = View.GONE
+                binding.mcvCalendar.currentDate = CalendarDay.from(year, month-1, 1)
+                binding.mcvCalendar.selectedDate = CalendarDay.from(year, month-1, 1)
+                binding.flCalendarSelectDate.visibility = View.GONE
             }
         })
         parentFragmentManager.beginTransaction()
