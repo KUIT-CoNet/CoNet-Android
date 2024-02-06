@@ -8,11 +8,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kuit.conet.Network.ResponseSidePlan
+import com.kuit.conet.Network.RetrofitClient
 import com.kuit.conet.Network.RetrofitInterface
 import com.kuit.conet.Network.SidePlanInfo
 import com.kuit.conet.Network.getRetrofit
 import com.kuit.conet.R
 import com.kuit.conet.UI.Home.RecyclerView.ConfirmRecyclerAdapter
+import com.kuit.conet.Utils.NETWORK
+import com.kuit.conet.Utils.TAG
 import com.kuit.conet.databinding.FragmentGroupBinding
 import com.kuit.conet.databinding.FragmentPlanListBinding
 import kotlinx.coroutines.CompletableDeferred
@@ -46,10 +49,13 @@ class PlanListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+    }
 
+    override fun onResume() {
+        super.onResume()
         val coroutineScope = CoroutineScope(Dispatchers.Main)
         coroutineScope.launch {
-            val plans = if (option == 1) {
+            val plans = if (option == 0) {
                 showSideConfirmplaninfo()
             } else {
                 showSideLastPlan()
@@ -66,11 +72,9 @@ class PlanListFragment : Fragment() {
     }
 
     private fun initConfirmRecycler(item: ArrayList<SidePlanInfo>, option: Int) {
-        val confirmRecyclerAdapter = ConfirmRecyclerAdapter(requireContext(), option)
+        val confirmRecyclerAdapter = ConfirmRecyclerAdapter(requireActivity(), option, item)
         binding.rvConfirmlist.adapter = confirmRecyclerAdapter
-        binding.rvConfirmlist.layoutManager = LinearLayoutManager(context)
-        confirmRecyclerAdapter.datas = item
-        confirmRecyclerAdapter.notifyDataSetChanged()
+        binding.rvConfirmlist.layoutManager = LinearLayoutManager(requireActivity())
     }
 
     private suspend fun showSideConfirmplaninfo(): ArrayList<SidePlanInfo> { // 사이드바 확정된 약속 조회
