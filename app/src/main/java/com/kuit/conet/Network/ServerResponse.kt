@@ -3,6 +3,8 @@ package com.kuit.conet.Network
 import android.os.Parcel
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 data class KaKaoResponse( // 맨 처음 카카오 로그인 했을 때 id token넘겨주고 그에 대한 응답을 처리하는 데이터 클래스
     @SerializedName("code") val code : Int,
@@ -145,20 +147,38 @@ data class DeleteUser(
     @SerializedName("message") val message : String,
     @SerializedName("result") val result : String
 )
-data class ResponseGetGroup(
     @SerializedName("code") val code: Int,
     @SerializedName("status") val status: Int,
     @SerializedName("message") val message: String,
-    @SerializedName("result") val result: ArrayList<ResultGetGroup>
+    @SerializedName("result") val result: String
 )
 
+@Serializable
+data class ResponseGetGroup(
+    @SerialName("code")
+    val code: Int,
+    @SerialName("status")
+    val status: Int,
+    @SerialName("message")
+    val message: String,
+    @SerialName("result")
+    val result: ArrayList<ResultGetGroup>
+)
+
+@Serializable
 data class ResultGetGroup(
-    @SerializedName("teamId") val groupId: Int,
-    @SerializedName("teamName") var groupName: String,
-    @SerializedName("teamImgUrl") var groupUrl: String,
-    @SerializedName("teamMemberCount") val groupMemberCount: Int,
-    @SerializedName("isNew") val newTag: Boolean,
-    @SerializedName("bookmark") var favoriteTag: Boolean
+    @SerialName("teamId")
+    val groupId: Int,
+    @SerialName("teamName")
+    var groupName: String,
+    @SerialName("teamImgUrl")
+    var groupUrl: String,
+    @SerialName("teamMemberCount")
+    val groupMemberCount: Int,
+    @SerialName("isNew")
+    val newTag: Boolean,
+    @SerialName("bookmark")
+    var favoriteTag: Boolean
 )
 
 data class ResponseCreateGroup(
