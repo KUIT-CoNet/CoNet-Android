@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
+    id 'kotlinx-serialization'
 }
 
 android {
@@ -31,7 +32,7 @@ android {
     kotlinOptions {
         jvmTarget = '17'
     }
-    buildFeatures{
+    buildFeatures {
         viewBinding true
     }
     viewBinding {
@@ -84,7 +85,6 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-slf4j:1.6.0")
 
 
-
 //    ViewModel & LiveData
     def lifecycle_version = "2.5.1"
     // ViewModel
@@ -98,4 +98,10 @@ dependencies {
 
     def fragment_ktx = "1.6.2"
     implementation "androidx.fragment:fragment-ktx:$fragment_ktx"
+
+    def kotlinx_serialization_json = "1.6.0"
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinx_serialization_json"
+    def kotlinx_serialization_converter = "1.0.0"
+    implementation "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:$kotlinx_serialization_converter"
+
 }
