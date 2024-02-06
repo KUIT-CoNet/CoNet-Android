@@ -6,7 +6,6 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.kuit.conet.Data.Group.groupId
 import com.kuit.conet.Network.*
 import com.kuit.conet.UI.Home.RecyclerView.ConfirmRecyclerAdapter
 import com.kuit.conet.databinding.ActivityNonregistedlastpromiseBinding

@@ -25,7 +25,6 @@ import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
 import com.google.android.material.textfield.TextInputEditText
-import com.kuit.conet.Data.Group
 import com.kuit.conet.Network.*
 import com.kuit.conet.R
 import com.kuit.conet.UI.Plan.detail.ParticipantAdapter
@@ -113,7 +112,6 @@ class DetailEditPastActivity : AppCompatActivity(), View.OnClickListener, TimeDi
         data.members.add(Members(0, "추가하기", null))
         participantAdapter = ParticipantAdapter(this, data.members, 1)
         participantAdapter.supportFragmentManager = supportFragmentManager
-        participantAdapter.groupId = Group.groupId
         binding.participantsRv.adapter = participantAdapter
         binding.participantsRv.layoutManager = GridLayoutManager(this, 2)
 
