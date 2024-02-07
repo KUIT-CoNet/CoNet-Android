@@ -137,6 +137,11 @@ class TimeInputActivity : AppCompatActivity() {
         }
 
         binding.ivTimeInputBackBtn.setOnClickListener {
+            val intent = Intent(this, PlanTimeActivity::class.java)
+            intent.putExtra("planId", planId)
+            intent.putExtra("planStartPeriod", intent.getStringExtra("planStartPeriod"))
+            intent.putExtra("groupId", intent.getIntExtra("groupId", 0))
+            startActivity(intent)
             finish()
         }
 
@@ -190,15 +195,12 @@ class TimeInputActivity : AppCompatActivity() {
 
         updateClickListener(1, true)
 
-
         binding.vTimeInputClockBorder.setOnClickListener {
             disable = !disable
-            updateDisable(1, disable)
-            updateDisable(4, disable)
-            updateDisable(7, disable)
+            for (i in intArrayOf(1,4,7)) {
+                updateDisable(i, disable)
+            }
         }
-
-
     }
 
     private suspend fun getFrame(planId: Int) {
@@ -250,7 +252,6 @@ class TimeInputActivity : AppCompatActivity() {
 
     //Time마다 date 입력
     private fun setDateOfTime(date: String) {
-        Log.d("L:setDateOFTime()실행", true.toString())
         time1.date = date.replace(".", "-")
         val startDate = LocalDate.parse(time1.date)
         time2.date = startDate.plusDays(1).toString().replace(".", "-")
@@ -273,7 +274,6 @@ class TimeInputActivity : AppCompatActivity() {
 
     //클릭 동작 활성화 함수 (true 넣으면 동작)
     private fun updateClickListener(day: Int, res: Boolean) {
-        Log.d("timeinput", "updateClickListener :: $day")
         if (res) {
             if (day==7) {
                 for (i in 0..23 step (1)) day1[i].setOnClickListener { updateCheck(day, i) }
@@ -308,8 +308,7 @@ class TimeInputActivity : AppCompatActivity() {
         return day
     }
 
-    //옆으로 이동시 화면 세팅
-    private fun setFrame(page: Int) {
+    private fun setFrame(page: Int) { //옆으로 이동시 화면 세팅
         val startDate = LocalDate.parse(intent.getStringExtra("planStartPeriod"))
         when (page) {
             1 -> {
@@ -363,9 +362,7 @@ class TimeInputActivity : AppCompatActivity() {
     }
 
     private fun updateCheck(day: Int, i: Int) { //선택된 칸의 색칠 유무 결정
-        Log.d("timeinput", "updateCheck :: day : ${day-1} , i :  $i")
         isCheckDay[day - 1][i] = !isCheckDay[day - 1][i]
-        Log.d("timeinput", "updayteCheck :: ${isCheckDay[day - 1][i]}")
         if (isCheckDay[day - 1][i]) {
             when (day) {
                 1, 4, 7 -> {
@@ -397,14 +394,9 @@ class TimeInputActivity : AppCompatActivity() {
             }
             updateSaveBtn(false) //저장버튼 비활성화
         }
-        for (i in 0..23) {
-            Log.d("timeinput", "$i : ${isCheckDay[day-1][i]}")
-        }
-
     }
 
     private fun tableToPDT(page: Int) { //표에 색칠된 부분을 PossibleDateTime 형식으로 저장
-        Log.d("timeinput", "tableToPDT 실행 현재 page : $page")
         when (page) {
             1 -> {
                 time1.time.clear()
@@ -449,8 +441,8 @@ class TimeInputActivity : AppCompatActivity() {
                 }
             }
         }
-        Log.d("timeinput", "time1 : $time1\ntime2 : $time2\ntime3 : $time3\ntime4 : $time4\ntime5 : $time5\ntime6 : $time6\ntime7 : $time7")
     }
+
     private fun pdtToTable( //저장된 PossibleDateTime 정보를 받아 이를 바탕으로 화면 구성
         day: Int, //시작 날이 1,4,7
         pdt1: PossibleDateTime,
@@ -567,13 +559,6 @@ class TimeInputActivity : AppCompatActivity() {
                     binding.cvTimeInputSaveBtn.setBackgroundResource(R.drawable.background_rectangular_gray_10)
                     binding.cvTimeInputSaveBtn.setOnClickListener { }
                 }
-//                for (j in 0..isCheckDay[i].size step (1)) {
-//                    if (isCheckDay[i][j]) {
-//                        binding.cvTimeInputSaveBtn.setBackgroundResource(R.drawable.background_rectangular_purple_10)
-//                        activateSaveBtn()
-//                        return
-//                    }
-//                }
             }
         }
     }
