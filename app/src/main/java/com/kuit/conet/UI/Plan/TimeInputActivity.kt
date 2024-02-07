@@ -38,10 +38,11 @@ class TimeInputActivity : AppCompatActivity() {
     private var time6: PossibleDateTime = PossibleDateTime("", arrayListOf())
     private var time7: PossibleDateTime = PossibleDateTime("", arrayListOf())
 
+    private var isCheckDay = Array(7) { Array(24) { false } }
+
     private lateinit var day1: ArrayList<View>
     private lateinit var day2: ArrayList<View>
     private lateinit var day3: ArrayList<View>
-    private var isCheckDay = Array(7) { Array(24) { false } }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -145,12 +146,8 @@ class TimeInputActivity : AppCompatActivity() {
                 page = 1
                 setFrame(page)
                 if (!disable) {
-                    if (time1.time.size == 0 && time2.time.size == 0 && time3.time.size == 0) {
-//                        allClearTime()
-                        clearTimetable()
-                    } else {
-                        pdtToTable(1, time1, time2, time3)
-                    }
+                    updateClickListener(1, true)
+                    pdtToTable(1, time1, time2, time3)
                 } else {
                     updateDisable(1, true)
                 }
@@ -159,12 +156,8 @@ class TimeInputActivity : AppCompatActivity() {
                 page = 2
                 setFrame(page)
                 if (!disable) {
-                    if (time4.time.size == 0 && time5.time.size == 0 && time6.time.size == 0) {
-                        //allClearTime()
-                        clearTimetable()
-                    } else {
-                        pdtToTable(4, time4, time5, time6)
-                    }
+                    updateClickListener(4, true)
+                    pdtToTable(4, time4, time5, time6)
                 } else {
                     updateDisable(4, true)
                 }
@@ -177,12 +170,8 @@ class TimeInputActivity : AppCompatActivity() {
                 page = 2
                 setFrame(page)
                 if (!disable) {
-                    if (time4.time.size == 0 && time5.time.size == 0 && time6.time.size == 0) {
-                        //allClearTime()
-                        clearTimetable()
-                    } else {
-                        pdtToTable(4, time4, time5, time6)
-                    }
+                    updateClickListener(4, true)
+                    pdtToTable(4, time4, time5, time6)
                 } else {
                     updateDisable(4, true)
                 }
@@ -191,12 +180,8 @@ class TimeInputActivity : AppCompatActivity() {
                 page = 3
                 setFrame(page)
                 if (!disable) {
-                    if (time7.time.size == 0) {
-                        //allClearTime()
-                        clearTimetable()
-                    } else {
-                        pdtToTable(7, time7, null, null)
-                    }
+                    updateClickListener(7, true)
+                    pdtToTable(7, time7, null, null)
                 } else {
                     updateDisable(7, true)
                 }
@@ -204,6 +189,7 @@ class TimeInputActivity : AppCompatActivity() {
         }
 
         updateClickListener(1, true)
+
 
         binding.vTimeInputClockBorder.setOnClickListener {
             disable = !disable
@@ -287,6 +273,7 @@ class TimeInputActivity : AppCompatActivity() {
 
     //클릭 동작 활성화 함수 (true 넣으면 동작)
     private fun updateClickListener(day: Int, res: Boolean) {
+        Log.d("timeinput", "updateClickListener :: $day")
         if (res) {
             if (day==7) {
                 for (i in 0..23 step (1)) day1[i].setOnClickListener { updateCheck(day, i) }
@@ -306,8 +293,7 @@ class TimeInputActivity : AppCompatActivity() {
         }
     }
 
-    //요일 구하기
-    private fun getDay(date: LocalDate): String {
+    private fun getDay(date: LocalDate): String { //요일 구하기
         val n: String = date.dayOfWeek.toString()
         var day = ""
         when (n) {
@@ -376,8 +362,49 @@ class TimeInputActivity : AppCompatActivity() {
         }
     }
 
+    private fun updateCheck(day: Int, i: Int) { //선택된 칸의 색칠 유무 결정
+        Log.d("timeinput", "updateCheck :: day : ${day-1} , i :  $i")
+        isCheckDay[day - 1][i] = !isCheckDay[day - 1][i]
+        Log.d("timeinput", "updayteCheck :: ${isCheckDay[day - 1][i]}")
+        if (isCheckDay[day - 1][i]) {
+            when (day) {
+                1, 4, 7 -> {
+                    day1[i].setBackgroundResource(R.drawable.view_border_check)
+                }
+
+                2, 5 -> {
+                    day2[i].setBackgroundResource(R.drawable.view_border_check)
+                }
+
+                3, 6 -> {
+                    day3[i].setBackgroundResource(R.drawable.view_border_check)
+                }
+            }
+            updateSaveBtn(true) //저장버튼 활성화
+        } else {
+            when (day) {
+                1, 4, 7 -> {
+                    day1[i].setBackgroundResource(R.drawable.view_border)
+                }
+
+                2, 5 -> {
+                    day2[i].setBackgroundResource(R.drawable.view_border)
+                }
+
+                3, 6 -> {
+                    day3[i].setBackgroundResource(R.drawable.view_border)
+                }
+            }
+            updateSaveBtn(false) //저장버튼 비활성화
+        }
+        for (i in 0..23) {
+            Log.d("timeinput", "$i : ${isCheckDay[day-1][i]}")
+        }
+
+    }
+
     private fun tableToPDT(page: Int) { //표에 색칠된 부분을 PossibleDateTime 형식으로 저장
-        Log.d("L:tableToPDT 실행", "page : $page")
+        Log.d("timeinput", "tableToPDT 실행 현재 page : $page")
         when (page) {
             1 -> {
                 time1.time.clear()
@@ -422,6 +449,7 @@ class TimeInputActivity : AppCompatActivity() {
                 }
             }
         }
+        Log.d("timeinput", "time1 : $time1\ntime2 : $time2\ntime3 : $time3\ntime4 : $time4\ntime5 : $time5\ntime6 : $time6\ntime7 : $time7")
     }
     private fun pdtToTable( //저장된 PossibleDateTime 정보를 받아 이를 바탕으로 화면 구성
         day: Int, //시작 날이 1,4,7
@@ -430,6 +458,7 @@ class TimeInputActivity : AppCompatActivity() {
         pdt3: PossibleDateTime?
     ) {
         clearTimetable() //화면만 초기화
+        clearIsCheck(day)
         for (i in 0 until pdt1.time.size) {
             day1[pdt1.time[i]].setBackgroundResource(R.drawable.view_border_check)
             isCheckDay[day - 1][pdt1.time[i]] = true
@@ -438,17 +467,21 @@ class TimeInputActivity : AppCompatActivity() {
             for (i in 0 until pdt2.time.size) {
                 day2[pdt2.time[i]].setBackgroundResource(R.drawable.view_border_check)
                 isCheckDay[day][pdt2.time[i]] = true
+
             }
             for (i in 0 until pdt3.time.size) {
                 day3[pdt3.time[i]].setBackgroundResource(R.drawable.view_border_check)
                 isCheckDay[day + 1][pdt3.time[i]] = true
+
             }
         }
     }
 
-    private fun allClearTime() { //day 3개 다 초기화
-        clearTimetable()
-        for (i in 1..3) clearIsCheck(i)
+    private fun allClearTime() { //모든 일주일 다 초기화
+        clearTimetable() //화면초기화
+        clearIsCheck(1)
+        clearIsCheck(4)
+        clearIsCheck(7)//ischeck 초기화
     }
 
     private fun clearTimetable() { //화면 초기화
@@ -460,10 +493,16 @@ class TimeInputActivity : AppCompatActivity() {
     }
 
     private fun clearIsCheck(day: Int) { //check 부분 초기화
-        for (i in 0..23 step (1)) {
-            isCheckDay[day - 1][i] = false
-            isCheckDay[day][i] = false
-            isCheckDay[day + 1][i] = false
+        if (day==7) {
+            for (i in 0..23 step (1)) {
+                isCheckDay[day -1][i] = false
+            }
+        } else {
+            for (i in 0..23 step (1)) {
+                isCheckDay[day - 1][i] = false
+                isCheckDay[day][i] = false
+                isCheckDay[day + 1][i] = false
+            }
         }
     }
 
@@ -512,61 +551,30 @@ class TimeInputActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateCheck(day: Int, i: Int) { //선택된 칸의 색칠 유무 결정
-        Log.d("timeinput", "day : $day , i :  $i")
-        isCheckDay[day - 1][i] = !isCheckDay[day - 1][i]
-
-        if (isCheckDay[day - 1][i]) {
-            when (day) {
-                1, 4, 7 -> {
-                    day1[i].setBackgroundResource(R.drawable.view_border_check)
-                }
-
-                2, 5 -> {
-                    day2[i].setBackgroundResource(R.drawable.view_border_check)
-                }
-
-                3, 6 -> {
-                    day3[i].setBackgroundResource(R.drawable.view_border_check)
-                }
-            }
-            updateSaveBtn(true) //저장버튼 활성화
-        } else {
-            when (day) {
-                1, 4, 7 -> {
-                    day1[i].setBackgroundResource(R.drawable.view_border)
-                }
-
-                2, 5 -> {
-                    day2[i].setBackgroundResource(R.drawable.view_border)
-                }
-
-                3, 6 -> {
-                    day3[i].setBackgroundResource(R.drawable.view_border)
-                }
-            }
-            updateSaveBtn(false) //저장버튼 비활성화
-        }
-    }
-
     private fun updateSaveBtn(isClicked: Boolean?) { //저장버튼 색 및 기능 업데이트 함수
         if (isClicked==true) { //true 값을 주면 바로 활성화 적용
             binding.cvTimeInputSaveBtn.setBackgroundResource(R.drawable.background_rectangular_purple_10)
             activateSaveBtn()
             return
         } else {
-            for (i in 0..6 step (1)) {
-                for (j in 0..23 step (1)) {
-                    if (isCheckDay[i][j]) {
-                        binding.cvTimeInputSaveBtn.setBackgroundResource(R.drawable.background_rectangular_purple_10)
-                        activateSaveBtn()
-                        return
-                    }
+            for (i in isCheckDay.indices step (1)) {
+                if (isCheckDay[i].isNotEmpty()) {
+                    binding.cvTimeInputSaveBtn.setBackgroundResource(R.drawable.background_rectangular_purple_10)
+                    activateSaveBtn()
+                    return
+                } else {
+                    //아무것도 선택 안된 상황이라면 저장버튼 비활성화
+                    binding.cvTimeInputSaveBtn.setBackgroundResource(R.drawable.background_rectangular_gray_10)
+                    binding.cvTimeInputSaveBtn.setOnClickListener { }
                 }
+//                for (j in 0..isCheckDay[i].size step (1)) {
+//                    if (isCheckDay[i][j]) {
+//                        binding.cvTimeInputSaveBtn.setBackgroundResource(R.drawable.background_rectangular_purple_10)
+//                        activateSaveBtn()
+//                        return
+//                    }
+//                }
             }
-            //아무것도 선택 안된 상황이라면 저장버튼 비활성화
-            binding.cvTimeInputSaveBtn.setBackgroundResource(R.drawable.background_rectangular_gray_10)
-            binding.cvTimeInputSaveBtn.setOnClickListener { }
         }
     }
 
