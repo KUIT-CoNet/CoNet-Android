@@ -479,9 +479,9 @@ class TimeInputActivity : AppCompatActivity() {
 
     private fun allClearTime() { //모든 일주일 다 초기화
         clearTimetable() //화면초기화
-        clearIsCheck(1)
-        clearIsCheck(4)
-        clearIsCheck(7)//ischeck 초기화
+        for (i in intArrayOf(1,4,7)) { //ischeck 초기화
+            clearIsCheck(i)
+        }
     }
 
     private fun clearTimetable() { //화면 초기화
