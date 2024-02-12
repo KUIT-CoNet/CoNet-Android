@@ -445,26 +445,18 @@ class PlanTimeActivity : AppCompatActivity() {
 
     private fun updateClickListener(day: Int, i: Int, activation: Boolean) {
         if (!activation) { //마지막 인자값을 false로 하면 클릭기능을 비활성화
-            Log.d("plantime", " 비활성화 :: day : $day / i : $i")
             when (day) {
                 1 -> day1[i].setOnClickListener { }
                 2 -> day2[i].setOnClickListener { }
                 3 -> day3[i].setOnClickListener { }
             }
         } else { //클릭기능을 활성화
-            Log.d("plantime", " 활성화 :: day : $day / i : $i ")
             when (day) {
                 1 -> day1[i].setOnClickListener { getFixPlanDialog(1, i) }
                 2 -> day2[i].setOnClickListener { getFixPlanDialog(2, i) }
                 3 -> day3[i].setOnClickListener { getFixPlanDialog(3, i) }
             }
         }
-
-//        for (i in 0..23 step (1)) {
-//            day1[i].setOnClickListener { getFixPlanDialog(1, i) }
-//            day2[i].setOnClickListener { getFixPlanDialog(2, i) }
-//            day3[i].setOnClickListener { getFixPlanDialog(3, i) }
-//        }
     }
 
     private fun getFixPlanDialog(day: Int, i: Int) {
@@ -521,8 +513,8 @@ class PlanTimeActivity : AppCompatActivity() {
         bundle.putInt("groupId", groupId)
         bundle.putString("planName", planName)
         bundle.putInt("planId", planId)
-        bundle.putString("fixed_date", fixedDate)
-        bundle.putInt("fixed_time", fixedTime)
+        bundle.putString("fixedDate", fixedDate)
+        bundle.putInt("fixedTime", fixedTime)
         bundle.putIntegerArrayList("userId", userId)
         bundle.putStringArrayList("userName", userName)
         Log.d("plantime", "fixedDate : $fixedDate / fixedTime : $fixedTime")

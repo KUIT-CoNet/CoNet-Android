@@ -31,21 +31,21 @@ class FixPlanDialog: Fragment() {
         var groupId = requireArguments().getInt("groupId")
         var planName = requireArguments().getString("planName")
         var planId = requireArguments().getInt("planId")
-        var fixed_date = requireArguments().getString("fixed_date")
-        var fixed_time = requireArguments().getInt("fixed_time")
+        var fixedDate = requireArguments().getString("fixedDate")
+        var fixedTime = requireArguments().getInt("fixedTime")
         var userId = requireArguments().getIntegerArrayList("userId")
         var userName = requireArguments().getStringArrayList("userName")
 
 
-        var year = fixed_date!!.substring(0,5)
-        var month = fixed_date!!.substring(6,8)
-        var date = fixed_date!!.substring(9,10)
-        //var Date = LocalDate.parse(fixed_date!!.replace("-","."))
+        var year = fixedDate!!.substring(0,4)
+        var month = fixedDate!!.substring(5,7)
+        var date = fixedDate!!.substring(8,10)
+        //var Date = LocalDate.parse(fixedDate!!.replace("-","."))
 
         var changeDate = "${year}년 ${month}월 ${date}일 "
         //var changeDay  = "${getDay(Date)}요일"
 
-        binding.tvTime.text = "$fixed_time:00"
+        binding.tvTime.text = "$fixedTime:00"
         binding.tvDate.text = changeDate
 
         var userNames = ""
@@ -62,7 +62,7 @@ class FixPlanDialog: Fragment() {
         }
 
         binding.tvConfirm.setOnClickListener {
-            postFixPlan(fixPlan(planId, fixed_date!!, fixed_time, userId!!)) //api 연동
+            postFixPlan(fixPlan(planId, fixedDate!!, fixedTime, userId!!)) //api 연동
 //            parentFragmentManager.beginTransaction().replace(R.id.fl_plan,
 //                FixPlanConfirm()
 //            ).commitAllowingStateLoss() => 화면이 왜 안 만들어지지..
@@ -87,11 +87,11 @@ class FixPlanDialog: Fragment() {
         return day
     }
 
-    private fun fixPlan(planId: Int, fixed_date: String, fixed_time: Int, userId: ArrayList<Int>): FixPlan {
+    private fun fixPlan(planId: Int, fixedDate: String, fixedTime: Int, userId: ArrayList<Int>): FixPlan {
         return FixPlan(
             planId = planId,
-            fixed_date = fixed_date,
-            fixed_time = fixed_time,
+            fixed_date = fixedDate,
+            fixed_time = fixedTime,
             userId = userId
         )
     }
