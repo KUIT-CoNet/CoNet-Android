@@ -238,7 +238,6 @@ class TimeInputActivity : AppCompatActivity() {
                         }
                         setFrame(page)
                     }
-
                 }
 
                 override fun onFailure(call: Call<ShowMyTime>, t: Throwable) {
@@ -377,7 +376,7 @@ class TimeInputActivity : AppCompatActivity() {
                     day3[i].setBackgroundResource(R.drawable.view_border_check)
                 }
             }
-            updateSaveBtn(true) //저장버튼 활성화
+            updateSaveBtn() //저장버튼 활성화
         } else {
             when (day) {
                 1, 4, 7 -> {
@@ -392,7 +391,7 @@ class TimeInputActivity : AppCompatActivity() {
                     day3[i].setBackgroundResource(R.drawable.view_border)
                 }
             }
-            updateSaveBtn(false) //저장버튼 비활성화
+            updateSaveBtn() //저장버튼 비활성화
         }
     }
 
@@ -523,7 +522,7 @@ class TimeInputActivity : AppCompatActivity() {
                 day3[i].setBackgroundResource(R.drawable.view_border_disable)
             }
 
-            updateSaveBtn(false) //저장버튼 비활성화
+            updateSaveBtn() //저장버튼 비활성화
             updateClickListener(day, false) //클릭 기능 해제 하기
 
         } else { //'가능한 시간 없음' 해제
@@ -543,13 +542,13 @@ class TimeInputActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateSaveBtn(isClicked: Boolean?) { //저장버튼 색 및 기능 업데이트 함수
+    private fun updateSaveBtn() { //저장버튼 색 및 기능 업데이트 함수
         binding.cvTimeInputSaveBtn.setBackgroundResource(R.drawable.background_rectangular_gray_10)
         binding.cvTimeInputSaveBtn.setOnClickListener { }
 
         for (i in 0..6) {
             for (j in 0..23) {
-                if (isCheckDay[i][j]){
+                if (isCheckDay[i][j]) {
                     binding.cvTimeInputSaveBtn.setBackgroundResource(R.drawable.background_rectangular_purple_10)
                     activateSaveBtn()
                     return

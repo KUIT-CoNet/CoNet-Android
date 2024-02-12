@@ -44,7 +44,7 @@ class PlanMenuDialog : Fragment() {
             val deletePlanDialog = DeletePlanDialog()
             val bundle = Bundle()
             bundle.putInt("planId", planId)
-            bundle.putInt("grouopId", groupId)
+            bundle.putInt("groupId", groupId)
             deletePlanDialog.arguments = bundle
             parentFragmentManager.beginTransaction()
                 .replace(R.id.fl_plan, deletePlanDialog)
