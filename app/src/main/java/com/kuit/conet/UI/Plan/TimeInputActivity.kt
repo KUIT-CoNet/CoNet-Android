@@ -544,20 +544,15 @@ class TimeInputActivity : AppCompatActivity() {
     }
 
     private fun updateSaveBtn(isClicked: Boolean?) { //저장버튼 색 및 기능 업데이트 함수
-        if (isClicked==true) { //true 값을 주면 바로 활성화 적용
-            binding.cvTimeInputSaveBtn.setBackgroundResource(R.drawable.background_rectangular_purple_10)
-            activateSaveBtn()
-            return
-        } else {
-            for (i in isCheckDay.indices step (1)) {
-                if (isCheckDay[i].isNotEmpty()) {
+        binding.cvTimeInputSaveBtn.setBackgroundResource(R.drawable.background_rectangular_gray_10)
+        binding.cvTimeInputSaveBtn.setOnClickListener { }
+
+        for (i in 0..6) {
+            for (j in 0..23) {
+                if (isCheckDay[i][j]){
                     binding.cvTimeInputSaveBtn.setBackgroundResource(R.drawable.background_rectangular_purple_10)
                     activateSaveBtn()
                     return
-                } else {
-                    //아무것도 선택 안된 상황이라면 저장버튼 비활성화
-                    binding.cvTimeInputSaveBtn.setBackgroundResource(R.drawable.background_rectangular_gray_10)
-                    binding.cvTimeInputSaveBtn.setOnClickListener { }
                 }
             }
         }
