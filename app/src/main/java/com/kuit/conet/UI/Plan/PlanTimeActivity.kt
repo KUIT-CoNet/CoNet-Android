@@ -24,7 +24,6 @@ import java.time.LocalDate
 import kotlin.coroutines.suspendCoroutine
 
 class PlanTimeActivity : AppCompatActivity() {
-    //
     lateinit var binding: ActivityPlanTimeBinding
     var page = 1
     var groupId = 0
@@ -76,7 +75,7 @@ class PlanTimeActivity : AppCompatActivity() {
         //intent값으로 받아오는 건 여기
         planStartPeriod = intent.getStringExtra("planStartPeriod").toString()
         planId = intent.getIntExtra("planId", 0)
-//        val planName = intent.getStringExtra("planName")
+        val planName = intent.getStringExtra("planName")
 
         val coroutineScope = CoroutineScope(Dispatchers.Main)
         coroutineScope.launch {
@@ -290,7 +289,6 @@ class PlanTimeActivity : AppCompatActivity() {
             }
         }
     }
-
 
     fun setFrame(page: Int) { //날짜 입력 후, 표채우기로 넘김
         Log.d("setFrame시작", "page : $page")
@@ -517,7 +515,6 @@ class PlanTimeActivity : AppCompatActivity() {
         bundle.putInt("fixedTime", fixedTime)
         bundle.putIntegerArrayList("userId", userId)
         bundle.putStringArrayList("userName", userName)
-        Log.d("plantime", "fixedDate : $fixedDate / fixedTime : $fixedTime")
         fixPlanDialog.arguments = bundle
         supportFragmentManager.beginTransaction()
             .replace(R.id.fl_plan, fixPlanDialog)
