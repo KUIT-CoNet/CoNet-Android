@@ -92,14 +92,12 @@ class PlanTimeActivity : AppCompatActivity() {//
         }
 
         binding.ivPrev.setOnClickListener {
-            if(page==2) page=1
-            else if (page==3) page=2
+            if(page==2) page=1 else if (page==3) page=2
             setFrame(page)
         }
 
         binding.ivNext.setOnClickListener {
-            if (page==1) page=2
-            else if (page==2) page=3
+            if (page==1) page=2 else if (page==2) page=3
             setFrame(page)
         }
 
