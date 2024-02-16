@@ -102,6 +102,10 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".UI.Plan.FixPlanConfirmActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
+        <activity
             android:name=".UI.History.HistoryMainActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
