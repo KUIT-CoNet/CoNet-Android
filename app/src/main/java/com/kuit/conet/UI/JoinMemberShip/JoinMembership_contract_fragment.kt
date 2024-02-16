@@ -14,76 +14,75 @@ import com.kuit.conet.saveIsoption
 class JoinMembership_contract_fragment : Fragment() {
     // TODO: Rename and change types of parameters
     lateinit var binding : FragmentTermsConditionsBinding
-    var checkbox = arrayOf(0,0,0) // 왼쪽부터 개인정보 수집[필수], 이용약관[필수], 푸시 알람 수신 동의[선택] 여부 0과 1로 나타냄(0은 미선택, 1은 선택)
+    private var checkbox = arrayOf(0,0,0) // 왼쪽부터 개인정보 수집[필수], 이용약관[필수], 푸시 알람 수신 동의[선택] 여부 0과 1로 나타냄(0은 미선택, 1은 선택)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
         binding = FragmentTermsConditionsBinding.inflate(inflater, container, false)
         //전체 동의 버튼 체크 시
-        binding.termsCheckAllIv.setOnClickListener {
+        binding.ivTermsCheckAll.setOnClickListener {
             if(checkbox[0] == 0 || checkbox[1] == 0 || checkbox[2] == 0){
                 checkbox[0] = 1
                 checkbox[1] = 1
                 checkbox[2] = 1
-                binding.termsCheckAllIv.setImageResource(R.drawable.checkbox1)
-                binding.termsCheck1Iv.setImageResource(R.drawable.checkbox1)
-                binding.termsCheck2Iv.setImageResource(R.drawable.checkbox1)
-                binding.termsCheck3Iv.setImageResource(R.drawable.checkbox1)
+                binding.ivTermsCheckAll.setImageResource(R.drawable.checkbox1)
+                binding.ivTermsPersonalInfo.setImageResource(R.drawable.checkbox1)
+                binding.ivTermsOfUse.setImageResource(R.drawable.checkbox1)
+                //binding.termsCheck3Iv.setImageResource(R.drawable.checkbox1)
 
             }
             else{
                 checkbox[0] = 0
                 checkbox[1] = 0
                 checkbox[2] = 0
-                binding.termsCheckAllIv.setImageResource(R.drawable.checkbox2)
-                binding.termsCheck1Iv.setImageResource(R.drawable.checkbox2)
-                binding.termsCheck2Iv.setImageResource(R.drawable.checkbox2)
-                binding.termsCheck3Iv.setImageResource(R.drawable.checkbox2)
+                binding.ivTermsCheckAll.setImageResource(R.drawable.checkbox2)
+                binding.ivTermsPersonalInfo.setImageResource(R.drawable.checkbox2)
+                binding.ivTermsOfUse.setImageResource(R.drawable.checkbox2)
+                //binding.termsCheck3Iv.setImageResource(R.drawable.checkbox2)
 
             }
             btnisEnabled()
         }
         //개인 정보 동의 체크 시
-        binding.termsCheck1Iv.setOnClickListener {
+        binding.ivTermsPersonalInfo.setOnClickListener {
             if(checkbox[0] == 0){
                 checkbox[0] = 1
-                binding.termsCheck1Iv.setImageResource(R.drawable.checkbox1)
+                binding.ivTermsPersonalInfo.setImageResource(R.drawable.checkbox1)
 
             }
             else{
                 checkbox[0] = 0
-                binding.termsCheck1Iv.setImageResource(R.drawable.checkbox2)
+                binding.ivTermsPersonalInfo.setImageResource(R.drawable.checkbox2)
             }
             btnisEnabled()
         }
         //이용약관 동의 체크 시
-        binding.termsCheck2Iv.setOnClickListener {
+        binding.ivTermsOfUse.setOnClickListener {
             if(checkbox[1] == 0){
                 checkbox[1] = 1
-                binding.termsCheck2Iv.setImageResource(R.drawable.checkbox1)
+                binding.ivTermsOfUse.setImageResource(R.drawable.checkbox1)
             }
             else{
                 checkbox[1] = 0
-                binding.termsCheck2Iv.setImageResource(R.drawable.checkbox2)
+                binding.ivTermsOfUse.setImageResource(R.drawable.checkbox2)
             }
             btnisEnabled()
         }
         // 푸쉬 알람 설정 체크 시
-        binding.termsCheck3Iv.setOnClickListener {
-            if(checkbox[2] == 0){
-                checkbox[2] = 1
-                binding.termsCheck3Iv.setImageResource(R.drawable.checkbox1)
-            }
-            else{
-                checkbox[2] = 0
-                binding.termsCheck3Iv.setImageResource(R.drawable.checkbox2)
-            }
-            btnisEnabled()
-        }
+//        binding.termsCheck3Iv.setOnClickListener {
+//            if(checkbox[2] == 0){
+//                checkbox[2] = 1
+//                binding.termsCheck3Iv.setImageResource(R.drawable.checkbox1)
+//            }
+//            else{
+//                checkbox[2] = 0
+//                binding.termsCheck3Iv.setImageResource(R.drawable.checkbox2)
+//            }
+//            btnisEnabled()
+//        }
 
-        binding.termsBtnCv.setOnClickListener {
+        binding.cvTermsNextBtn.setOnClickListener {
             Log.d("button event","버튼 클릭")
             if(checkbox[0] == 1 && checkbox[1] == 1){
                 (activity as JoinMembershipActivity).changeProgressBar(2) // 프로그래스바 변경
@@ -99,16 +98,16 @@ class JoinMembership_contract_fragment : Fragment() {
     }
     fun btnisEnabled(){
         if(checkbox[0] == 1 && checkbox[1] == 1 && checkbox[2] == 1){
-            binding.termsCheckAllIv.setImageResource(R.drawable.checkbox1)
+            binding.ivTermsCheckAll.setImageResource(R.drawable.checkbox1)
         }
         else{
-            binding.termsCheckAllIv.setImageResource(R.drawable.checkbox2)
+            binding.ivTermsCheckAll.setImageResource(R.drawable.checkbox2)
         }
         if(checkbox[0] == 1 && checkbox[1] == 1){
-            binding.termsBtnCv.setBackgroundResource(R.drawable.button_design_purple)
+            binding.cvTermsNextBtn.setBackgroundResource(R.drawable.button_design_purple)
         }
         else{
-            binding.termsBtnCv.setBackgroundResource(R.drawable.button_design_gray)
+            binding.cvTermsNextBtn.setBackgroundResource(R.drawable.button_design_gray)
         }
     }
 }
