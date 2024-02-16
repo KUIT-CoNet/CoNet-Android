@@ -13,7 +13,7 @@ class JoinMembershipActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         supportFragmentManager.beginTransaction()
-            .replace(R.id.jm_fl, JoinMembership_contract_fragment())
+            .replace(R.id.jm_fl, JoinMembershipContract())
             .commitAllowingStateLoss()
 
         binding.cancleButton.setOnClickListener {
