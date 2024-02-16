@@ -14,9 +14,9 @@ import okhttp3.RequestBody
 import retrofit2.http.*
 
 interface RetrofitInterface {
-    @POST("auth/login/kakao")
+    @POST("auth/login")
     fun signUp(
-        @Body idToken: String?
+        @Body login: Login
     ) : Call<KaKaoResponse>
 
     @POST("auth/regenerate-token")

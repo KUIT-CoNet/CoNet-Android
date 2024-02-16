@@ -4,6 +4,11 @@ import android.os.Parcel
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 
+data class Login(
+    @SerializedName("platform") var platform: String,
+    @SerializedName("idToken") var idToken: String?
+)
+
 data class KaKaoResponse( // 맨 처음 카카오 로그인 했을 때 id token넘겨주고 그에 대한 응답을 처리하는 데이터 클래스
     @SerializedName("code") val code : Int,
     @SerializedName("status") val status : Int,

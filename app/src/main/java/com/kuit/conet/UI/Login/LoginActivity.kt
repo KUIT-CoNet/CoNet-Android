@@ -14,6 +14,7 @@ import com.kakao.sdk.user.UserApiClient
 import com.kuit.conet.UI.JoinMemberShip.JoinMembershipActivity
 import com.kuit.conet.UI.ConetMainActivity
 import com.kuit.conet.Network.KaKaoResponse
+import com.kuit.conet.Network.Login
 import com.kuit.conet.Network.RetrofitInterface
 import com.kuit.conet.Network.getRetrofit
 import com.kuit.conet.R
@@ -124,7 +125,8 @@ class LoginActivity : AppCompatActivity() {
         Log.d("getkakaoResponse","실행")
         Log.d("idToken","${idToken}")
         val signUpService = getRetrofit().create(RetrofitInterface::class.java)
-        signUpService.signUp(idToken).enqueue(object :
+        val login: Login = Login("kakao", idToken)
+        signUpService.signUp(login).enqueue(object :
             retrofit2.Callback<KaKaoResponse> { // 서버와 비동기적으로 데이터 주고받을 수 있는 방법 enqueue사용
             override fun onResponse( // 통신에 성공했을 경우
                 call: Call<KaKaoResponse>,
