@@ -87,7 +87,7 @@ data class plans(
     @SerializedName("teamName") val teamName: String,
     @SerializedName("planName") val planName: String,
     @SerializedName("dday") val dday: String?,
-    @SerializedName("isRegisteredToHistory") val isRegisteredToHistory: Boolean?
+//    @SerializedName("isRegisteredToHistory") val isRegisteredToHistory: Boolean?
 )
 
 // 대기 중 약속 조회
@@ -276,23 +276,6 @@ data class ResponseUpdatePlanDetail(
     @SerializedName("message") val message: String,
     @SerializedName("result") val result: String
 )
-// 사이드바에 확정된 약속, 지난 약속
-//data class ResponseSidePlan(
-//    @SerializedName("code") val code: Int,
-//    @SerializedName("status") val status: Int,
-//    @SerializedName("message") val message: String,
-//    @SerializedName("result") val result: ArrayList<SidePlanInfo>
-//)
-//
-//data class SidePlanInfo(
-//    @SerializedName("planId") val planId : Int,
-//    @SerializedName("date") val date : String,
-//    @SerializedName("time") val time : String,
-//    @SerializedName("teamName") val teamName : String,
-//    @SerializedName("planName") val planName : String,
-//    @SerializedName("dday") val dday : String?,
-//    @SerializedName("isRegisteredToHistory") val isRegisteredToHistory : Boolean?
-//)
 
 //약속 생성 - 요청 부분
 
@@ -334,24 +317,6 @@ data class NoticeInfo(
     @SerializedName("content") val content: String,
     @SerializedName("date") val date: String
 )
-
-//히스토리 조회
-data class ResponseShowHistory(
-    @SerializedName("code") val code: Int,
-    @SerializedName("status") val status: Int,
-    @SerializedName("message") val message: String,
-    @SerializedName("result") val result: ArrayList<HistoryInfo>
-)
-
-data class HistoryInfo(
-    @SerializedName("planId") val planId: Int,
-    @SerializedName("planName") val planName: String,
-    @SerializedName("planDate") val planDate: String,
-    @SerializedName("planMemberNum") val planMemberNum: Int,
-    @SerializedName("historyImgUrl") val historyImgUrl: String?,
-    @SerializedName("historyDescription") val historyDescription: String?
-)
-
 
 //가능한 시간 저장
 data class InputMyTime(
@@ -556,32 +521,6 @@ data class PlanInfo(
     @SerializedName("time") val time: String,
     @SerializedName("participant") val participant: Boolean,
     @SerializedName("dday") val dday: String?,
-)
-
-data class ResponseNonHistory(
-    @SerializedName("code") val code: Int,
-    @SerializedName("status") val status: Int,
-    @SerializedName("message") val message: String,
-    @SerializedName("result") val result: ArrayList<NonHistory>
-)
-
-data class NonHistory(
-    @SerializedName("planId") val planId: Int,
-    @SerializedName("date") val date: String,
-    @SerializedName("time") val time: String,
-    @SerializedName("planName") val planName: String,
-    @SerializedName("isRegistedToHistory") val isRegisteredToHistory: Boolean
-)
-
-data class ResponseRegistHistory(
-    @SerializedName("code") val code: Int,
-    @SerializedName("status") val status: Int,
-    @SerializedName("message") val message: String,
-    @SerializedName("result") val result: ResultRegistHistory
-)
-
-data class ResultRegistHistory(
-    @SerializedName("historyId") val historyId: Int
 )
 
 data class ResponseGetGroupDetail(

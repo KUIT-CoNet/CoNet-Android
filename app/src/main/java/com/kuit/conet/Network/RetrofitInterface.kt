@@ -50,6 +50,7 @@ interface RetrofitInterface {
         @Query("searchDate") searchDate: String
     ): Call<HomePlanInfo>
 
+    
     // TEAM //
     @GET("team") // :: 모임 리스트 조회
     fun getGroup(
@@ -110,6 +111,7 @@ interface RetrofitInterface {
         @Body teamId: Int
     ): Call<ResponseGroupCode>
 
+
     // PLAN //
     @POST("plan")  // :: 약속 생성
     fun MakePlan(
@@ -136,6 +138,13 @@ interface RetrofitInterface {
     ): Call<ResponseFixPlan>
 
     // :: 약속 수정 - 확정
+    @Multipart
+//    @Headers("Content-Type: application/json")
+    @POST("team/plan/update-fixed")
+    fun updatePlanDetail(
+        @Part("requestBody") requestBody: RequestBody,
+        @Part file: MultipartBody.Part?
+    ): Call<ResponseUpdatePlanDetail>
 
     @DELETE("plan/{planId}") // :: 약속 삭제
     fun deletePlan(
@@ -220,37 +229,11 @@ interface RetrofitInterface {
         @Header("Authorization") authorization: String?
     ): Call<DeleteUser>
 
+
     // NOTICE //
     @GET("notice") // :: 공지 조회
     fun getNotice(
         @Header("Authorization") authorization: String?,
     ): Call<Notice>
 
-
-    //히스토리 조회
-    @GET("history")
-    fun ShowHistory(
-        @Query("teamId") teamId: Int
-    ): Call<ResponseShowHistory>
-
-
-    @Multipart
-//    @Headers("Content-Type: application/json")
-    @POST("team/plan/update-fixed")
-    fun updatePlanDetail(
-        @Part("requestBody") requestBody: RequestBody,
-        @Part file: MultipartBody.Part?
-    ): Call<ResponseUpdatePlanDetail>
-
-//    @GET("team/plan/non-history")
-//    fun ShownonHistory(
-//        @Query("teamId") teamId: Int
-//    ): Call<ResponseSidePlan>
-//    @Multipart
-////    @Headers("Content-Type: application/json")
-//    @POST("history/register")
-//    fun registHistory(
-//        @Part("registerRequest") requestBody: RequestBody,
-//        @Part file: MultipartBody.Part?
-//    ): Call<ResponseRegistHistory>
 }
