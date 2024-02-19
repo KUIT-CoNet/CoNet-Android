@@ -14,6 +14,7 @@ import com.kuit.conet.Network.RetrofitInterface
 import com.kuit.conet.Network.getRetrofit
 import com.kuit.conet.R
 import com.kuit.conet.databinding.DialogFixPlanBinding
+import com.kuit.conet.getRefreshToken
 import org.threeten.bp.LocalDate
 import retrofit2.Call
 import retrofit2.Response
@@ -30,12 +31,12 @@ class FixPlanDialog : Fragment() {
     ): View {
         binding = DialogFixPlanBinding.inflate(layoutInflater, container, false)
 
-        var groupId = requireArguments().getInt("groupId")
+        var teamId = requireArguments().getInt("teamId")
         var planName = requireArguments().getString("planName")
         val planId = requireArguments().getInt("planId")
         val fixedDate = requireArguments().getString("fixedDate")
         val fixedTime = requireArguments().getInt("fixedTime")
-        val userId = requireArguments().getIntegerArrayList("userId")
+        val memberIds = requireArguments().getIntegerArrayList("memberIds")
         val userName = requireArguments().getStringArrayList("userName")
 
 
@@ -54,7 +55,6 @@ class FixPlanDialog : Fragment() {
         for (i in 0 until userName!!.size) userNames = userNames + " " + userName[i].toString()
         binding.tvParticipants.text = userNames
 
-
         binding.tvCancel.setOnClickListener {
             parentFragmentManager.beginTransaction()
                 .remove(this)
@@ -62,7 +62,7 @@ class FixPlanDialog : Fragment() {
         }
 
         binding.tvConfirm.setOnClickListener {
-            postFixPlan(fixPlan(planId, fixedDate!!, fixedTime, userId!!)) //api 연동
+            postFixPlan(fixPlan(planId, fixedDate!!, fixedTime, memberIds!!)) //api 연동
             parentFragmentManager.beginTransaction()
                 .remove(this)
                 .commit()
@@ -70,7 +70,7 @@ class FixPlanDialog : Fragment() {
             val intent = Intent(requireContext(), FixPlanConfirmActivity::class.java)
             intent.putExtra("planId", planId)
             intent.putExtra("planName", planName)
-            intent.putExtra("groupId", groupId)
+            intent.putExtra("teamId", teamId)
             intent.putExtra("fixedDate", fixedDate)
             intent.putExtra("fixedTime", fixedTime)
             startActivity(intent)
@@ -83,19 +83,24 @@ class FixPlanDialog : Fragment() {
         planId: Int,
         fixedDate: String,
         fixedTime: Int,
-        userId: ArrayList<Int>
+        memberIds: ArrayList<Int>
     ): FixPlan {
         return FixPlan(
             planId = planId,
-            fixed_date = fixedDate,
-            fixed_time = fixedTime,
-            userId = userId
+            fixedDate = fixedDate,
+            fixedTime = fixedTime,
+            memberIds = memberIds
         )
     }
 
     private fun postFixPlan(fixPlan: FixPlan) {
         val fixPlanService = getRetrofit().create(RetrofitInterface::class.java)
-        fixPlanService.FixPlan(fixPlan).enqueue(object : retrofit2.Callback<ResponseFixPlan> {
+        val refreshToken = getRefreshToken(requireContext())
+        val authHeader = "Bearer $refreshToken"
+        fixPlanService.FixPlan(
+            authHeader,
+            fixPlan
+        ).enqueue(object : retrofit2.Callback<ResponseFixPlan> {
             override fun onResponse(
                 call: Call<ResponseFixPlan>,
                 response: Response<ResponseFixPlan>

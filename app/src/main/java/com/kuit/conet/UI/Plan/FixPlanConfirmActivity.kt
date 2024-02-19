@@ -1,11 +1,13 @@
 package com.kuit.conet.UI.Plan
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import com.kuit.conet.Network.ResponseGetPlanDetail
 import com.kuit.conet.Network.RetrofitClient
+import com.kuit.conet.UI.GroupMain.GroupMainActivity
 import com.kuit.conet.UI.Plan.detail.ParticipantAdapter
 import com.kuit.conet.Utils.NETWORK
 import com.kuit.conet.databinding.ActivityFixPlanConfirmBinding
@@ -27,6 +29,9 @@ class FixPlanConfirmActivity : AppCompatActivity() {
         setFrame()
 
         binding.cvFixConfirmBtn.setOnClickListener {
+            val intent = Intent(this, GroupMainActivity::class.java)
+            intent.putExtra("teamId", intent.getStringExtra("teamId"))
+            startActivity(intent)
             finish()
         }
     }
