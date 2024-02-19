@@ -113,8 +113,8 @@ interface RetrofitInterface {
 
 
     // PLAN //
-    @POST("plan")  // :: 약속 생성
-    fun MakePlan(
+    @POST("plan")  // :: 약속 생성 //
+    fun makePlan(
         @Header("Authorization") authorization: String,
         @Body makePlanInfo: MakePlanInfo
     ): Call<ResponseMakePlan>
@@ -182,13 +182,13 @@ interface RetrofitInterface {
         @Query("period") period: String //지난 약속 : past, 다가오는 : oncoming
     ): Call<ResponseSideBarPlan>
 
-    @GET("plan/{planId}/available-time-slot/my") // :: 특정 약속의 나의 가능한 시간 조회
+    @GET("plan/{planId}/available-time-slot/my") // :: 특정 약속의 나의 가능한 시간 조회 //
     fun ShowMyTime(
         @Header("Authorization") authorization: String,
         @Query("planId") planId: Int
     ): Call<ShowMyTime>
 
-    @GET("team/plan/member-time")  // :: 대기중인 약속의 구성원, 가능한 시간 조회
+    @GET("team/plan/member-time")  // :: 대기중인 약속의 구성원, 가능한 시간 조회 //
     fun ShowMemTime(
         @Query("planId") planId: Int
     ): Call<ShowMemTime>

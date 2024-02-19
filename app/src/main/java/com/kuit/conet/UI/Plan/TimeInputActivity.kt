@@ -7,11 +7,12 @@ import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.kuit.conet.Network.AvailableDateTimes
 import com.kuit.conet.Network.InputMyTime
-import com.kuit.conet.Network.PossibleDateTime
 import com.kuit.conet.Network.ResponseInputMyTime
 import com.kuit.conet.Network.RetrofitInterface
 import com.kuit.conet.Network.ShowMyTime
+import com.kuit.conet.Network.UserAvailableTimeDTO
 import com.kuit.conet.Network.getRetrofit
 import com.kuit.conet.R
 import com.kuit.conet.databinding.ActivityTimeInputBinding
@@ -27,16 +28,16 @@ import kotlin.coroutines.suspendCoroutine
 class TimeInputActivity : AppCompatActivity() {
     lateinit var binding: ActivityTimeInputBinding
     var page = 1
-    var disable = false
+    private var disable = false
     var planId = 0
 
-    private var time1: PossibleDateTime = PossibleDateTime("", arrayListOf())
-    private var time2: PossibleDateTime = PossibleDateTime("", arrayListOf())
-    private var time3: PossibleDateTime = PossibleDateTime("", arrayListOf())
-    private var time4: PossibleDateTime = PossibleDateTime("", arrayListOf())
-    private var time5: PossibleDateTime = PossibleDateTime("", arrayListOf())
-    private var time6: PossibleDateTime = PossibleDateTime("", arrayListOf())
-    private var time7: PossibleDateTime = PossibleDateTime("", arrayListOf())
+    private var time1: AvailableDateTimes = AvailableDateTimes("", arrayListOf())
+    private var time2: AvailableDateTimes = AvailableDateTimes("", arrayListOf())
+    private var time3: AvailableDateTimes = AvailableDateTimes("", arrayListOf())
+    private var time4: AvailableDateTimes = AvailableDateTimes("", arrayListOf())
+    private var time5: AvailableDateTimes = AvailableDateTimes("", arrayListOf())
+    private var time6: AvailableDateTimes = AvailableDateTimes("", arrayListOf())
+    private var time7: AvailableDateTimes = AvailableDateTimes("", arrayListOf())
 
     private var isCheckDay = Array(7) { Array(24) { false } }
 
@@ -197,7 +198,7 @@ class TimeInputActivity : AppCompatActivity() {
 
         binding.vTimeInputClockBorder.setOnClickListener {
             disable = !disable
-            for (i in intArrayOf(1,4,7)) {
+            for (i in intArrayOf(1, 4, 7)) {
                 updateDisable(i, disable)
             }
         }
@@ -223,20 +224,48 @@ class TimeInputActivity : AppCompatActivity() {
                         //초기 세팅
                         setDateOfTime(intent.getStringExtra("planStartPeriod").toString())
 
-                        if (!resp!!.result.hasRegisteredTime) {
-                            Log.d("L:입력한시간없었음", resp.result.hasRegisteredTime.toString())
+//                        if (!resp!!.result.hasRegisteredTime) {
+//                            Log.d("L:입력한시간없었음", resp.result.hasRegisteredTime.toString())
+//
+//                        } else {
+//                            if (resp.result.hasPossibleTime) {
+//                                Log.d("L:입력한시간있음", resp.result.hasPossibleTime.toString())
+//                                initTime(resp.result.possibleTime)
+//                            } else {
+//                                Log.d("L:가능한시간없음", resp.result.hasPossibleTime.toString())
+//                                disable = true
+//                                updateDisable(1, disable)
+//                            }
+//                        }
+                        setFrame(page)
+                        when (resp!!.result.availableTimeRegisteredStatus) {
+                            0 -> {
+                                Log.d(
+                                    "TimeInputActivity",
+                                    "[0] 입력한 적 없음\n" + resp.result.availableTimeRegisteredStatus.toString()
+                                )
+                            }
 
-                        } else {
-                            if (resp.result.hasPossibleTime) {
-                                Log.d("L:입력한시간있음", resp.result.hasPossibleTime.toString())
-                                initTime(resp.result.possibleTime)
-                            } else {
-                                Log.d("L:가능한시간없음", resp.result.hasPossibleTime.toString())
-                                disable = true
-                                updateDisable(1, disable)
+                            1 -> {
+                                Log.d(
+                                    "TimeInputActivity",
+                                    "[1] 가능한 시간 없음\n" + resp.result.availableTimeRegisteredStatus.toString()
+                                )
+                                disable = !disable
+                                for (i in intArrayOf(1, 4, 7)) {
+                                    updateDisable(i, disable)
+                                }
+                            }
+
+                            2 -> {
+                                Log.d(
+                                    "TimeInputActivity",
+                                    "[2] 시간 있음\n" + resp.result.availableTimeRegisteredStatus.toString()
+                                )
+                                initTime(resp.result.timeSlot)
                             }
                         }
-                        setFrame(page)
+
                     }
                 }
 
@@ -261,20 +290,20 @@ class TimeInputActivity : AppCompatActivity() {
         time7.date = startDate.plusDays(6).toString().replace(".", "-")
     }
 
-    private fun initTime(possibleTimeList: ArrayList<PossibleDateTime>) {
-        for (j in 0 until possibleTimeList[0].time.size) time1.time.add(possibleTimeList[0].time[j])
-        for (j in 0 until possibleTimeList[1].time.size) time2.time.add(possibleTimeList[0].time[j])
-        for (j in 0 until possibleTimeList[2].time.size) time3.time.add(possibleTimeList[0].time[j])
-        for (j in 0 until possibleTimeList[3].time.size) time4.time.add(possibleTimeList[0].time[j])
-        for (j in 0 until possibleTimeList[4].time.size) time5.time.add(possibleTimeList[0].time[j])
-        for (j in 0 until possibleTimeList[5].time.size) time6.time.add(possibleTimeList[0].time[j])
-        for (j in 0 until possibleTimeList[6].time.size) time7.time.add(possibleTimeList[0].time[j])
+    private fun initTime(possibleTimeList: ArrayList<UserAvailableTimeDTO>) {
+        for (j in 0 until possibleTimeList[0].availableTimes.size) time1.time.add(possibleTimeList[0].availableTimes[j])
+        for (j in 0 until possibleTimeList[1].availableTimes.size) time2.time.add(possibleTimeList[0].availableTimes[j])
+        for (j in 0 until possibleTimeList[2].availableTimes.size) time3.time.add(possibleTimeList[0].availableTimes[j])
+        for (j in 0 until possibleTimeList[3].availableTimes.size) time4.time.add(possibleTimeList[0].availableTimes[j])
+        for (j in 0 until possibleTimeList[4].availableTimes.size) time5.time.add(possibleTimeList[0].availableTimes[j])
+        for (j in 0 until possibleTimeList[5].availableTimes.size) time6.time.add(possibleTimeList[0].availableTimes[j])
+        for (j in 0 until possibleTimeList[6].availableTimes.size) time7.time.add(possibleTimeList[0].availableTimes[j])
     }
 
     //클릭 동작 활성화 함수 (true 넣으면 동작)
     private fun updateClickListener(day: Int, res: Boolean) {
         if (res) {
-            if (day==7) {
+            if (day == 7) {
                 for (i in 0..23 step (1)) day1[i].setOnClickListener { updateCheck(day, i) }
             } else {
                 for (i in 0..23 step (1)) {
@@ -444,9 +473,9 @@ class TimeInputActivity : AppCompatActivity() {
 
     private fun pdtToTable( //저장된 PossibleDateTime 정보를 받아 이를 바탕으로 화면 구성
         day: Int, //시작 날이 1,4,7
-        pdt1: PossibleDateTime,
-        pdt2: PossibleDateTime?,
-        pdt3: PossibleDateTime?
+        pdt1: AvailableDateTimes,
+        pdt2: AvailableDateTimes?,
+        pdt3: AvailableDateTimes?
     ) {
         clearTimetable() //화면만 초기화
         clearIsCheck(day)
@@ -470,7 +499,7 @@ class TimeInputActivity : AppCompatActivity() {
 
     private fun allClearTime() { //모든 일주일 다 초기화
         clearTimetable() //화면초기화
-        for (i in intArrayOf(1,4,7)) { //ischeck 초기화
+        for (i in intArrayOf(1, 4, 7)) { //ischeck 초기화
             clearIsCheck(i)
         }
     }
@@ -484,9 +513,9 @@ class TimeInputActivity : AppCompatActivity() {
     }
 
     private fun clearIsCheck(day: Int) { //check 부분 초기화
-        if (day==7) {
+        if (day == 7) {
             for (i in 0..23 step (1)) {
-                isCheckDay[day -1][i] = false
+                isCheckDay[day - 1][i] = false
             }
         } else {
             for (i in 0..23 step (1)) {
@@ -575,7 +604,7 @@ class TimeInputActivity : AppCompatActivity() {
     private fun getMyTime(): InputMyTime {
         return InputMyTime(
             planId = intent.getIntExtra("planId", 0),
-            possibleDateTimes = arrayListOf(time1, time2, time3, time4, time5, time6, time7)
+            availableDateTimes = arrayListOf(time1, time2, time3, time4, time5, time6, time7)
         )
     }
 
