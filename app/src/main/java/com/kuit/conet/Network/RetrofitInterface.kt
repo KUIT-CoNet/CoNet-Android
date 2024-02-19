@@ -14,38 +14,104 @@ import okhttp3.RequestBody
 import retrofit2.http.*
 
 interface RetrofitInterface {
-    @POST("auth/login")
+    // AUTH //
+    @POST("auth/login") // :: 로그인(회원가입)
     fun signUp(
         @Body login: Login
     ) : Call<KaKaoResponse>
 
-    @POST("auth/regenerate-token")
+    @POST("auth/term") // :: 약관 동의 및 이름 입력
+    fun registed(
+        @Header("Authorization") authorization : String?,
+        @Body sendInfo: sendInfo
+    ) : Call<registedResponse>
+
+    @POST("auth/regenerate-token") // :: refresh token 재발급
     fun getAccess(
         @Header("Authorization") refreshToken:String?,
         @Body default : String
     ) : Call<refreshResponse>
 
-    @POST("auth/term-and-name")
-    fun registed(
-        @Header("Authorization") authorization : String?,
-        @Body sendInfo: sendInfo
-    ) : Call<registedResponse>
-    @GET("home/month")
-    fun homepromiseshow( // 홈 화면 특정 달의 약속 조회
+    // HOME //
+    @GET("home/plan/waiting") // :: 홈 화면 대기 중인 약속 조회
+    fun homeoncallshow(
+        @Header("Authorization") authorization : String?
+    ) : Call<HomeOncall>
+
+    @GET("home/plan/month") // :: 홈 화면 특정 달의 확정된 약속 날짜 조회
+    fun homepromiseshow(
         @Header("Authorization") authorization : String?,
         @Query("searchDate") searchDate : String
     ) : Call<HomePlanShow>
 
-    @GET("home/day")
-    fun homepromiseinfo( // 홈 화면 특정 날짜의 약속 조회
+    @GET("home/plan/day") // :: 홈 화면 특정 날짜의 확정된 약속 조회
+    fun homepromiseinfo(
         @Header("Authorization") authorization : String?,
         @Query("searchDate") searchDate : String
     ) : Call<HomePlanInfo>
 
-    @GET("home/waiting")
-    fun homeoncallshow( // 홈 화면 대기중 약속 조회
-        @Header("Authorization") authorization : String?
-    ) : Call<HomeOncall>
+    // TEAM //
+    @GET("team") // :: 모임 리스트 조회
+    fun getGroup(
+        @Header("Authorization") authorization: String
+    ): Call<ResponseGetGroup>
+
+    @GET("team/{teamId}/members") // :: 모임 구성원 조회
+    fun getGroupMembers(
+        @Header("Authorization") authorization: String,
+        @Path("teamId") groupId: Int
+    ): Call<ResponseGetGroupMembers>
+
+    @GET("team/{teamID}") // :: 모임 상세 조회
+    fun getGroupDetail(
+        @Header("Authorization") authorization: String,
+        @Path("teamId") groupId: Int
+    ): Call<ResponseGetGroupDetail>
+
+    @DELETE("team/{teamId}") // :: 모임 삭제
+    fun DeleteGroup(
+        @Header("Authorization") authorization: String,
+        @Path("teamID") teamId: Int
+    ) : Call<EditUserName>
+
+    @POST("team/join") // :: 모임 참여
+    fun enrollGroup(
+        @Header("Authorization") authorization: String,
+        @Body inviteCode: String
+    ): Call<ResponseEnrollGroup>
+
+    @Multipart
+//    @Headers("Content-Type: application/json")
+    @POST("team") // :: 모임 생성
+    fun createGroup(
+        @Header("Authorization") authorization: String,
+        @Part file: MultipartBody.Part,
+        @Part("request") request: RequestBody
+    ): Call<ResponseCreateGroup>
+
+    @POST("team/leave") // :: 모임 탈퇴
+    fun LeaveGroup(
+        @Header("Authorization") authorization: String,
+        @Body teamId: Int
+    ) : Call<EditUserName>
+
+    @Multipart
+//    @Headers("Content-Type: application/json")
+    @POST("team/update") // :: 모임 수정
+    fun updateGroup(
+        @Header("Authorization") authorization: String,
+        @Part file: MultipartBody.Part,
+        @Part("request") request: RequestBody
+    ): Call<ResponseUpdateGroup>
+
+    @POST("team/code") // :: 초대 코드 재발급
+    fun getGroupCode(
+        @Header("Authorization") authorization: String,
+        @Body teamId: Int
+    ): Call<ResponseGroupCode>
+
+   
+
 
     @GET("user")
     fun showuser(
@@ -70,51 +136,22 @@ interface RetrofitInterface {
         @Header("Authorization") authorization : String?
     ) : Call<DeleteUser>
 
-    @Multipart
-//    @Headers("Content-Type: application/json")
-    @POST("team/create")
-    fun createGroup(
-        @Header("Authorization") authorization: String,
-        @Part file: MultipartBody.Part,
-        @Part("request") request: RequestBody
-    ): Call<ResponseCreateGroup>
 
-    @POST("team/participate")
-    fun enrollGroup(
-        @Header("Authorization") authorization: String,
-        @Body inviteCode: String
-    ): Call<ResponseEnrollGroup>
 
-    @POST("team/code")
-    fun getGroupCode(
-        @Header("Authorization") authorization: String,
-        @Body teamId: Int
-    ): Call<ResponseGroupCode>
 
-    @GET("team")
-    fun getGroup(
-        @Header("Authorization") authorization: String
-    ): Call<ResponseGetGroup>
+
+
+
+
 
     @GET("team/bookmark")
     fun getBookmarkGroup(
         @Header("Authorization") authorization: String
     ): Call<ResponseGetGroup>
 
-    @Multipart
-//    @Headers("Content-Type: application/json")
-    @POST("team/update")
-    fun updateGroup(
-        @Header("Authorization") authorization: String,
-        @Part file: MultipartBody.Part,
-        @Part("request") request: RequestBody
-    ): Call<ResponseUpdateGroup>
 
-    @GET("team/members")
-    fun getGroupMembers(
-//        @Header("Authorization") authorization: String,
-        @Query("teamId") groupId: Int
-    ): Call<ResponseGetGroupMembers>
+
+
 
     @POST("team/plan/delete")
     fun deletePlan(
@@ -153,8 +190,9 @@ interface RetrofitInterface {
         @Query("teamId") teamId : Int
     ) : Call<ResponseSidePlan>
 
-    @POST("team/plan/create")
+    @POST("plan")  // 이거부터 다시
     fun MakePlan(
+        @Header("Authorization") authorization: String,
         @Body makePlanInfo : MakePlanInfo
     ) : Call<ResponseMakePlan>
 
@@ -170,18 +208,9 @@ interface RetrofitInterface {
         @Body teamId: Int
     ): Call<ResponseDeleteBookmark>
 
-    //모임 나가기
-    @POST("team/leave")
-    fun LeaveGroup(
-        @Header("Authorization") authorization: String,
-        @Body teamId: Int
-    ) : Call<EditUserName>
-    // 모임 삭제
-    @POST("team/delete")
-    fun DeleteGroup(
-        @Header("Authorization") authorization: String,
-        @Body teamId: Int
-    ) : Call<EditUserName>
+
+
+
 
     //히스토리 조회
     @GET("history")
@@ -221,11 +250,8 @@ interface RetrofitInterface {
         @Part file: MultipartBody.Part?
     ): Call<ResponseRegistHistory>
 
-    @GET("team/detail")
-    fun getGroupDetail(
-        @Header("Authorization") authorization: String,
-        @Query("teamId") groupId: Int
-    ): Call<ResponseGetGroupDetail>
+
+
     @POST("team/plan/update-waiting")
     fun UpdateWaiting(
         @Body updateWaiting: UpdateWaiting

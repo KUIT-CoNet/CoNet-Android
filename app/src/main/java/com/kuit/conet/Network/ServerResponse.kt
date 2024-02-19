@@ -44,7 +44,6 @@ data class registedResponse(
 )
 data class sendInfo(
     @SerializedName("name") val name : String,
-    @SerializedName("optionTerm") val optionTerm: Int
 )
 data class userInfo(
     @SerializedName("name") val name : String,
