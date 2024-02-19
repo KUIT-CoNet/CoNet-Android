@@ -106,10 +106,11 @@ class InfoActivity : AppCompatActivity() {
             override fun onResponse(call: Call<EditUserImage>, response: Response<EditUserImage>) {
                 if (response.isSuccessful) {
                     val resp = response.body() // 성공했을 경우 response body불러오기
-                    Log.d("SIGNUP/SUCCESS", resp.toString())
-                    Log.d("성공!", "success")
+                    Log.d("UserInfo", resp.toString())
+                    Log.d("UserInfo!", "success")
                 } else {
                     // 실패 처리
+                    Log.d("UserInfo", "failed")
                 }
             }
 

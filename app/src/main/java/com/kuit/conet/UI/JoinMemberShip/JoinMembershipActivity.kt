@@ -5,7 +5,7 @@ import android.os.Bundle
 import com.kuit.conet.R
 import com.kuit.conet.databinding.ActivityJoinMembershipBinding
 
-class JoinMembershipActivity : AppCompatActivity() {
+class JoinMembershipActivity : AppCompatActivity() { //
     lateinit var binding : ActivityJoinMembershipBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityJoinMembershipBinding.inflate(layoutInflater)

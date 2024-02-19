@@ -15,12 +15,12 @@ import retrofit2.http.*
 
 interface RetrofitInterface {
     // AUTH //
-    @POST("auth/login") // :: 로그인(회원가입)
+    @POST("auth/login") // :: 로그인(회원가입) //
     fun signUp(
         @Body login: Login
     ): Call<KaKaoResponse>
 
-    @POST("auth/term") // :: 약관 동의 및 이름 입력
+    @POST("auth/term") // :: 약관 동의 및 이름 입력 //
     fun registed(
         @Header("Authorization") authorization: String?,
         @Body sendInfo: sendInfo
@@ -50,7 +50,7 @@ interface RetrofitInterface {
         @Query("searchDate") searchDate: String
     ): Call<HomePlanInfo>
 
-    
+
     // TEAM //
     @GET("team") // :: 모임 리스트 조회
     fun getGroup(
@@ -195,7 +195,7 @@ interface RetrofitInterface {
 
 
     // MEMBER //
-    @GET("member") // :: 사용자 조회
+    @GET("member") // :: 사용자 조회 //
     fun showuser(
         @Header("Authorization") authorization: String?
     ): Call<ShowUser>
@@ -211,27 +211,27 @@ interface RetrofitInterface {
         @Body teamId: Int
     ): Call<ResponseBookmark>
 
-    @POST("member/name") // :: 사용자 이름 수정
+    @POST("member/name") // :: 사용자 이름 수정 //
     fun editName(
         @Header("Authorization") authorization: String?,
         @Body name: String
     ): Call<EditUserName>
 
     @Multipart
-    @POST("member/image") // ::  사용자 이미지 수정
+    @POST("member/image") // ::  사용자 이미지 수정 //
     fun editImage(
         @Header("Authorization") authorization: String?,
         @Part image: MultipartBody.Part
     ): Call<EditUserImage>
 
-    @DELETE("user") // :: 회원 탈퇴
+    @DELETE("user") // :: 회원 탈퇴 //
     fun deleteUser(
         @Header("Authorization") authorization: String?
     ): Call<DeleteUser>
 
 
     // NOTICE //
-    @GET("notice") // :: 공지 조회
+    @GET("notice") // :: 공지 조회 //
     fun getNotice(
         @Header("Authorization") authorization: String?,
     ): Call<Notice>
