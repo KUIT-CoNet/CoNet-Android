@@ -14,6 +14,7 @@ import com.kuit.conet.Network.RetrofitClient
 import com.kuit.conet.R
 import com.kuit.conet.Utils.TAG
 import com.kuit.conet.databinding.DialogBottomSheetMembersBinding
+import com.kuit.conet.getRefreshToken
 import retrofit2.Call
 import retrofit2.Response
 
@@ -43,9 +44,12 @@ class MembersDialog(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val refreshToken = getRefreshToken(requireContext())
 
-        RetrofitClient.instance.getGroupMembers(groupId)
-            .enqueue(object : retrofit2.Callback<ResponseGetGroupMembers> {
+        RetrofitClient.instance.getGroupMembers(
+            "Bearer $refreshToken",
+            groupId
+        ).enqueue(object : retrofit2.Callback<ResponseGetGroupMembers> {
                 override fun onResponse(
                     call: Call<ResponseGetGroupMembers>,
                     response: Response<ResponseGetGroupMembers>

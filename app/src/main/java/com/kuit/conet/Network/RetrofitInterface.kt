@@ -119,19 +119,19 @@ interface RetrofitInterface {
         @Body makePlanInfo: MakePlanInfo
     ): Call<ResponseMakePlan>
 
-    @POST("plan/update/waiting") // :: 약속 수정 - 대기 중
+    @POST("plan/update/waiting") // :: 약속 수정 - 대기 중 //
     fun UpdateWaiting(
         @Header("Authorization") authorization: String,
         @Body updateWaiting: UpdateWaiting
     ): Call<ResponseUpdateWaiting>
 
-    @POST("plan/available-time-slot") // :: 나의 가능한 시간 저장
+    @POST("plan/available-time-slot") // :: 나의 가능한 시간 저장 //
     fun InputMyTime(
         @Header("Authorization") authorization: String,
         @Body inputMyTime: InputMyTime
     ): Call<ResponseInputMyTime>
 
-    @POST("plan/fix") // :: 약속 확정
+    @POST("plan/fix") // :: 약속 확정 //
     fun FixPlan(
         @Header("Authorization") authorization: String,
         @Body fixPlan: FixPlan
@@ -146,13 +146,13 @@ interface RetrofitInterface {
         @Part file: MultipartBody.Part?
     ): Call<ResponseUpdatePlanDetail>
 
-    @DELETE("plan/{planId}") // :: 약속 삭제
+    @DELETE("plan/{planId}") // :: 약속 삭제 //
     fun deletePlan(
         @Header("Authorization") authorization: String,
         @Path("planID") planId: Int
     ): Call<ResponseDeletePlan>
 
-    @GET("plan/{planId}") // :: 약속 상세 정보 조회
+    @GET("plan/{planId}") // :: 약속 상세 정보 조회 //
 //    @Headers("Content-Type: application/json")
     fun getPlanDetail(
         @Path("planId") planId: Int
@@ -206,7 +206,7 @@ interface RetrofitInterface {
     ): Call<ResponseGetGroup>
 
     @POST("member/bookmark") // :: 북마크 추가/삭제
-    fun enrollBookmark(
+    fun checkBookmark(
         @Header("Authorization") authorization: String,
         @Body teamId: Int
     ): Call<ResponseBookmark>

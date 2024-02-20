@@ -11,12 +11,15 @@ import com.kuit.conet.Network.ResponseDeletePlan
 import com.kuit.conet.Network.ResponseGetPlanDetail
 import com.kuit.conet.Network.ResultGetPlanDetail
 import com.kuit.conet.Network.RetrofitClient
+import com.kuit.conet.Network.RetrofitInterface
+import com.kuit.conet.Network.getRetrofit
 import com.kuit.conet.R
 import com.kuit.conet.UI.Plan.dialog.EditTrashDialog
 import com.kuit.conet.Utils.LIFECYCLE
 import com.kuit.conet.Utils.NETWORK
 import com.kuit.conet.Utils.TAG
 import com.kuit.conet.databinding.ActivityDetailFixBinding
+import com.kuit.conet.getRefreshToken
 import retrofit2.Call
 import retrofit2.Response
 
@@ -107,12 +110,15 @@ class DetailFixActivity
 
     override fun onTrashButtonClick() {
 //        TODO 약속 삭제에 대한 dialog 만들기(DeletePlanDialog을 활용하기)
+        val refreshToken = getRefreshToken(this)
         val builder: AlertDialog.Builder = AlertDialog.Builder(this)
             .setMessage("해당 약속을 삭제하시겠습니까?")
             .setTitle("약속 삭제")
             .setPositiveButton("확인") { dialog, which ->
-                RetrofitClient.instance.deletePlan(planId)
-                    .enqueue(object : retrofit2.Callback<ResponseDeletePlan> {
+                RetrofitClient.instance.deletePlan(
+                    "Bearer $refreshToken",
+                    planId
+                ).enqueue(object : retrofit2.Callback<ResponseDeletePlan> {
                         override fun onResponse(
                             call: Call<ResponseDeletePlan>,
                             response: Response<ResponseDeletePlan>

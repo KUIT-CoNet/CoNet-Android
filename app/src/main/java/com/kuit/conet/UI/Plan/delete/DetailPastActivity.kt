@@ -11,7 +11,7 @@ import com.kuit.conet.Network.ResponseGetPlanDetail
 import com.kuit.conet.Network.ResultGetPlanDetail
 import com.kuit.conet.Network.RetrofitClient
 import com.kuit.conet.R
-import com.kuit.conet.UI.History.RegistHistoryActivity
+//import com.kuit.conet.UI.History.RegistHistoryActivity
 import com.kuit.conet.UI.Plan.detail.ParticipantAdapter
 import com.kuit.conet.UI.Plan.dialog.EditTrashDialog
 import com.kuit.conet.Utils.TAG
@@ -52,11 +52,11 @@ class DetailPastActivity : AppCompatActivity(), View.OnClickListener, EditTrashD
             R.id.back_iv -> {
                 finish()
             }
-            R.id.enroll_history_btn_iv -> {
-                val mIntnet = Intent(this, RegistHistoryActivity::class.java)
-                mIntnet.putExtra("data", data)
-                startActivity(mIntnet)
-            }
+//            R.id.enroll_history_btn_iv -> {
+//                val mIntnet = Intent(this, RegistHistoryActivity::class.java)
+//                mIntnet.putExtra("data", data)
+//                startActivity(mIntnet)
+//            }
         }
     }
 
@@ -65,7 +65,9 @@ class DetailPastActivity : AppCompatActivity(), View.OnClickListener, EditTrashD
         planId?.let {
             Log.d(TAG, "DetailPastActivity - onResume() planId가 정상적으로 받아와졌어요\n" +
                     "planId : $planId")
-            RetrofitClient.instance.getPlanDetail(it).enqueue(object: retrofit2.Callback<ResponseGetPlanDetail>{
+            RetrofitClient.instance.getPlanDetail(it)
+                .enqueue(object: retrofit2.Callback<ResponseGetPlanDetail> {
+
             override fun onResponse(
                 call: Call<ResponseGetPlanDetail>,
                 response: Response<ResponseGetPlanDetail>
@@ -81,25 +83,25 @@ class DetailPastActivity : AppCompatActivity(), View.OnClickListener, EditTrashD
 //                    binding.nameTf.setTextColor(R.color.texthigh)
                     binding.dateTf.setText(response.body()!!.result.date)
                     binding.timeTf.setText(response.body()!!.result.time)
-                    if(response.body()!!.result.isRegisteredToHistory){
-                        Glide.with(this@DetailPastActivity)
-                            .load(response.body()!!.result.historyImageUrl) // 불러올 이미지 url
-                            .centerCrop()
-                            .error(R.drawable.profile_purple) // 로딩 에러 발생 시 표시할 이미지
-                            .into(binding.pictureIv1) // 이미지를 넣을 뷰
-
-                        if(response.body()!!.result.historyDescription != null){
-                            binding.contentHintTv.visibility = View.GONE
-                            binding.contentTf.setText(response.body()!!.result.historyDescription)
-                        } else{
-                            binding.contentHintTv.visibility = View.VISIBLE
-                        }
-                        binding.historyCl.visibility = View.VISIBLE
-                        binding.noHistoryCl.visibility = View.GONE
-                    } else{
-                        binding.historyCl.visibility = View.GONE
-                        binding.noHistoryCl.visibility = View.VISIBLE
-                    }
+//                    if(response.body()!!.result.isRegisteredToHistory){
+//                        Glide.with(this@DetailPastActivity)
+//                            .load(response.body()!!.result.historyImageUrl) // 불러올 이미지 url
+//                            .centerCrop()
+//                            .error(R.drawable.profile_purple) // 로딩 에러 발생 시 표시할 이미지
+//                            .into(binding.pictureIv1) // 이미지를 넣을 뷰
+//
+//                        if(response.body()!!.result.historyDescription != null){
+//                            binding.contentHintTv.visibility = View.GONE
+//                            binding.contentTf.setText(response.body()!!.result.historyDescription)
+//                        } else{
+//                            binding.contentHintTv.visibility = View.VISIBLE
+//                        }
+//                        binding.historyCl.visibility = View.VISIBLE
+//                        binding.noHistoryCl.visibility = View.GONE
+//                    } else{
+//                        binding.historyCl.visibility = View.GONE
+//                        binding.noHistoryCl.visibility = View.VISIBLE
+//                    }
 
                     val participantList = response.body()!!.result.members
                     val participantAdapter = ParticipantAdapter(this@DetailPastActivity, participantList, 0)
