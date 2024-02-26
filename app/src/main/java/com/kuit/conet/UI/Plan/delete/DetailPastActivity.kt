@@ -39,7 +39,7 @@ class DetailPastActivity : AppCompatActivity(), View.OnClickListener, EditTrashD
 
         binding.menuBtn.setOnClickListener(this)
         binding.backIv.setOnClickListener(this)
-        binding.enrollHistoryBtnIv.setOnClickListener(this)
+//        binding.enrollHistoryBtnIv.setOnClickListener(this)
     }
 
     override fun onClick(v: View?) {
@@ -52,11 +52,11 @@ class DetailPastActivity : AppCompatActivity(), View.OnClickListener, EditTrashD
             R.id.back_iv -> {
                 finish()
             }
-            R.id.enroll_history_btn_iv -> {
+            /*R.id.enroll_history_btn_iv -> {
                 val mIntnet = Intent(this, RegistHistoryActivity::class.java)
                 mIntnet.putExtra("data", data)
                 startActivity(mIntnet)
-            }
+            }*/
         }
     }
 
@@ -81,7 +81,7 @@ class DetailPastActivity : AppCompatActivity(), View.OnClickListener, EditTrashD
 //                    binding.nameTf.setTextColor(R.color.texthigh)
                     binding.dateTf.setText(response.body()!!.result.date)
                     binding.timeTf.setText(response.body()!!.result.time)
-                    if(response.body()!!.result.isRegisteredToHistory){
+                    /*if(response.body()!!.result.isRegisteredToHistory){
                         Glide.with(this@DetailPastActivity)
                             .load(response.body()!!.result.historyImageUrl) // 불러올 이미지 url
                             .centerCrop()
@@ -99,7 +99,7 @@ class DetailPastActivity : AppCompatActivity(), View.OnClickListener, EditTrashD
                     } else{
                         binding.historyCl.visibility = View.GONE
                         binding.noHistoryCl.visibility = View.VISIBLE
-                    }
+                    }*/
 
                     val participantList = response.body()!!.result.members
                     val participantAdapter = ParticipantAdapter(this@DetailPastActivity, participantList, 0)
@@ -118,7 +118,7 @@ class DetailPastActivity : AppCompatActivity(), View.OnClickListener, EditTrashD
         }) }
     }
 
-    private fun checkHistory(isRegisteredHistory: Boolean){
+    /*private fun checkHistory(isRegisteredHistory: Boolean){
         if(isRegisteredHistory){
             binding.historyCl.visibility = View.VISIBLE
             binding.noHistoryCl.visibility = View.GONE
@@ -126,7 +126,7 @@ class DetailPastActivity : AppCompatActivity(), View.OnClickListener, EditTrashD
             binding.historyCl.visibility = View.GONE
             binding.noHistoryCl.visibility = View.VISIBLE
         }
-    }
+    }*/
 
     override fun onEditButtonClick() {
         val mIntent = Intent(this, DetailEditPastActivity::class.java)
