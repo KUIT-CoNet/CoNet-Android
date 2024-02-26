@@ -117,7 +117,7 @@ class ConfirmRecyclerAdapter(private val context: Context, val option: Int, var 
                     mIntent.putExtra("PlanId", datas[position].planId)
                     startActivity(context, mIntent, null)
                 }
-                2 -> {
+                0 -> {
                     Log.d(TAG, "RecyclerViewAdapter - onBindBiewHolder 에서 실행\n" +
                             "planid : ${datas[position].planId}")
                     val mIntent = Intent(context, DetailPastActivity::class.java)
