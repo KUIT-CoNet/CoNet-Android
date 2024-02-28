@@ -5,7 +5,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-const val BASE_URL = "http://43.203.29.216/"
+const val BASE_URL = "https://conet.store/"
 
 object RetrofitClient{
     val retrofit = getRetrofit()

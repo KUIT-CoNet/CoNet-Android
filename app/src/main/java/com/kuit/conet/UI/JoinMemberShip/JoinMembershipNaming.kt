@@ -98,13 +98,12 @@ class JoinMembershipNaming : Fragment() {
         }
 
         binding.cvNameInputDoneBtn.setOnClickListener { // 완료 시 이름 저장
-
             if (edit) {
                 saveUsername(requireContext(), binding.etNameInput.text.toString())
                 sendUserInfo( //서버로 정보 보내기
                     getAccessToken(requireContext()),
                     getUsername(requireContext()),
-                    getIsoption(requireContext())
+                    //getIsoption(requireContext())
                 )
                 val intent = Intent(requireContext(), ConetMainActivity::class.java)
                 startActivity(intent)
@@ -115,20 +114,19 @@ class JoinMembershipNaming : Fragment() {
         return binding.root
     }
 
-    private fun sendUserInfo(accessToken: String, name: String, optionTerm: Int) { // 유저 정보 보내는 메소드
+    private fun sendUserInfo(accessToken: String, name: String) { // 유저 정보 보내는 메소드
         val signUpService = RetrofitClient.instance
         Log.d("accestoken2", "Bearer $accessToken")
         signUpService.registed(
             "Bearer $accessToken",
             sendInfo(
                 name,
-                optionTerm
             )
         ).enqueue(object :
-            retrofit2.Callback<registedResponse> { // 서버와 비동기적으로 데이터 주고 받을 수 있는 방법 enqueue 사용
+            retrofit2.Callback<RegistedResponse> { // 서버와 비동기적으로 데이터 주고 받을 수 있는 방법 enqueue 사용
             override fun onResponse( // 통신에 성공했을 경우
-                call: Call<registedResponse>,
-                response: Response<registedResponse>
+                call: Call<RegistedResponse>,
+                response: Response<RegistedResponse>
             ) {
                 if (response.isSuccessful) {
                     val resp = response.body()// 성공했을 경우 response body 불러오기
@@ -136,7 +134,7 @@ class JoinMembershipNaming : Fragment() {
                 }
             }
 
-            override fun onFailure(call: Call<registedResponse>, t: Throwable) {
+            override fun onFailure(call: Call<RegistedResponse>, t: Throwable) {
                 Log.d("SIGNUP/FAILURE", t.message.toString()) // 실패한 이유 메세지 출력
             }
         })

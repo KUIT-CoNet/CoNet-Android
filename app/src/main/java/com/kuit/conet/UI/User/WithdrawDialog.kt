@@ -42,7 +42,7 @@ class WithdrawDialog : Fragment() {
         }
 
         binding.withdrawDone.setOnClickListener {
-            DeleteUser()
+            deleteUser()
             val intent = Intent(requireContext(), WithdrawDoneActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
             startActivity(intent)
@@ -54,7 +54,7 @@ class WithdrawDialog : Fragment() {
         return binding.root
     }
 
-    fun DeleteUser() {
+    private fun deleteUser() {
 
         val deleteUser = getRetrofit().create(RetrofitInterface::class.java)
         val refreshToken = getRefreshToken(requireContext())
@@ -65,7 +65,7 @@ class WithdrawDialog : Fragment() {
             override fun onResponse(call: Call<DeleteUser>, response: Response<DeleteUser>) {
                 if (response.isSuccessful) {
                     val resp = response.body()// 성공했을 경우 response body불러오기
-                    Log.d("SIGNUP/SUCCESS", resp.toString())
+                    Log.d("deleteUser/SUCCESS", resp.toString())
                     Log.d("성공!", "success")
                 } else {
 
@@ -73,8 +73,7 @@ class WithdrawDialog : Fragment() {
             }
 
             override fun onFailure(call: Call<DeleteUser>, t: Throwable) {
-                Log.d("SIGNUP/FAILURE", t.message.toString()) // 실패한 이유 메세지 출력
-
+                Log.d("deleteUser/FAILURE", t.message.toString()) // 실패한 이유 메세지 출력
             }
 
         })

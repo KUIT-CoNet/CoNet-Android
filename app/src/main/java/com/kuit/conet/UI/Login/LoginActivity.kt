@@ -125,7 +125,7 @@ class LoginActivity : AppCompatActivity() {
         Log.d("getkakaoResponse","실행")
         Log.d("idToken","${idToken}")
         val signUpService = getRetrofit().create(RetrofitInterface::class.java)
-        val login: Login = Login("kakao", idToken)
+        val login = Login("kakao", idToken)
         signUpService.signUp(login).enqueue(object :
             retrofit2.Callback<KaKaoResponse> { // 서버와 비동기적으로 데이터 주고받을 수 있는 방법 enqueue사용
             override fun onResponse( // 통신에 성공했을 경우

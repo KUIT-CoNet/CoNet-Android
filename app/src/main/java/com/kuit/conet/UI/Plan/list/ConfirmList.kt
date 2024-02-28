@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.tabs.TabLayoutMediator
 import com.kuit.conet.Network.*
 import com.kuit.conet.UI.Group.GroupVPAdapter
-import com.kuit.conet.UI.Home.RecyclerView.ConfirmRecyclerAdapter
+//import com.kuit.conet.UI.Home.RecyclerView.ConfirmRecyclerAdapter
 import com.kuit.conet.databinding.FragmentConfirmlistBinding
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope

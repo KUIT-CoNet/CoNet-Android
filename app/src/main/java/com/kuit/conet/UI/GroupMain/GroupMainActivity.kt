@@ -9,8 +9,9 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.commit
 import com.bumptech.glide.Glide
-import com.kuit.conet.Network.ResponseDeleteBookmark
-import com.kuit.conet.Network.ResponseEnrollBookmark
+import com.kuit.conet.Network.ResponseBookmark
+//import com.kuit.conet.Network.ResponseDeleteBookmark
+//import com.kuit.conet.Network.ResponseEnrollBookmark
 import com.kuit.conet.Network.RetrofitClient
 import com.kuit.conet.R
 import com.kuit.conet.UI.Group.GroupAdapter
@@ -67,52 +68,55 @@ class GroupMainActivity : AppCompatActivity() {
         binding.ivStar.setOnClickListener {
             binding.ivStar.visibility = View.GONE
             binding.ivStarUn.visibility = View.VISIBLE
-            RetrofitClient.instance.deleteBookmark(
+            RetrofitClient.instance.checkBookmark(
                 "Bearer " + getAccessToken(this),
                 groupData.groupId
-            ).enqueue(object : retrofit2.Callback<ResponseDeleteBookmark> {
+            ).enqueue(object : retrofit2.Callback<ResponseBookmark> {
                 override fun onResponse(
-                    call: Call<ResponseDeleteBookmark>,
-                    response: Response<ResponseDeleteBookmark>
+                    call: Call<ResponseBookmark>,
+                    response: Response<ResponseBookmark>
                 ) {
                     if (response.isSuccessful) {
                         Log.d(
-                            NETWORK, "GroupMainActivity - Retrofit deleteBookmark() 실행결과 - 성공\n" +
-                                    "result : ${response.body()?.result}"
+                            NETWORK,
+                            "GroupAdapter - Retrofit checkBookmark() 북마크 삭제 실행결과 - 성공\n" + "result : ${response.body()!!.result}"
                         )
                     } else {
-                        Log.d(NETWORK, "GroupMainActivity - Retrofit deleteBookmark() 실행결과 - 안좋음")
+                        Log.d(NETWORK, "GroupAdapter - Retrofit checkBookmark() 북마크 삭제 실행결과 - 안좋음")
                     }
                 }
 
-                override fun onFailure(call: Call<ResponseDeleteBookmark>, t: Throwable) {
-                    Log.d(NETWORK, "GroupMainActivity - Retrofit deleteBookmark() 실행결과 - 실패")
+                override fun onFailure(call: Call<ResponseBookmark>, t: Throwable) {
+                    Log.d(NETWORK, "GroupAdapter - Retrofit checkBookmark() 북마크 삭제 실행결과 - 실패")
                 }
+
             })
         }
+
         binding.ivStarUn.setOnClickListener {
             binding.ivStar.visibility = View.VISIBLE
             binding.ivStarUn.visibility = View.GONE
-            RetrofitClient.instance.enrollBookmark(
+
+            RetrofitClient.instance.checkBookmark(
                 "Bearer " + getAccessToken(this),
                 groupData.groupId
-            ).enqueue(object : retrofit2.Callback<ResponseEnrollBookmark> {
+            ).enqueue(object : retrofit2.Callback<ResponseBookmark> {
                 override fun onResponse(
-                    call: Call<ResponseEnrollBookmark>,
-                    response: Response<ResponseEnrollBookmark>
+                    call: Call<ResponseBookmark>,
+                    response: Response<ResponseBookmark>
                 ) {
                     if (response.isSuccessful) {
                         Log.d(
-                            NETWORK, "GroupMainActivity - Retrofit enrollBookmark() 실행결과 - 성공\n" +
-                                    "result : ${response.body()?.result}"
+                            NETWORK,
+                            "GroupAdapter - Retrofit checkBookmark() 북마크 추가 실행결과 - 성공\n" + "result : ${response.body()!!.result}"
                         )
                     } else {
-                        Log.d(NETWORK, "GroupMainActivity - Retrofit enrollBookmark() 실행결과 - 안좋음")
+                        Log.d(NETWORK, "GroupAdapter - Retrofit checkBookmark() 북마크 추가 실행결과 - 안좋음")
                     }
                 }
 
-                override fun onFailure(call: Call<ResponseEnrollBookmark>, t: Throwable) {
-                    Log.d(NETWORK, "GroupMainActivity - Retrofit enrollBookmark() 실행결과 - 실패")
+                override fun onFailure(call: Call<ResponseBookmark>, t: Throwable) {
+                    Log.d(NETWORK, "GroupAdapter - Retrofit checkBookmark() 북마크 추가 실행결과 - 실패")
                 }
 
             })

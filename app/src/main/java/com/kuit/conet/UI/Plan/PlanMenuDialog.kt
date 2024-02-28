@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.kuit.conet.R
-import com.kuit.conet.UI.User.WithdrawDialog
 import com.kuit.conet.databinding.DialogPlanMenuBinding
 
 class PlanMenuDialog : Fragment() {
@@ -21,20 +20,21 @@ class PlanMenuDialog : Fragment() {
     ): View {
         binding = DialogPlanMenuBinding.inflate(inflater, container, false)
 
-        val plan_name = arguments?.getString("planName")
-        val plan_date = arguments?.getString("planDate")
-        val planId = requireArguments().getInt("planId")
-        val groupId = requireArguments().getInt("groupId")
 
-        binding.dialogPlanName.text = plan_name.toString()
-        binding.dialogPlanDate.text = plan_date.toString()
+        val planName = arguments?.getString("planName")
+        val planDate = arguments?.getString("planDate")
+        val planId = requireArguments().getInt("planId")
+        val teamId = requireArguments().getInt("teamId")
+
+        binding.dialogPlanName.text = planName.toString()
+        binding.dialogPlanDate.text = planDate.toString()
 
         binding.clEdit.setOnClickListener {
             val intent = Intent(requireContext(), EditPlanActivity::class.java)
             intent.putExtra("planName", binding.dialogPlanName.text.toString())
             intent.putExtra("planDate", binding.dialogPlanDate.text.toString())
             intent.putExtra("planId", planId)
-            intent.putExtra("groupId", groupId)
+            intent.putExtra("teamId", teamId)
             Log.d("Pmenu>planId!!", planId.toString())
             startActivity(intent)
             parentFragmentManager.beginTransaction().remove(this).commit()
@@ -44,7 +44,7 @@ class PlanMenuDialog : Fragment() {
             val deletePlanDialog = DeletePlanDialog()
             val bundle = Bundle()
             bundle.putInt("planId", planId)
-            bundle.putInt("groupId", groupId)
+            bundle.putInt("teamId", teamId)
             deletePlanDialog.arguments = bundle
             parentFragmentManager.beginTransaction()
                 .replace(R.id.fl_plan, deletePlanDialog)
