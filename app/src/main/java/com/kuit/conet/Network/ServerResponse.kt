@@ -44,7 +44,8 @@ data class registedResponse(
 )
 
 data class sendInfo(
-    @SerializedName("name") val name: String,
+    @SerializedName("name")
+    val name: String,
 )
 
 data class userInfo(
@@ -280,9 +281,12 @@ data class ResponseUpdatePlanDetail(
 //약속 생성 - 요청 부분
 
 data class MakePlanInfo(
-    @SerializedName("teamId") val teamId: Int,
-    @SerializedName("planName") val planName: String?,
-    @SerializedName("planStartDate") val planStartDate: String?
+    @SerializedName("teamId")
+    val teamId: Int,
+    @SerializedName("planName")
+    val planName: String,
+    @SerializedName("planStartDate")
+    val planStartDate: String,      // 2024-03-02 형식
 )
 
 //약속 생성 - 응답 부분
@@ -320,8 +324,10 @@ data class NoticeInfo(
 
 //가능한 시간 저장
 data class InputMyTime(
-    @SerializedName("planId") val planId: Int,
-    @SerializedName("availableDateTimes") val availableDateTimes: ArrayList<AvailableDateTimes>
+    @SerializedName("planId")
+    val planId: Int,
+    @SerializedName("availableDateTimes")
+    val availableDateTimes: ArrayList<AvailableDateTimes>,
 )
 
 data class ResponseInputMyTime(
@@ -332,8 +338,10 @@ data class ResponseInputMyTime(
 )
 
 data class AvailableDateTimes(
-    @SerializedName("date") var date: String,
-    @SerializedName("time") val time: ArrayList<Int>
+    @SerializedName("date")
+    var date: String,
+    @SerializedName("time")
+    val time: ArrayList<Int>,
 )
 
 //나의 가능한 시간 조회
@@ -407,9 +415,12 @@ data class ResultGetPlanDetail(
 
 }
 
-data class UpdateWaiting( //약속 수정- 대기중
-    @SerializedName("planId") val planId: Int,
-    @SerializedName("planName") val planName: String
+//약속 수정- 대기중
+data class UpdateWaiting(
+    @SerializedName("planId")
+    val planId: Int,
+    @SerializedName("planName")
+    val planName: String,
 )
 
 data class ResponseUpdateWaiting(
@@ -456,10 +467,14 @@ data class PossibleMember(
 
 //약속 확정
 data class FixPlan(
-    @SerializedName("planId") var planId: Int,
-    @SerializedName("fixedDate") var fixedDate: String,
-    @SerializedName("fixedTime") var fixedTime: Int,
-    @SerializedName("memberIds") var memberIds: ArrayList<Int>
+    @SerializedName("planId")
+    var planId: Int,
+    @SerializedName("fixedDate")
+    var fixedDate: String,
+    @SerializedName("fixedTime")
+    var fixedTime: Int,
+    @SerializedName("memberIds")
+    var memberIds: ArrayList<Int>,
 )
 
 data class ResponseFixPlan(
@@ -467,6 +482,19 @@ data class ResponseFixPlan(
     @SerializedName("status") var status: Int,
     @SerializedName("message") var message: String,
     @SerializedName("result") var result: String
+)
+
+data class PlanDetail(
+    @SerializedName("planId")
+    val planId: Long,
+    @SerializedName("planName")
+    val planName: String,
+    @SerializedName("date")
+    val date: String,        //2024-02-09 형식
+    @SerializedName("time")
+    val time: String,        // 19:00 형식
+    @SerializedName("memberIds")
+    val membersIds: List<Int>,
 )
 
 
