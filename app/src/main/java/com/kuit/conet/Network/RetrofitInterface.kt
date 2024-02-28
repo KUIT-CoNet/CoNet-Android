@@ -82,12 +82,14 @@ interface RetrofitInterface {
     ): Call<ResponseEnrollGroup>
 
     @Multipart
-//    @Headers("Content-Type: application/json")
     @POST("team") // :: 모임 생성
     fun createGroup(
-        @Header("Authorization") authorization: String,
-        @Part file: MultipartBody.Part,
-        @Part("request") request: RequestBody
+        @Header("Authorization")
+        authorization: String,
+        @Part
+        file: MultipartBody.Part,
+        @Part("request")
+        request: RequestBody
     ): Call<ResponseCreateGroup>
 
     @POST("team/leave") // :: 모임 탈퇴
@@ -97,12 +99,14 @@ interface RetrofitInterface {
     ): Call<EditUserName>
 
     @Multipart
-//    @Headers("Content-Type: application/json")
     @POST("team/update") // :: 모임 수정
     fun updateGroup(
-        @Header("Authorization") authorization: String,
-        @Part file: MultipartBody.Part,
-        @Part("request") request: RequestBody
+        @Header("Authorization")
+        authorization: String,
+        @Part
+        file: MultipartBody.Part,
+        @Part("request")
+        request: RequestBody
     ): Call<ResponseUpdateGroup>
 
     @POST("team/code") // :: 초대 코드 재발급
