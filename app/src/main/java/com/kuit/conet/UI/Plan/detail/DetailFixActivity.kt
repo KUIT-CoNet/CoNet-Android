@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
+import com.kuit.conet.Network.Members
 import com.kuit.conet.Network.ResponseDeletePlan
 import com.kuit.conet.Network.ResponseGetPlanDetail
 import com.kuit.conet.Network.ResultGetPlanDetail
@@ -66,7 +67,9 @@ class DetailFixActivity
         super.onResume()
         Log.d(LIFECYCLE, "DetailFixActivity - onResume() 실행")
 
-        RetrofitClient.instance.getPlanDetail(planId)
+        RetrofitClient.instance.getPlanDetail(
+            "Bearer ${getRefreshToken(this)}",
+            planId)
             .enqueue(object : retrofit2.Callback<ResponseGetPlanDetail> {
                 override fun onResponse(
                     call: Call<ResponseGetPlanDetail>,
@@ -85,7 +88,7 @@ class DetailFixActivity
 
                         val participantList = response.body()!!.result.members
                         binding.rvDetailFixPlanParticipants.adapter =
-                            ParticipantAdapter(this@DetailFixActivity, participantList, 0)
+                            ParticipantAdapter(this@DetailFixActivity, participantList.map { it.asMembers() } as ArrayList<Members>, 0)
                         binding.rvDetailFixPlanParticipants.layoutManager =
                             GridLayoutManager(this@DetailFixActivity, 2)
                     } else {

@@ -123,10 +123,10 @@ class JoinMembershipNaming : Fragment() {
                 name,
             )
         ).enqueue(object :
-            retrofit2.Callback<registedResponse> { // 서버와 비동기적으로 데이터 주고 받을 수 있는 방법 enqueue 사용
+            retrofit2.Callback<RegistedResponse> { // 서버와 비동기적으로 데이터 주고 받을 수 있는 방법 enqueue 사용
             override fun onResponse( // 통신에 성공했을 경우
-                call: Call<registedResponse>,
-                response: Response<registedResponse>
+                call: Call<RegistedResponse>,
+                response: Response<RegistedResponse>
             ) {
                 if (response.isSuccessful) {
                     val resp = response.body()// 성공했을 경우 response body 불러오기
@@ -134,7 +134,7 @@ class JoinMembershipNaming : Fragment() {
                 }
             }
 
-            override fun onFailure(call: Call<registedResponse>, t: Throwable) {
+            override fun onFailure(call: Call<RegistedResponse>, t: Throwable) {
                 Log.d("SIGNUP/FAILURE", t.message.toString()) // 실패한 이유 메세지 출력
             }
         })

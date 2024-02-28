@@ -5,12 +5,14 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
+import com.kuit.conet.Network.Members
 import com.kuit.conet.Network.ResponseGetPlanDetail
 import com.kuit.conet.Network.RetrofitClient
 import com.kuit.conet.UI.GroupMain.GroupMainActivity
 import com.kuit.conet.UI.Plan.detail.ParticipantAdapter
 import com.kuit.conet.Utils.NETWORK
 import com.kuit.conet.databinding.ActivityFixPlanConfirmBinding
+import com.kuit.conet.getRefreshToken
 import retrofit2.Call
 import retrofit2.Response
 
@@ -26,7 +28,7 @@ class FixPlanConfirmActivity : AppCompatActivity() {
             finish()
         }
 
-        setFrame()
+        setFrame(getRefreshToken(this))
 
         binding.cvFixConfirmBtn.setOnClickListener {
             val intent = Intent(this, GroupMainActivity::class.java)
@@ -36,8 +38,10 @@ class FixPlanConfirmActivity : AppCompatActivity() {
         }
     }
 
-    private fun setFrame() {
-        RetrofitClient.instance.getPlanDetail(intent.getIntExtra("planId",0))
+    private fun setFrame(refreshToken: String) {
+        RetrofitClient.instance.getPlanDetail(
+            "Bearer $refreshToken",
+            intent.getIntExtra("planId",0))
             .enqueue(object : retrofit2.Callback<ResponseGetPlanDetail> {
                 override fun onResponse(
                     call: Call<ResponseGetPlanDetail>,
@@ -56,7 +60,7 @@ class FixPlanConfirmActivity : AppCompatActivity() {
 
                         val participantList = response.body()!!.result.members
                         binding.rvFixConfirmParticipants.adapter =
-                            ParticipantAdapter(this@FixPlanConfirmActivity, participantList, 0)
+                            ParticipantAdapter(this@FixPlanConfirmActivity, participantList.map { it.asMembers() } as ArrayList<Members>, 0)
                         binding.rvFixConfirmParticipants.layoutManager =
                             GridLayoutManager(this@FixPlanConfirmActivity, 2)
                     } else {

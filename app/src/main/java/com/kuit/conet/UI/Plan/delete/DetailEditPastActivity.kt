@@ -109,8 +109,8 @@ class DetailEditPastActivity : AppCompatActivity(), View.OnClickListener, TimeDi
 
         checkEnable()
 
-        data.members.add(Members(0, "추가하기", null))
-        participantAdapter = ParticipantAdapter(this, data.members, 1)
+        data.members.add(ResultGetPlanDetail.Members(0, "추가하기", ""))
+        participantAdapter = ParticipantAdapter(this, data.members.map { it.asMembers() } as ArrayList<Members>, 1)
         participantAdapter.supportFragmentManager = supportFragmentManager
         participantAdapter.groupId = Group.groupId
         binding.participantsRv.adapter = participantAdapter

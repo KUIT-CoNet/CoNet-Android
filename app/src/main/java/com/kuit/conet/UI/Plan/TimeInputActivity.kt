@@ -262,6 +262,8 @@ class TimeInputActivity : AppCompatActivity() {
                                     "TimeInputActivity",
                                     "[2] 시간 있음\n" + resp.result.availableTimeRegisteredStatus.toString()
                                 )
+
+                                requireNotNull(resp.result.timeSlot) { "TimeInputActivity onResponse() timeslot is null" }
                                 initTime(resp.result.timeSlot)
                             }
                         }

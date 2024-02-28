@@ -1,6 +1,5 @@
 package com.kuit.conet.Network
 
-import com.google.gson.annotations.JsonAdapter
 import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.http.Body
@@ -27,13 +26,13 @@ interface RetrofitInterface {
         authorization: String,
         @Body
         sendInfo: sendInfo
-    ): Call<registedResponse>
+    ): Call<RegistedResponse>
 
     @POST("auth/regenerate-token") // :: refresh token 재발급
     fun getAccess(
         @Header("Authorization")
         refreshToken: String,
-    ): Call<refreshResponse>
+    ): Call<RefreshResponse>
 
     // HOME //
     @GET("home/plan/waiting") // :: 홈 화면 대기 중인 약속 조회
@@ -195,6 +194,7 @@ interface RetrofitInterface {
         planId: Int,
     ): Call<ResponseGetPlanDetail>
 
+    //이거 뭐야 왜이래? 못찾겠다;;;
     @GET("plan/day") // :: 모임 내 특정 날짜의 확정된 약속 조회
     fun ShowGroupConfirmPlan(
         @Query("teamId")
