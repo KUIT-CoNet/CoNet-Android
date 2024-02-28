@@ -6,6 +6,7 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import com.kuit.conet.UI.Login.LoginActivity
 import com.kuit.conet.Network.RetrofitInterface
 import com.kuit.conet.Network.getRetrofit
@@ -26,6 +27,7 @@ class SplashActivity : AppCompatActivity(){
         super.onCreate(savedInstanceState)
         binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 //        Handler(Looper.getMainLooper()).postDelayed({
 //
 //            // 일정 시간이 지나면 MainActivity로 이동
