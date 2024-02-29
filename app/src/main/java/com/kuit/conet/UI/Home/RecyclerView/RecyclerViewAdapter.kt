@@ -37,6 +37,7 @@ class AllTodoRecyclerAdapter(option : Int, context: Context) : RecyclerView.Adap
             val mIntent = Intent(context, PlanTimeActivity::class.java)
             mIntent.putExtra("planId",datas[position].planId)
             mIntent.putExtra("planName",datas[position].planName)
+            Log.d(TAG, "onBindViewHolder: ${datas[position].planId} + ${datas[position].planName}")
             startActivity(context, mIntent, null)
         }
     }
