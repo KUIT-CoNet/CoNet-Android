@@ -76,21 +76,14 @@ class PlanTimeActivity : AppCompatActivity() {
             binding.day320, binding.day321, binding.day322, binding.day323
         )
 
-        Log.d(TAG, "onCreate: planTimeActivity 실행됨")
         planStartDate = intent.getStringExtra("planStartDate").toString()
         planId = intent.getIntExtra("planId", 0)
         val planName = intent.getStringExtra("planName")
 
-        val coroutineScope = CoroutineScope(Dispatchers.Main)
-        coroutineScope.launch {
-            Log.d(TAG, "onCreate: coroutine => planId $planId")
-            getFrame(planId) //api로 정보 받아오기
-        }
-
         binding.btnCloseIv.setOnClickListener {
-            val intent = Intent(this, GroupMainActivity::class.java)
-            intent.putExtra("teamId", teamId)
-            startActivity(intent)
+//            val intent = Intent(this, GroupMainActivity::class.java)
+//            intent.putExtra("teamId", teamId)
+//            startActivity(intent)
             finish()
         }
 
@@ -120,9 +113,18 @@ class PlanTimeActivity : AppCompatActivity() {
         binding.btnCv.setOnClickListener {
             val intent = Intent(this, TimeInputActivity::class.java)
             intent.putExtra("planId", planId)
-            intent.putExtra("planStartPeriod", planStartDate)
+            intent.putExtra("planName", planName)
+            intent.putExtra("planStartDate", planStartDate)
             startActivity(intent)
             finish()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val coroutineScope = CoroutineScope(Dispatchers.Main)
+        coroutineScope.launch {
+            getFrame(planId) //api로 정보 받아오기
         }
     }
 
@@ -191,7 +193,6 @@ class PlanTimeActivity : AppCompatActivity() {
                     amdtList[i].sectionAndAvailableTimes[j].memberNames,
                     amdtList[i].sectionAndAvailableTimes[j].memberIds
                 )
-
                 when (i) {
                     0 -> day1Info.add(possibleMember)
                     1 -> day2Info.add(possibleMember)

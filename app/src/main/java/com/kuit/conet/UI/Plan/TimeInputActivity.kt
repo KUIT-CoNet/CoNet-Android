@@ -135,15 +135,16 @@ class TimeInputActivity : AppCompatActivity() {
 
         val coroutineScope = CoroutineScope(Dispatchers.Main)
         coroutineScope.launch {
-            getFrame(planId) //get api 연결 : planName, planStartPeriod, colorNum 범위 지정
+            getFrame(planId) //get api 연결 : planName, planStartDate, colorNum 범위 지정
         }
 
         binding.ivTimeInputBackBtn.setOnClickListener {
             val intent = Intent(this, PlanTimeActivity::class.java)
             intent.putExtra("planId", planId)
-            intent.putExtra("planStartPeriod", intent.getStringExtra("planStartPeriod"))
+            intent.putExtra("planStartDate", intent.getStringExtra("planStartDate"))
             intent.putExtra("groupId", intent.getIntExtra("groupId", 0))
             startActivity(intent)
+
             finish()
         }
 
@@ -227,15 +228,13 @@ class TimeInputActivity : AppCompatActivity() {
                         Log.i(NETWORK, resp.toString())
 
                         //초기 세팅
-                        setDateOfTime(intent.getStringExtra("planStartPeriod").toString())
+                        setDateOfTime(intent.getStringExtra("planStartDate").toString())
                         var regiStatus = resp?.result?.availableTimeRegisteredStatus
                         setFrame(page)
 
                         when (regiStatus) {
                             0 -> {
-                                Log.d(TAG, "onResponse: regiStatus = $regiStatus")
                                 if (resp != null) {
-                                    Log.d(TAG, "onResponse: 233줄 실행")
                                     //requireNotNull(resp.result.timeSlot) { "TimeInputActivity onResponse() timeslot is null" }
                                 }
                                 time1.time.clear()
@@ -250,7 +249,6 @@ class TimeInputActivity : AppCompatActivity() {
                             }
 
                             1 -> {
-                                Log.d(TAG, "onResponse: regiStatus = $regiStatus")
                                 time1.time.clear()
                                 time2.time.clear()
                                 time3.time.clear()
@@ -267,10 +265,10 @@ class TimeInputActivity : AppCompatActivity() {
                             }
 
                             2 -> {
-                                Log.d(TAG, "onResponse: regiStatus = $regiStatus")
                                 if (resp != null) {
                                     resp.result.timeSlot?.let { it1 -> initTime(it1) }
                                 }
+                                Log.d(TAG, "[timeinput] onResponse: 2번 initTime 후")
                                 pdtToTable(1)
                             }
                         }
@@ -297,17 +295,17 @@ class TimeInputActivity : AppCompatActivity() {
     }
 
     private fun initTime(timeslot: ArrayList<UserAvailableTimeDTO>) {
-        Log.d(TAG, "initTime: 실행중\n$timeslot")
+        Log.d(TAG, "[timeinput] initTime: timeslot인자\n$timeslot")
         for (j in 0 until timeslot[0].availableTimes.size) {
-            Log.d(TAG, "initTime: time1 안\n${timeslot[0].availableTimes[j]}")
             time1.time.add(timeslot[0].availableTimes[j])
         }
-        for (j in 0 until timeslot[1].availableTimes.size) time2.time.add(timeslot[0].availableTimes[j])
-        for (j in 0 until timeslot[2].availableTimes.size) time3.time.add(timeslot[0].availableTimes[j])
-        for (j in 0 until timeslot[3].availableTimes.size) time4.time.add(timeslot[0].availableTimes[j])
-        for (j in 0 until timeslot[4].availableTimes.size) time5.time.add(timeslot[0].availableTimes[j])
-        for (j in 0 until timeslot[5].availableTimes.size) time6.time.add(timeslot[0].availableTimes[j])
-        for (j in 0 until timeslot[6].availableTimes.size) time7.time.add(timeslot[0].availableTimes[j])
+        for (j in 0 until timeslot[1].availableTimes.size) time2.time.add(timeslot[1].availableTimes[j])
+        for (j in 0 until timeslot[2].availableTimes.size) time3.time.add(timeslot[2].availableTimes[j])
+        for (j in 0 until timeslot[3].availableTimes.size) time4.time.add(timeslot[3].availableTimes[j])
+        for (j in 0 until timeslot[4].availableTimes.size) time5.time.add(timeslot[4].availableTimes[j])
+        for (j in 0 until timeslot[5].availableTimes.size) time6.time.add(timeslot[5].availableTimes[j])
+        for (j in 0 until timeslot[6].availableTimes.size) time7.time.add(timeslot[6].availableTimes[j])
+        Log.d(TAG, "initTime: 끝\n")
     }
 
     //클릭 동작 활성화 함수 (true 넣으면 동작)
@@ -331,6 +329,29 @@ class TimeInputActivity : AppCompatActivity() {
         }
     }
 
+    private fun updateCheck(day: Int, i: Int) { //선택된 칸의 색칠 유무 결정
+        isCheckDay[day - 1][i] = !isCheckDay[day - 1][i]
+        if (isCheckDay[day - 1][i]) {
+            when (day) {
+                1, 4, 7 -> day1[i].setBackgroundResource(R.drawable.view_border_check)
+
+                2, 5 -> day2[i].setBackgroundResource(R.drawable.view_border_check)
+
+                3, 6 -> day3[i].setBackgroundResource(R.drawable.view_border_check)
+            }
+            updateSaveBtn() //저장버튼 활성화
+        } else {
+            when (day) {
+                1, 4, 7 -> day1[i].setBackgroundResource(R.drawable.view_border)
+
+                2, 5 -> day2[i].setBackgroundResource(R.drawable.view_border)
+
+                3, 6 -> day3[i].setBackgroundResource(R.drawable.view_border)
+            }
+            updateSaveBtn() //저장버튼 비활성화
+        }
+    }
+
     private fun getDay(date: LocalDate): String { //요일 구하기
         val n: String = date.dayOfWeek.toString()
         var day = ""
@@ -347,8 +368,7 @@ class TimeInputActivity : AppCompatActivity() {
     }
 
     private fun setFrame(page: Int) { //옆으로 이동시 화면 세팅
-        Log.d(TAG, "setFrame: $page 실행")
-        val planStartDate = intent.getStringExtra("planStartPeriod").toString()
+        val planStartDate = intent.getStringExtra("planStartDate").toString()
         var startDate = LocalDate.parse(planStartDate.replace(". ", "-"))
         when (page) {
             1 -> {
@@ -398,30 +418,6 @@ class TimeInputActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateCheck(day: Int, i: Int) { //선택된 칸의 색칠 유무 결정
-        isCheckDay[day - 1][i] = !isCheckDay[day - 1][i]
-        Log.d(TAG, "updateCheck: $day 선택됨")
-        if (isCheckDay[day - 1][i]) {
-            when (day) {
-                1, 4, 7 -> day1[i].setBackgroundResource(R.drawable.view_border_check)
-
-                2, 5 -> day2[i].setBackgroundResource(R.drawable.view_border_check)
-
-                3, 6 -> day3[i].setBackgroundResource(R.drawable.view_border_check)
-            }
-            updateSaveBtn() //저장버튼 활성화
-        } else {
-            when (day) {
-                1, 4, 7 -> day1[i].setBackgroundResource(R.drawable.view_border)
-
-                2, 5 -> day2[i].setBackgroundResource(R.drawable.view_border)
-
-                3, 6 -> day3[i].setBackgroundResource(R.drawable.view_border)
-            }
-            updateSaveBtn() //저장버튼 비활성화
-        }
-    }
-
     private fun tableToPDT(page: Int) { //표에 색칠된 부분을 PossibleDateTime 형식으로 저장
         when (page) {
             1 -> {
@@ -453,12 +449,13 @@ class TimeInputActivity : AppCompatActivity() {
                 }
             }
         }
+        Log.d(TAG, "[timeinput] tableToPDT: 실행\n$time1\n$time2\n$time3\n$time4\n$time5\n$time6\n$time7")
     }
 
     private fun pdtToTable( //저장된 PossibleDateTime 정보를 받아 이를 바탕으로 화면 구성
         day: Int, //시작 날이 1,4,7
     ) {
-        Log.d(TAG, "pdtToTable: $day 실행\n")
+        Log.d(TAG, "[timeinput] pdtToTable: 실행")
         var pdt1: AvailableDateTimes
         var pdt2: AvailableDateTimes?
         var pdt3: AvailableDateTimes?
@@ -488,7 +485,6 @@ class TimeInputActivity : AppCompatActivity() {
             for (i in 0 until pdt2.time.size) {
                 day2[pdt2.time[i]].setBackgroundResource(R.drawable.view_border_check)
                 isCheckDay[day][pdt2.time[i]] = true
-
             }
             for (i in 0 until pdt3.time.size) {
                 day3[pdt3.time[i]].setBackgroundResource(R.drawable.view_border_check)
@@ -588,14 +584,13 @@ class TimeInputActivity : AppCompatActivity() {
 
     private fun activateSaveBtn() { //저장버튼 활성화 함수
         binding.cvTimeInputSaveBtn.setOnClickListener {
-            //해당 페이지 변경 내용 저장
-            tableToPDT(page)
-            //서버 연결
-            inputTime(getMyTime())
+            tableToPDT(page) //해당 페이지 변경 내용 저장
+            inputTime(getMyTime()) //서버 연결
+
             val intent = Intent(this, PlanTimeActivity::class.java)
             intent.putExtra("planId", planId)
-            intent.putExtra("planStartPeriod", intent.getStringExtra("planStartPeriod"))
-            intent.putExtra("groupId", intent.getIntExtra("groupId", 0))
+            intent.putExtra("planStartDate", intent.getStringExtra("planStartDate"))
+            intent.putExtra("planName", intent.getStringExtra("planName"))
             startActivity(intent)
             finish()
         }
