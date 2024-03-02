@@ -44,12 +44,15 @@ class DeletePlanDialog : Fragment() {
         }
 
         binding.tvDelete.setOnClickListener {
-            val intent = Intent(requireContext(), GroupMainActivity::class.java)
+//            val intent = Intent(requireContext(), GroupMainActivity::class.java)
             deletePlan(planId)
-            //그룹 상세조회
-            intent.putExtra(GroupAdapter.INTENT_GROUP, groupDetail)
-            startActivity(intent)
-            parentFragmentManager.beginTransaction().remove(this).commit()
+//            getGroupDetail(teamId)
+//            intent.putExtra(GroupAdapter.INTENT_GROUP, groupDetail)
+//            startActivity(intent)
+//            parentFragmentManager.beginTransaction()
+//                .remove(this)
+//                .commit()
+            requireActivity().finish()
         }
 
         return binding.root
