@@ -25,7 +25,6 @@ import retrofit2.create
 
 class DeletePlanDialog : Fragment() {
     lateinit var binding: DialogDeletePlanBinding
-    lateinit var groupDetail: GroupData
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,7 +34,6 @@ class DeletePlanDialog : Fragment() {
         binding = DialogDeletePlanBinding.inflate(inflater, container, false)
 
         var planId = requireArguments().getInt("planId")
-        var teamId = requireArguments().getInt("teamId")
 
         binding.tvCancel.setOnClickListener {
             parentFragmentManager.beginTransaction()
@@ -44,14 +42,7 @@ class DeletePlanDialog : Fragment() {
         }
 
         binding.tvDelete.setOnClickListener {
-//            val intent = Intent(requireContext(), GroupMainActivity::class.java)
             deletePlan(planId)
-//            getGroupDetail(teamId)
-//            intent.putExtra(GroupAdapter.INTENT_GROUP, groupDetail)
-//            startActivity(intent)
-//            parentFragmentManager.beginTransaction()
-//                .remove(this)
-//                .commit()
             requireActivity().finish()
         }
 
@@ -79,33 +70,6 @@ class DeletePlanDialog : Fragment() {
                 Log.d("API-eletePlan/Fail", t.message.toString())
             }
 
-        })
-    }
-
-    private fun getGroupDetail(teamId: Int) {
-        val getGroupDataService = getRetrofit().create(RetrofitInterface::class.java)
-        val authHeader = "Bearer ${getRefreshToken(requireContext())}"
-
-        getGroupDataService.getGroupDetail(
-            authHeader,
-            teamId
-        ).enqueue(object : retrofit2.Callback<ResponseGetGroupDetail> {
-            override fun onResponse(
-                call: Call<ResponseGetGroupDetail>,
-                response: Response<ResponseGetGroupDetail>
-            ) {
-                if (response.isSuccessful) {
-                    val resp = response.body()
-                    Log.i(NETWORK, "onResponse: Success\n$resp")
-                    if (resp != null) {
-                        groupDetail = GroupData(resp.result.groupId, resp.result.groupName, resp.result.groupImgUrl, resp.result.groupMemberCount, resp.result.bookmark)
-                    }
-                }
-            }
-
-            override fun onFailure(call: Call<ResponseGetGroupDetail>, t: Throwable) {
-                Log.i(NETWORK, "onResponse: Failure\n${t.message}")
-            }
         })
     }
 }
