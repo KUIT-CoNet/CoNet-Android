@@ -14,6 +14,7 @@ import com.kuit.conet.Network.UpdateWaiting
 import com.kuit.conet.Network.getRetrofit
 import com.kuit.conet.R
 import com.kuit.conet.databinding.ActivityEditPlanBinding
+import com.kuit.conet.getRefreshToken
 import retrofit2.Call
 import retrofit2.Response
 
@@ -53,7 +54,7 @@ class EditPlanActivity: AppCompatActivity() {
 
             override fun afterTextChanged(p0: Editable?) {
                 Log.d("texting","입력끝")
-                if(p0!!.length > 0){
+                if(p0!!.isNotEmpty()){
                     binding.ivEditTextCancel.visibility = View.VISIBLE
                     //원래 이름과 같은지 판별
                     isNameChange = !p0.toString().equals(planName)
@@ -87,13 +88,18 @@ class EditPlanActivity: AppCompatActivity() {
         }
         else {
             binding.clEditDoneBtn.setBackgroundResource(R.color.gray200)
+            binding.cvEditDoneBtn.setOnClickListener { }
         }
     }
 
     private fun updateWaiting() {
         val updateWaitingService = getRetrofit().create(RetrofitInterface::class.java)
-        updateWaitingService.UpdateWaiting(waitingInfo())
-            .enqueue(object : retrofit2.Callback<ResponseUpdateWaiting>{
+        val refreshToken = getRefreshToken(this)
+        val authHeader = "Bearer $refreshToken"
+        updateWaitingService.UpdateWaiting(
+            authHeader,
+            waitingInfo()
+        ).enqueue(object : retrofit2.Callback<ResponseUpdateWaiting>{
                 override fun onResponse(
                     call: Call<ResponseUpdateWaiting>,
                     response: Response<ResponseUpdateWaiting>

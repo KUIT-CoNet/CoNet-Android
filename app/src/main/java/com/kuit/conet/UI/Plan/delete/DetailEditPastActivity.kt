@@ -95,8 +95,7 @@ class DetailEditPastActivity : AppCompatActivity(), View.OnClickListener, TimeDi
         binding.dateTf.setText(data.date)
         binding.timeTf.setText(data.time)
 
-        setHistory()
-
+        //setHistory()
 
         binding.backIv.setOnClickListener(this)
         binding.finishTv.setOnClickListener(this)
@@ -109,8 +108,8 @@ class DetailEditPastActivity : AppCompatActivity(), View.OnClickListener, TimeDi
 
         checkEnable()
 
-        data.members.add(Members(0, "추가하기", null))
-        participantAdapter = ParticipantAdapter(this, data.members, 1)
+        data.members.add(ResultGetPlanDetail.Members(0, "추가하기", ""))
+        participantAdapter = ParticipantAdapter(this, data.members.map { it.asMembers() } as ArrayList<Members>, 1)
         participantAdapter.supportFragmentManager = supportFragmentManager
         binding.participantsRv.adapter = participantAdapter
         binding.participantsRv.layoutManager = GridLayoutManager(this, 2)
@@ -131,28 +130,28 @@ class DetailEditPastActivity : AppCompatActivity(), View.OnClickListener, TimeDi
         })
     }
 
-    private fun setHistory() {
-        if(data.historyImageUrl != null){
-            binding.countPictureTv.text = "1/1"
-            binding.pictureDeleteIv.visibility = View.VISIBLE
-            binding.pictureIv.visibility = View.VISIBLE
-            Glide.with(this)
-                .load(data.historyImageUrl) // 불러올 이미지 url
-                .centerCrop()
-                .into(binding.pictureIv) // 이미지를 넣을 뷰
-        } else {
-            binding.countPictureTv.text = "사진 추가"
-            binding.pictureDeleteIv.visibility = View.GONE
-            binding.pictureIv.visibility = View.GONE
-        }
-
-        if(data.historyDescription != null){
-            binding.contentTf.setText(data.historyDescription)
-            binding.contentHintTv.visibility = View.GONE
-        } else {
-            binding.contentHintTv.visibility = View.VISIBLE
-        }
-    }
+//    private fun setHistory() {
+//        if(data.historyImageUrl != null){
+//            binding.countPictureTv.text = "1/1"
+//            binding.pictureDeleteIv.visibility = View.VISIBLE
+//            binding.pictureIv.visibility = View.VISIBLE
+//            Glide.with(this)
+//                .load(data.historyImageUrl) // 불러올 이미지 url
+//                .centerCrop()
+//                .into(binding.pictureIv) // 이미지를 넣을 뷰
+//        } else {
+//            binding.countPictureTv.text = "사진 추가"
+//            binding.pictureDeleteIv.visibility = View.GONE
+//            binding.pictureIv.visibility = View.GONE
+//        }
+//
+//        if(data.historyDescription != null){
+//            binding.contentTf.setText(data.historyDescription)
+//            binding.contentHintTv.visibility = View.GONE
+//        } else {
+//            binding.contentHintTv.visibility = View.VISIBLE
+//        }
+//    }
 
     override fun onClick(v: View?) {
         when(v!!.id){
@@ -187,9 +186,10 @@ class DetailEditPastActivity : AppCompatActivity(), View.OnClickListener, TimeDi
                             " \"planName\" : \"${binding.nameTf.text}\"," +
                             " \"date\" : \"${dateData[0]}-${dateData[1]}-${dateData[2]}\"," +
                             " \"time\" : \"${binding.timeTf.text}\"," +
-                            " \"members\" : ${members}," +
-                            " \"isRegisteredToHistory\" : ${data.isRegisteredToHistory}," +
-                            " \"historyDescription\" : \"${binding.contentTf.text}\"}"
+                            " \"members\" : ${members},"
+//                    +
+//                            " \"isRegisteredToHistory\" : ${data.isRegisteredToHistory}," +
+//                            " \"historyDescription\" : \"${binding.contentTf.text}\"}"
                     val jsonList = jsonString.toRequestBody("application/json".toMediaTypeOrNull())
 
                     Log.d(TAG, "jsonList : $jsonString")

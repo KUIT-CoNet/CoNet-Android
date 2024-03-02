@@ -9,8 +9,8 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.kuit.conet.Network.Oncall
-import com.kuit.conet.Network.SidePlanInfo
-import com.kuit.conet.Network.plans
+import com.kuit.conet.Network.Plan
+//import com.kuit.conet.Network.SidePlanInfo
 import com.kuit.conet.UI.Plan.detail.DetailFixActivity
 import com.kuit.conet.UI.Plan.delete.DetailPastActivity
 import com.kuit.conet.UI.Plan.PlanTimeActivity
@@ -67,7 +67,7 @@ class AllTodoRecyclerAdapter(option : Int, context: Context) : RecyclerView.Adap
 }
 
 class TodoRecyclerAdapter(private val context:Context) : RecyclerView.Adapter<TodoRecyclerAdapter.ViewHolder>(){
-    var itemList = ArrayList<plans>()
+    var itemList = ArrayList<Plan>()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ItemTodolistBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
@@ -87,7 +87,7 @@ class TodoRecyclerAdapter(private val context:Context) : RecyclerView.Adapter<To
 
     inner class ViewHolder(val binding: ItemTodolistBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: plans) {
+        fun bind(item: Plan) {
             binding.tvPromisstime.text = item.time
             binding.tvPromisscontent.text = item.planName
             if(item.teamName == null){
@@ -101,7 +101,7 @@ class TodoRecyclerAdapter(private val context:Context) : RecyclerView.Adapter<To
     }
 }
 
-class ConfirmRecyclerAdapter(private val context: Context, val option: Int, var datas:List<SidePlanInfo>) : RecyclerView.Adapter<ConfirmRecyclerAdapter.ViewHolder>(){
+/*class ConfirmRecyclerAdapter(private val context: Context, val option: Int, var datas:List<SidePlanInfo>) : RecyclerView.Adapter<ConfirmRecyclerAdapter.ViewHolder>(){
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ConfirmRecyclerAdapter.ViewHolder {
         val binding = ItemCofirmlistBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
@@ -159,4 +159,4 @@ class ConfirmRecyclerAdapter(private val context: Context, val option: Int, var 
         }
     }
 
-}
+}*/

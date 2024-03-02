@@ -6,13 +6,14 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import com.kuit.conet.Network.AvailableMemberDateTime
+import com.kuit.conet.Network.EndNumberForEachSection
+import com.kuit.conet.Network.PossibleMember
 import com.kuit.conet.Network.RetrofitInterface
 import com.kuit.conet.Network.ShowMemTime
 import com.kuit.conet.Network.getRetrofit
-import com.kuit.conet.Network.posiibleMemberDateTime
-import com.kuit.conet.Network.possibleMember
-import com.kuit.conet.Network.sectionMemberCounts
 import com.kuit.conet.R
+import com.kuit.conet.UI.GroupMain.GroupMainActivity
 import com.kuit.conet.databinding.ActivityPlanTimeBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -22,26 +23,28 @@ import retrofit2.Response
 import java.time.LocalDate
 import kotlin.coroutines.suspendCoroutine
 
-class PlanTimeActivity : AppCompatActivity() {//
-    lateinit var binding : ActivityPlanTimeBinding
+class PlanTimeActivity : AppCompatActivity() {
+    lateinit var binding: ActivityPlanTimeBinding
     var page = 1
-    var groupId = 0
+    var teamId = 0
     var planId = -1
     var planName = ""
-    var planStartPeriod = ""
+    private var planStartDate = ""
+    lateinit var endNumberForEachSection: ArrayList<EndNumberForEachSection>
 
     //view 만드는 3개의 날
-    lateinit var day1 : ArrayList<View>
-    lateinit var day2 : ArrayList<View>
-    lateinit var day3 : ArrayList<View>
+    private lateinit var day1: ArrayList<View>
+    private lateinit var day2: ArrayList<View>
+    private lateinit var day3: ArrayList<View>
+
     //일주일 정보를 각각 담음
-    private var day1Info : ArrayList<possibleMember> = arrayListOf()
-    private var day2Info : ArrayList<possibleMember> = arrayListOf()
-    private var day3Info : ArrayList<possibleMember> = arrayListOf()
-    private var day4Info : ArrayList<possibleMember> = arrayListOf()
-    private var day5Info : ArrayList<possibleMember> = arrayListOf()
-    private var day6Info : ArrayList<possibleMember> = arrayListOf()
-    private var day7Info : ArrayList<possibleMember> = arrayListOf()
+    private var day1Info: ArrayList<PossibleMember> = arrayListOf()
+    private var day2Info: ArrayList<PossibleMember> = arrayListOf()
+    private var day3Info: ArrayList<PossibleMember> = arrayListOf()
+    private var day4Info: ArrayList<PossibleMember> = arrayListOf()
+    private var day5Info: ArrayList<PossibleMember> = arrayListOf()
+    private var day6Info: ArrayList<PossibleMember> = arrayListOf()
+    private var day7Info: ArrayList<PossibleMember> = arrayListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,46 +73,40 @@ class PlanTimeActivity : AppCompatActivity() {//
             binding.day320, binding.day321, binding.day322, binding.day323
         )
 
-        //intent값으로 받아오는 건 여기
-        planStartPeriod = intent.getStringExtra("planStartPeriod").toString()
+
+        planStartDate = intent.getStringExtra("planStartDate").toString()
         planId = intent.getIntExtra("planId", 0)
-//        val planName = intent.getStringExtra("planName")
+        val planName = intent.getStringExtra("planName")
 
         val coroutineScope = CoroutineScope(Dispatchers.Main)
         coroutineScope.launch {
-            Log.d("PlanTimeActivity", "Get showMemTime api 실행 전")
             getFrame(planId) //api로 정보 받아오기
-            Log.d("PlanTimeActivity", "Get showMemTime api 실행 완")
         }
 
-        updateClickListener()
-
         binding.btnCloseIv.setOnClickListener {
-//            val intent = Intent(this, GroupMainActivity::class.java)
-//            intent.putExtra("GroupId", groupId)
-//            startActivity(intent)
+            val intent = Intent(this, GroupMainActivity::class.java)
+            intent.putExtra("teamId", teamId)
+            startActivity(intent)
             finish()
         }
 
         binding.ivPrev.setOnClickListener {
-            if(page==2) page=1
-            else if (page==3) page=2
+            if (page == 2) page = 1 else if (page == 3) page = 2
             setFrame(page)
         }
 
         binding.ivNext.setOnClickListener {
-            if (page==1) page=2
-            else if (page==2) page=3
+            if (page == 1) page = 2 else if (page == 2) page = 3
             setFrame(page)
         }
 
         binding.ivBtn.setOnClickListener {
-            var planMenuDialog = PlanMenuDialog()
+            val planMenuDialog = PlanMenuDialog()
             val bundle = Bundle()
             bundle.putString("planName", planName)
-            bundle.putString("planDate", planStartPeriod)
+            bundle.putString("planDate", planStartDate)
             bundle.putInt("planId", planId)
-            bundle.putInt("groupId", groupId)
+            bundle.putInt("teamId", teamId)
             planMenuDialog.arguments = bundle
             supportFragmentManager.beginTransaction()
                 .replace(R.id.fl_plan, planMenuDialog)
@@ -119,25 +116,25 @@ class PlanTimeActivity : AppCompatActivity() {//
         binding.btnCv.setOnClickListener {
             val intent = Intent(this, TimeInputActivity::class.java)
             intent.putExtra("planId", planId)
-            intent.putExtra("planStartPeriod", planStartPeriod)
+            intent.putExtra("planStartPeriod", planStartDate)
             startActivity(intent)
             finish()
         }
     }
 
     //요일 구하기
-    fun getDay(date : LocalDate):String{
-        var n : String = date.dayOfWeek.toString()
+    private fun getDay(date: LocalDate): String {
+        val n: String = date.dayOfWeek.toString()
         var day = ""
 
         when (n) {
-            "SUNDAY" -> day="일"
-            "MONDAY" -> day="월"
-            "TUESDAY" -> day="화"
-            "WEDNESDAY" -> day="수"
-            "THURSDAY" -> day="목"
-            "FRIDAY" -> day="금"
-            "SATURDAY" -> day="토"
+            "SUNDAY" -> day = "일"
+            "MONDAY" -> day = "월"
+            "TUESDAY" -> day = "화"
+            "WEDNESDAY" -> day = "수"
+            "THURSDAY" -> day = "목"
+            "FRIDAY" -> day = "금"
+            "SATURDAY" -> day = "토"
         }
 
         return day
@@ -147,116 +144,131 @@ class PlanTimeActivity : AppCompatActivity() {//
         Log.d("PlanTimeActivity", "Get showMemTime api 실행 중")
         return suspendCoroutine { continuation ->
             val showMemberTimeService = getRetrofit().create(RetrofitInterface::class.java)
-            showMemberTimeService.ShowMemTime(planId).enqueue(object : retrofit2.Callback<ShowMemTime>{
-                override fun onResponse(
-                    call: Call<ShowMemTime>,
-                    response: Response<ShowMemTime>
-                ) {
-                    if (response.isSuccessful){
-                        val resp = response.body()
-                        Log.i("ShowMemTime/성공", resp.toString())
+            showMemberTimeService.ShowMemTime(planId)
+                .enqueue(object : retrofit2.Callback<ShowMemTime> {
+                    override fun onResponse(
+                        call: Call<ShowMemTime>,
+                        response: Response<ShowMemTime>
+                    ) {
+                        if (response.isSuccessful) {
+                            val resp = response.body()
+                            Log.i("ShowMemTime/성공", resp.toString())
 
-                        groupId = resp!!.result.teamId
-                        this@PlanTimeActivity.planId = resp!!.result.planId
-                        planName = resp!!.result.planName
-                        planStartPeriod = resp!!.result.planStartPeriod
-                        initInfo(resp!!.result.possibleMemberDateTime)
-                        setColorNumText(resp!!.result.sectionMemberCounts)
+                            teamId = resp!!.result.teamId
+                            this@PlanTimeActivity.planId = resp!!.result.planId
+                            planName = resp!!.result.planName
+                            planStartDate = resp!!.result.planStartPeriod
+                            endNumberForEachSection = resp!!.result.endNumberForEachSection
 
-                        binding.tvPlanName.text = planName
+                            initInfo(resp!!.result.availableMemberDateTime)
+                            setColorNumText(resp!!.result.endNumberForEachSection)
 
-                        setFrame(page) // 화면 구성
+                            binding.tvPlanName.text = planName
+
+                            setFrame(page) // 화면 구성
+                        }
                     }
-                }
 
-                override fun onFailure(call: Call<ShowMemTime>, t: Throwable) {
-                    Log.i("ShowMemTime/실패", t.message.toString())
-                }
+                    override fun onFailure(call: Call<ShowMemTime>, t: Throwable) {
+                        Log.i("ShowMemTime/실패", t.message.toString())
+                    }
 
-            })
+                })
         }
     }
 
-    private fun initInfo(pmdtList: ArrayList<posiibleMemberDateTime>) {
+    private fun initInfo(amdtList: ArrayList<AvailableMemberDateTime>) {
         for (i in 0..6) {
-            for (j in 0..23){
+            for (j in 0..23) {
                 when (i) {
                     0 -> day1Info.add(
-                        possibleMember(
-                            pmdtList[i].possibleMember[j].time,
-                            pmdtList[i].possibleMember[j].section,
-                            pmdtList[i].possibleMember[j].memberNames,
-                            pmdtList[i].possibleMember[j].memberIds
-                        ))
+                        PossibleMember(
+                            amdtList[i].possibleMember[j].time,
+                            amdtList[i].possibleMember[j].section,
+                            amdtList[i].possibleMember[j].memberNames,
+                            amdtList[i].possibleMember[j].memberIds
+                        )
+                    )
+
                     1 -> day2Info.add(
-                        possibleMember(
-                            pmdtList[i].possibleMember[j].time,
-                            pmdtList[i].possibleMember[j].section,
-                            pmdtList[i].possibleMember[j].memberNames,
-                            pmdtList[i].possibleMember[j].memberIds
-                        ))
+                        PossibleMember(
+                            amdtList[i].possibleMember[j].time,
+                            amdtList[i].possibleMember[j].section,
+                            amdtList[i].possibleMember[j].memberNames,
+                            amdtList[i].possibleMember[j].memberIds
+                        )
+                    )
+
                     2 -> day3Info.add(
-                        possibleMember(
-                            pmdtList[i].possibleMember[j].time,
-                            pmdtList[i].possibleMember[j].section,
-                            pmdtList[i].possibleMember[j].memberNames,
-                            pmdtList[i].possibleMember[j].memberIds
-                        ))
+                        PossibleMember(
+                            amdtList[i].possibleMember[j].time,
+                            amdtList[i].possibleMember[j].section,
+                            amdtList[i].possibleMember[j].memberNames,
+                            amdtList[i].possibleMember[j].memberIds
+                        )
+                    )
+
                     3 -> day4Info.add(
-                        possibleMember(
-                            pmdtList[i].possibleMember[j].time,
-                            pmdtList[i].possibleMember[j].section,
-                            pmdtList[i].possibleMember[j].memberNames,
-                            pmdtList[i].possibleMember[j].memberIds
-                        ))
+                        PossibleMember(
+                            amdtList[i].possibleMember[j].time,
+                            amdtList[i].possibleMember[j].section,
+                            amdtList[i].possibleMember[j].memberNames,
+                            amdtList[i].possibleMember[j].memberIds
+                        )
+                    )
+
                     4 -> day5Info.add(
-                        possibleMember(
-                            pmdtList[i].possibleMember[j].time,
-                            pmdtList[i].possibleMember[j].section,
-                            pmdtList[i].possibleMember[j].memberNames,
-                            pmdtList[i].possibleMember[j].memberIds
-                        ))
+                        PossibleMember(
+                            amdtList[i].possibleMember[j].time,
+                            amdtList[i].possibleMember[j].section,
+                            amdtList[i].possibleMember[j].memberNames,
+                            amdtList[i].possibleMember[j].memberIds
+                        )
+                    )
+
                     5 -> day6Info.add(
-                        possibleMember(
-                            pmdtList[i].possibleMember[j].time,
-                            pmdtList[i].possibleMember[j].section,
-                            pmdtList[i].possibleMember[j].memberNames,
-                            pmdtList[i].possibleMember[j].memberIds
-                        ))
+                        PossibleMember(
+                            amdtList[i].possibleMember[j].time,
+                            amdtList[i].possibleMember[j].section,
+                            amdtList[i].possibleMember[j].memberNames,
+                            amdtList[i].possibleMember[j].memberIds
+                        )
+                    )
+
                     6 -> day7Info.add(
-                        possibleMember(
-                            pmdtList[i].possibleMember[j].time,
-                            pmdtList[i].possibleMember[j].section,
-                            pmdtList[i].possibleMember[j].memberNames,
-                            pmdtList[i].possibleMember[j].memberIds
-                        ))
+                        PossibleMember(
+                            amdtList[i].possibleMember[j].time,
+                            amdtList[i].possibleMember[j].section,
+                            amdtList[i].possibleMember[j].memberNames,
+                            amdtList[i].possibleMember[j].memberIds
+                        )
+                    )
                 }
             }
         }
-        Log.d("day1 값들", day1Info.toString())
-        Log.d("day2 값들", day2Info.toString())
-        Log.d("day3 값들", day3Info.toString())
-        Log.d("day4 값들", day4Info.toString())
-        Log.d("day5 값들", day5Info.toString())
-        Log.d("day6 값들", day6Info.toString())
-        Log.d("day7 값들", day7Info.toString())
     }
 
     @SuppressLint("SetTextI18n")
-    private fun setColorNumText(section: java.util.ArrayList<sectionMemberCounts>) {
+    private fun setColorNumText(section: java.util.ArrayList<EndNumberForEachSection>) {
         Log.d("setColorNumText 시작", "section.size : ${section.size}")
         for (i in 0 until section.size) {
-            if (i==0) {
+            if (i == 0) {
                 Log.d("setColorNumText", "i=0 실행")
-                if (section[i].memberCount.size==1) binding.tvColorNum1.text = section[i].memberCount[0].toString()
-                else binding.tvColorNum1.text = section[i].memberCount[0].toString()+"-"+section[i].memberCount[1].toString()
-            }
-            else if (i==1) {
+                if (section[i].memberCount == 1) {
+                    binding.tvColorNum1.text = section[i].memberCount.toString()
+                } else {
+                    binding.tvColorNum1.text =
+                        "1-" + section[i].memberCount.toString()
+                }
+            } else if (i == 1) {
                 Log.d("setColorNumText", "i=1 실행")
-                if (section[i].memberCount.size==1) binding.tvColorNum2.text = section[i].memberCount[0].toString()
-                else binding.tvColorNum2.text = section[i].memberCount[0].toString()+"-"+section[i].memberCount[1].toString()
-
-                if(section.size==2) {
+                if (section[i].memberCount == section[i-1].memberCount) {
+                    binding.tvColorNum2.text = section[i].memberCount.toString()
+                } else {
+                    binding.tvColorNum2.text =
+                        {section[i-1].memberCount+1}.toString() + "-" + section[i].memberCount.toString()
+                }
+                if (section.size == 2) {
                     binding.section1View.setBackgroundResource(R.drawable.view_border_section2)
                     binding.section2View.setBackgroundResource(R.drawable.view_border_section3)
                     binding.section3View.visibility = View.GONE
@@ -267,34 +279,42 @@ class PlanTimeActivity : AppCompatActivity() {//
                     binding.section3View.visibility = View.VISIBLE
                     binding.tvColorNum3.visibility = View.VISIBLE
                 }
-            }
-            else if (i==2) {
+            } else if (i == 2) {
                 Log.d("setColorNumText", "i=2 실행")
-                if (section[i].memberCount.size==1) binding.tvColorNum3.text = section[i].memberCount[0].toString()
-                else binding.tvColorNum3.text = section[i].memberCount[0].toString()+"-"+section[i].memberCount[1].toString()
+                if (section[i].memberCount == section[i-1].memberCount) {
+                    binding.tvColorNum3.text = section[i].memberCount.toString()
+                } else {
+                    binding.tvColorNum3.text =
+                        {section[i-1].memberCount+1}.toString() + "-" + section[i].memberCount.toString()
+                }
             }
         }
     }
 
-
-    fun setFrame(page: Int){ //날짜 입력 후, 표채우기로 넘김
-        Log.d("setFrame시작", "page : $page" )
-        var startDate = LocalDate.parse(planStartPeriod.replace(".","-"))
+    fun setFrame(page: Int) { //날짜 입력 후, 표채우기로 넘김
+        Log.d("setFrame시작", "page : $page")
+        var startDate = LocalDate.parse(planStartDate.replace(".", "-"))
         when (page) {
             1 -> {
                 binding.tvDate1.text = startDate.toString().substring(5).replace("-", ".")
-                binding.tvDate2.text = startDate.plusDays(1).toString().substring(5).replace("-", ".")
-                binding.tvDate3.text = startDate.plusDays(2).toString().substring(5).replace("-", ".")
+                binding.tvDate2.text =
+                    startDate.plusDays(1).toString().substring(5).replace("-", ".")
+                binding.tvDate3.text =
+                    startDate.plusDays(2).toString().substring(5).replace("-", ".")
                 binding.tvDay1.text = getDay(startDate)
                 binding.tvDay2.text = getDay(startDate.plusDays(1))
                 binding.tvDay3.text = getDay(startDate.plusDays(2))
                 binding.ivPrev.visibility = View.GONE
                 binding.ivNext.visibility = View.VISIBLE
             }
+
             2 -> {
-                binding.tvDate1.text = startDate.plusDays(3).toString().substring(5).replace("-", ".")
-                binding.tvDate2.text = startDate.plusDays(4).toString().substring(5).replace("-", ".")
-                binding.tvDate3.text = startDate.plusDays(5).toString().substring(5).replace("-", ".")
+                binding.tvDate1.text =
+                    startDate.plusDays(3).toString().substring(5).replace("-", ".")
+                binding.tvDate2.text =
+                    startDate.plusDays(4).toString().substring(5).replace("-", ".")
+                binding.tvDate3.text =
+                    startDate.plusDays(5).toString().substring(5).replace("-", ".")
                 binding.tvDate2.visibility = View.VISIBLE
                 binding.tvDate3.visibility = View.VISIBLE
                 binding.tvDay1.text = getDay(startDate.plusDays(3))
@@ -310,8 +330,10 @@ class PlanTimeActivity : AppCompatActivity() {//
                     day3[i].visibility = View.VISIBLE
                 }
             }
+
             3 -> {
-                binding.tvDate1.text = startDate.plusDays(6).toString().substring(5).replace("-", ".")
+                binding.tvDate1.text =
+                    startDate.plusDays(6).toString().substring(5).replace("-", ".")
                 binding.tvDate2.visibility = View.GONE
                 binding.tvDate3.visibility = View.GONE
                 binding.tvDay1.text = getDay(startDate.plusDays(6))
@@ -330,51 +352,88 @@ class PlanTimeActivity : AppCompatActivity() {//
     }
 
     private fun colorTimeTable(page: Int) {
-        Log.d("colorTimeTable 시작", "page : $page")
+        Log.d("plantime", "page : $page")
         when (page) {
-            1 -> for (i in 0..23){
-                when (day1Info[i]!!.section){
-                    0 -> day1[i].setBackgroundResource(R.drawable.view_border)
+            1 -> for (i in 0..23) {
+                updateClickListener(1, i, true)
+                updateClickListener(2, i, true)
+                updateClickListener(3, i, true)
+                when (day1Info[i]!!.section) {
+                    0 -> {
+                        day1[i].setBackgroundResource(R.drawable.view_border)
+                        updateClickListener(1, i, false)
+                    }
+
                     1 -> day1[i].setBackgroundResource(R.drawable.view_border_section1)
                     2 -> day1[i].setBackgroundResource(R.drawable.view_border_section2)
                     3 -> day1[i].setBackgroundResource(R.drawable.view_border_section3)
                 }
-                when (day2Info[i]!!.section){
-                    0 -> day2[i].setBackgroundResource(R.drawable.view_border)
+                when (day2Info[i]!!.section) {
+                    0 -> {
+                        day2[i].setBackgroundResource(R.drawable.view_border)
+                        updateClickListener(2, i, false)
+                    }
+
                     1 -> day2[i].setBackgroundResource(R.drawable.view_border_section1)
                     2 -> day2[i].setBackgroundResource(R.drawable.view_border_section2)
                     3 -> day2[i].setBackgroundResource(R.drawable.view_border_section3)
                 }
-                when (day3Info[i]!!.section){
-                    0 -> day3[i].setBackgroundResource(R.drawable.view_border)
+                when (day3Info[i]!!.section) {
+                    0 -> {
+                        day3[i].setBackgroundResource(R.drawable.view_border)
+                        updateClickListener(3, i, false)
+                    }
+
                     1 -> day3[i].setBackgroundResource(R.drawable.view_border_section1)
                     2 -> day3[i].setBackgroundResource(R.drawable.view_border_section2)
                     3 -> day3[i].setBackgroundResource(R.drawable.view_border_section3)
                 }
             }
-            2 -> for (i in 0..23){
-                when (day4Info[i]!!.section){
-                    0 -> day1[i].setBackgroundResource(R.drawable.view_border)
+
+            2 -> for (i in 0..23) {
+                updateClickListener(1, i, true)
+                updateClickListener(2, i, true)
+                updateClickListener(3, i, true)
+                when (day4Info[i]!!.section) {
+                    0 -> {
+                        day1[i].setBackgroundResource(R.drawable.view_border)
+                        updateClickListener(1, i, false)
+                    }
+
                     1 -> day1[i].setBackgroundResource(R.drawable.view_border_section1)
                     2 -> day1[i].setBackgroundResource(R.drawable.view_border_section2)
                     3 -> day1[i].setBackgroundResource(R.drawable.view_border_section3)
                 }
-                when (day5Info[i]!!.section){
-                    0 -> day2[i].setBackgroundResource(R.drawable.view_border)
+                when (day5Info[i]!!.section) {
+                    0 -> {
+                        day2[i].setBackgroundResource(R.drawable.view_border)
+                        updateClickListener(2, i, false)
+                    }
+
                     1 -> day2[i].setBackgroundResource(R.drawable.view_border_section1)
                     2 -> day2[i].setBackgroundResource(R.drawable.view_border_section2)
                     3 -> day2[i].setBackgroundResource(R.drawable.view_border_section3)
                 }
-                when (day6Info[i]!!.section){
-                    0 -> day3[i].setBackgroundResource(R.drawable.view_border)
+                when (day6Info[i]!!.section) {
+                    0 -> {
+                        day3[i].setBackgroundResource(R.drawable.view_border)
+                        updateClickListener(3, i, false)
+                    }
+
                     1 -> day3[i].setBackgroundResource(R.drawable.view_border_section1)
                     2 -> day3[i].setBackgroundResource(R.drawable.view_border_section2)
                     3 -> day3[i].setBackgroundResource(R.drawable.view_border_section3)
                 }
             }
-            3 -> for (i in 0..23){
-                when (day7Info[i]!!.section){
-                    0 -> day1[i].setBackgroundResource(R.drawable.view_border)
+
+            3 -> for (i in 0..23) {
+                updateClickListener(1, i, true)
+                when (day7Info[i]!!.section) {
+                    0 -> {
+                        day1[i].setBackgroundResource(R.drawable.view_border)
+                        updateClickListener(1, i, false)
+                    }
+
                     1 -> day1[i].setBackgroundResource(R.drawable.view_border_section1)
                     2 -> day1[i].setBackgroundResource(R.drawable.view_border_section2)
                     3 -> day1[i].setBackgroundResource(R.drawable.view_border_section3)
@@ -383,33 +442,41 @@ class PlanTimeActivity : AppCompatActivity() {//
         }
     }
 
-    private fun updateClickListener() {
-        for (i in 0..23 step(1)) {
-            day1[i].setOnClickListener { getFixPlanDialog(1, i) }
-            day2[i].setOnClickListener { getFixPlanDialog(2, i) }
-            day3[i].setOnClickListener { getFixPlanDialog(3, i) }
+    private fun updateClickListener(day: Int, i: Int, activation: Boolean) {
+        if (!activation) { //마지막 인자값을 false로 하면 클릭기능을 비활성화
+            when (day) {
+                1 -> day1[i].setOnClickListener { }
+                2 -> day2[i].setOnClickListener { }
+                3 -> day3[i].setOnClickListener { }
+            }
+        } else { //클릭기능을 활성화
+            when (day) {
+                1 -> day1[i].setOnClickListener { getFixPlanDialog(1, i) }
+                2 -> day2[i].setOnClickListener { getFixPlanDialog(2, i) }
+                3 -> day3[i].setOnClickListener { getFixPlanDialog(3, i) }
+            }
         }
     }
 
-    fun getFixPlanDialog(day : Int, i : Int) {
-        var startDate = LocalDate.parse(planStartPeriod.replace(".", "-"))
-        var fixed_date = ""
-        var fixed_time = i
+    private fun getFixPlanDialog(day: Int, i: Int) {
+        var startDate = LocalDate.parse(planStartDate.replace(".", "-"))
+        var fixedDate = ""
+        var fixedTime = i
         var userId: ArrayList<Int> = arrayListOf()
         var userName: ArrayList<String> = arrayListOf()
 
         when (day) {
             1 -> {
                 if (page == 1) {
-                    fixed_date = startDate.toString()
+                    fixedDate = startDate.toString()
                     userId = day1Info[i].memberIds
                     userName = day1Info[i].memberNames
                 } else if (page == 2) {
-                    fixed_date = startDate.plusDays(3).toString()
+                    fixedDate = startDate.plusDays(3).toString()
                     userId = day4Info[i].memberIds
                     userName = day4Info[i].memberNames
                 } else if (page == 3) {
-                    fixed_date = startDate.plusDays(6).toString()
+                    fixedDate = startDate.plusDays(6).toString()
                     userId = day7Info[i].memberIds
                     userName = day7Info[i].memberNames
                 }
@@ -417,11 +484,11 @@ class PlanTimeActivity : AppCompatActivity() {//
 
             2 -> {
                 if (page == 1) {
-                    fixed_date = startDate.plusDays(1).toString()
+                    fixedDate = startDate.plusDays(1).toString()
                     userId = day2Info[i].memberIds
                     userName = day2Info[i].memberNames
                 } else if (page == 2) {
-                    fixed_date = startDate.plusDays(4).toString()
+                    fixedDate = startDate.plusDays(4).toString()
                     userId = day5Info[i].memberIds
                     userName = day5Info[i].memberNames
                 }
@@ -429,11 +496,11 @@ class PlanTimeActivity : AppCompatActivity() {//
 
             3 -> {
                 if (page == 1) {
-                    fixed_date = startDate.plusDays(2).toString()
+                    fixedDate = startDate.plusDays(2).toString()
                     userId = day3Info[i].memberIds
                     userName = day3Info[i].memberNames
                 } else if (page == 2) {
-                    fixed_date = startDate.plusDays(5).toString()
+                    fixedDate = startDate.plusDays(5).toString()
                     userId = day6Info[i].memberIds
                     userName = day6Info[i].memberNames
                 }
@@ -442,15 +509,13 @@ class PlanTimeActivity : AppCompatActivity() {//
 
         var fixPlanDialog = FixPlanDialog()
         val bundle = Bundle()
-        bundle.putInt("groupId", groupId)
+        bundle.putInt("teamId", teamId)
         bundle.putString("planName", planName)
-
         bundle.putInt("planId", planId)
-        bundle.putString("fixed_date", fixed_date)
-        bundle.putInt("fixed_time", fixed_time)
+        bundle.putString("fixedDate", fixedDate)
+        bundle.putInt("fixedTime", fixedTime)
         bundle.putIntegerArrayList("userId", userId)
         bundle.putStringArrayList("userName", userName)
-
         fixPlanDialog.arguments = bundle
         supportFragmentManager.beginTransaction()
             .replace(R.id.fl_plan, fixPlanDialog)

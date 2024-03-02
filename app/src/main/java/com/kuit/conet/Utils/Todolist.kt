@@ -8,9 +8,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kuit.conet.Network.HomePlanInfo
+import com.kuit.conet.Network.Plan
 import com.kuit.conet.Network.RetrofitInterface
 import com.kuit.conet.Network.getRetrofit
-import com.kuit.conet.Network.plans
 import com.kuit.conet.UI.Home.RecyclerView.TodoRecyclerAdapter
 import com.kuit.conet.databinding.FragmentTodolistBinding
 import com.kuit.conet.getRefreshToken
@@ -30,7 +30,7 @@ import kotlin.coroutines.suspendCoroutine
 class Todolist(date : CalendarDay, groupId : Int) : Fragment() { // -1은 홈메뉴의 확정 약속 보여줌 1부터는 모임탭의 확정약속 보여줌(이 숫자가 teamId의 역할을 할 거임)
     lateinit var binding : FragmentTodolistBinding
     lateinit var todoRecyclerAdapter : TodoRecyclerAdapter
-    var plans = ArrayList<plans>()
+    var plans = ArrayList<Plan>()
     val date = date
     val groupId = groupId
 
@@ -59,7 +59,7 @@ class Todolist(date : CalendarDay, groupId : Int) : Fragment() { // -1은 홈메
         }
     }
 
-    suspend fun showGroupplaninfo(date: CalendarDay): ArrayList<plans> {
+    suspend fun showGroupplaninfo(date: CalendarDay): ArrayList<Plan> {
         return suspendCoroutine { continuation2->
             Log.d("callDate","${date}")
             val year = (date.year).toString()
@@ -97,7 +97,7 @@ class Todolist(date : CalendarDay, groupId : Int) : Fragment() { // -1은 홈메
 
     }
 
-    suspend fun showplaninfo(date : CalendarDay) : ArrayList<plans>{
+    suspend fun showplaninfo(date : CalendarDay) : ArrayList<Plan>{
         return suspendCoroutine { continuation2->
             Log.d("callDate","${date}")
             val year = (date.year).toString()
@@ -140,7 +140,7 @@ class Todolist(date : CalendarDay, groupId : Int) : Fragment() { // -1은 홈메
         initDeferred.await()
     }
 
-    fun initRecycler(plans : ArrayList<plans>?) {
+    fun initRecycler(plans : ArrayList<Plan>?) {
         Log.d("todolist","${plans}")
         if(plans != null){
             todoRecyclerAdapter = TodoRecyclerAdapter(requireContext())

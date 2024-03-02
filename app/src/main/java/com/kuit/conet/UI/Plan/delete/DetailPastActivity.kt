@@ -7,15 +7,17 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
+import com.kuit.conet.Network.Members
 import com.kuit.conet.Network.ResponseGetPlanDetail
 import com.kuit.conet.Network.ResultGetPlanDetail
 import com.kuit.conet.Network.RetrofitClient
 import com.kuit.conet.R
-import com.kuit.conet.UI.History.RegistHistoryActivity
+//import com.kuit.conet.UI.History.RegistHistoryActivity
 import com.kuit.conet.UI.Plan.detail.ParticipantAdapter
 import com.kuit.conet.UI.Plan.dialog.EditTrashDialog
 import com.kuit.conet.Utils.TAG
 import com.kuit.conet.databinding.ActivityDetailPastBinding
+import com.kuit.conet.getRefreshToken
 import retrofit2.Call
 import retrofit2.Response
 
@@ -65,7 +67,11 @@ class DetailPastActivity : AppCompatActivity(), View.OnClickListener, EditTrashD
         planId?.let {
             Log.d(TAG, "DetailPastActivity - onResume() planId가 정상적으로 받아와졌어요\n" +
                     "planId : $planId")
-            RetrofitClient.instance.getPlanDetail(it).enqueue(object: retrofit2.Callback<ResponseGetPlanDetail>{
+            RetrofitClient.instance.getPlanDetail(
+                "Bearer ${getRefreshToken(this)}",
+                it)
+                .enqueue(object: retrofit2.Callback<ResponseGetPlanDetail> {
+
             override fun onResponse(
                 call: Call<ResponseGetPlanDetail>,
                 response: Response<ResponseGetPlanDetail>
@@ -102,7 +108,7 @@ class DetailPastActivity : AppCompatActivity(), View.OnClickListener, EditTrashD
                     }*/
 
                     val participantList = response.body()!!.result.members
-                    val participantAdapter = ParticipantAdapter(this@DetailPastActivity, participantList, 0)
+                    val participantAdapter = ParticipantAdapter(this@DetailPastActivity, participantList.map { it.asMembers() } as ArrayList<Members>, 0)
 
                     binding.participantsRv.adapter = participantAdapter
                     binding.participantsRv.layoutManager = GridLayoutManager(this@DetailPastActivity, 2)

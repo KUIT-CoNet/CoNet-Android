@@ -31,26 +31,26 @@ class NameChangeActivity : AppCompatActivity() {
         // 이름 검사(실시간으로)
         binding.etName.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                Log.d("texting","입력전")
+                Log.d("texting", "입력전")
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                Log.d("texting","입력중")
+                Log.d("texting", "입력중")
             }
 
             override fun afterTextChanged(p0: Editable?) {
-                Log.d("texting","입력끝")
+                Log.d("texting", "입력끝")
 
                 val matcher = pattern.matcher(p0.toString())
                 //Log.d("texting", "${matcher.find()}")
                 //Log.d("text length","${p0!!.length}")
-                if(binding.ivNameTextCancel.visibility == View.GONE && p0!!.length > 0){
+                if (binding.ivNameTextCancel.visibility == View.GONE && p0!!.length > 0) {
                     binding.ivNameTextCancel.visibility = View.VISIBLE
                 }
 
 
-                if(matcher.find() || p0!!.length >= 20 || p0!!.length <= 0){
-                    Log.d("texting","오류")
+                if (matcher.find() || p0!!.length >= 20 || p0!!.length <= 0) {
+                    Log.d("texting", "오류")
                     binding.ivNameInfo1.setImageResource(R.drawable.ic_error_red)
                     binding.tvNameInfo1.setTextColor(getColor(R.color.error))
                     binding.ivNameTextCancel.visibility = View.GONE
@@ -58,8 +58,7 @@ class NameChangeActivity : AppCompatActivity() {
                     binding.cvNameDoneBtn.setBackgroundResource(R.drawable.button_design_gray)
                     binding.llNameUnderline.setBackgroundResource(R.color.error)
                     edit = false
-                }
-                else if(p0.length > 0){
+                } else if (p0.length > 0) {
                     binding.ivNameInfo1.setImageResource(R.drawable.ic_error_purple)
                     binding.tvNameInfo1.setTextColor(getColor(R.color.gray800))
                     binding.ivNameTextCancel.visibility = View.VISIBLE
@@ -67,8 +66,7 @@ class NameChangeActivity : AppCompatActivity() {
                     binding.cvNameDoneBtn.setBackgroundResource(R.drawable.button_design_purple)
                     binding.llNameUnderline.setBackgroundResource(R.color.gray200)
                     edit = true
-                }
-                else{
+                } else {
                     binding.ivNameInfo1.setImageResource(R.drawable.ic_error_purple)
                     binding.tvNameInfo1.setTextColor(getColor(R.color.gray800))
                     binding.ivNameTextCancel.visibility = View.GONE
@@ -87,14 +85,9 @@ class NameChangeActivity : AppCompatActivity() {
         }
 
         binding.cvNameDoneBtn.setOnClickListener { // 완료 시 이름 저장
-
-
-            if(edit){
+            if (edit) {
                 saveUsername(this, binding.etName.text.toString())
-                //서버로 정보 보내기
-                editUserName(getUsername(this))
-                //메인 화면으로 이동
-
+                editUserName(getUsername(this)) //서버로 정보 보내기
                 val intent = Intent(this, InfoActivity::class.java)
                 startActivity(intent)
                 finish()
@@ -102,9 +95,7 @@ class NameChangeActivity : AppCompatActivity() {
         }
     }
 
-
-
-    fun editUserName(name : String){
+    private fun editUserName(name : String){
         val refreshToken = getRefreshToken(this)
         val editName = getRetrofit().create(RetrofitInterface::class.java)
         editName.editName(

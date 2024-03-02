@@ -13,6 +13,7 @@ import com.kuit.conet.Network.RetrofitInterface
 import com.kuit.conet.Network.getRetrofit
 import com.kuit.conet.UI.GroupMain.GroupMainActivity
 import com.kuit.conet.databinding.DialogDeletePlanBinding
+import com.kuit.conet.getRefreshToken
 import retrofit2.Call
 import retrofit2.Response
 
@@ -27,7 +28,7 @@ class DeletePlanDialog : Fragment() {
         binding = DialogDeletePlanBinding.inflate(inflater, container, false)
 
         var planId = requireArguments().getInt("planId")
-        var groupId = requireArguments().getInt("groupId")
+        var teamId = requireArguments().getInt("teamId")
 
         binding.tvCancel.setOnClickListener {
             parentFragmentManager.beginTransaction()
@@ -38,7 +39,7 @@ class DeletePlanDialog : Fragment() {
         binding.tvDelete.setOnClickListener{
             val intent = Intent(requireContext(), GroupMainActivity::class.java)
             deletePlan(planId)
-            intent.putExtra("groupId", groupId)
+            intent.putExtra("teamId", teamId)
             startActivity(intent)
             parentFragmentManager.beginTransaction().remove(this).commit()
         }
@@ -48,8 +49,12 @@ class DeletePlanDialog : Fragment() {
 
     private fun deletePlan(planId: Int) {
         val deletePlanService = getRetrofit().create(RetrofitInterface::class.java)
-        deletePlanService.deletePlan(planId)
-            .enqueue(object : retrofit2.Callback<ResponseDeletePlan>{
+        val refreshToken = getRefreshToken(requireContext())
+        val authHeader = "Bearer $refreshToken"
+        deletePlanService.deletePlan(
+            authHeader,
+            planId
+        ).enqueue(object : retrofit2.Callback<ResponseDeletePlan>{
                 override fun onResponse(
                     call: Call<ResponseDeletePlan>,
                     response: Response<ResponseDeletePlan>

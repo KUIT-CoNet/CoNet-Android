@@ -12,6 +12,7 @@ import com.example.calenderdialog.CalenderDialog
 import com.kuit.conet.Network.*
 import com.kuit.conet.R
 import com.kuit.conet.databinding.ActivityCreatePlanBinding
+import com.kuit.conet.getRefreshToken
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -21,7 +22,7 @@ import retrofit2.Response
 import kotlin.coroutines.suspendCoroutine
 
 class CreatePlanActivity() : AppCompatActivity() {
-    lateinit var binding : ActivityCreatePlanBinding
+    lateinit var binding: ActivityCreatePlanBinding
     var isNameInput = false
     var isDateInput = false
 
@@ -31,7 +32,7 @@ class CreatePlanActivity() : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        val groupId = intent.getIntExtra("GroupId", -1)
+        val teamId = intent.getIntExtra("GroupId", -1)
 
         binding.tvCreatePlanNameLength.text = "0/20"
 
@@ -39,27 +40,27 @@ class CreatePlanActivity() : AppCompatActivity() {
             finish()
         }
 
-        binding.etCreatePlanName.addTextChangedListener(object : TextWatcher{
+        binding.etCreatePlanName.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                Log.d("texting","입력전")
+                Log.d("texting", "입력전")
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                Log.d("texting","입력중")
-                binding.tvCreatePlanNameLength.text=getString(R.string.plan_name_length, p0!!.length)
+                Log.d("texting", "입력중")
+                binding.tvCreatePlanNameLength.text =
+                    getString(R.string.plan_name_length, p0!!.length)
                 binding.vCreateUnderline2.visibility = View.VISIBLE
                 binding.vCreateUnderline1.visibility = View.GONE
             }
 
             override fun afterTextChanged(p0: Editable?) {
-                Log.d("texting","입력끝")
-                if(p0!!.isNotEmpty()){
+                Log.d("texting", "입력끝")
+                if (p0!!.isNotEmpty()) {
                     binding.ivCreateTextCancel.visibility = View.VISIBLE
-                    isNameInput=true
-                }
-                else {
+                    isNameInput = true
+                } else {
                     binding.ivCreateTextCancel.visibility = View.GONE
-                    isNameInput=false
+                    isNameInput = false
                 }
                 binding.vCreateUnderline2.visibility = View.GONE
                 binding.vCreateUnderline1.visibility = View.VISIBLE
@@ -68,27 +69,27 @@ class CreatePlanActivity() : AppCompatActivity() {
 
         binding.ivCreateTextCancel.setOnClickListener {
             binding.etCreatePlanName.text = null
-            isNameInput=false
+            isNameInput = false
         }
 
         val calenderDialog = CalenderDialog()
         binding.tvCreatePlanDate.setOnClickListener {
             supportFragmentManager.beginTransaction()
                 .setCustomAnimations(R.anim.to_up, R.anim.from_down)
-                .replace(R.id.fl_calendar, calenderDialog)
+                .replace(R.id.fl_create_plan, calenderDialog)
                 .commitAllowingStateLoss()
 
             binding.ivCreateCalendar.setColorFilter(R.color.black)
             binding.tvCreatePlanDate.setTextColor(R.color.black)
         }
 
-        calenderDialog.setOnButtonClickListener(object : CalenderDialog.OnButtonClickListener{
+        calenderDialog.setOnButtonClickListener(object : CalenderDialog.OnButtonClickListener {
             override fun onButtonClicked(date: String) {
                 binding.tvCreatePlanDate.text = date
                 binding.ivCreateCalendar.setColorFilter(R.color.gray300)
                 //binding.ivCreateCalendar.setImageResource(R.drawable.calendar_gray)
                 binding.tvCreatePlanDate.setTextColor(R.color.black)
-                isDateInput=true
+                isDateInput = true
 
                 binding.clCreateDoneBtn.setBackgroundResource(R.color.purpleMain)
                 binding.tvCreateDoneBtn.text = "다음"
@@ -100,25 +101,34 @@ class CreatePlanActivity() : AppCompatActivity() {
         })
 
         binding.cvCreateDoneBtn.setOnClickListener {
-            if (isDateInput && isNameInput){
+            if (isDateInput && isNameInput) {
                 val coroutineScope = CoroutineScope(Dispatchers.Main)
                 val intent = Intent(this, PlanTimeActivity::class.java)
                 coroutineScope.launch {
-                    MakePlan(binding.etCreatePlanName.text!!.toString(), groupId, binding.tvCreatePlanDate.text!!.toString(), intent)
+                    makePlan(
+                        binding.etCreatePlanName.text!!.toString(),
+                        teamId,
+                        binding.tvCreatePlanDate.text!!.toString(),
+                        intent
+                    )
                 }
             }
         }
     }
 
-    suspend fun MakePlan(planName : String, groupId : Int, planStartPeriod : String, intent : Intent){
-        return suspendCoroutine { continuation2->
-            val planStartPeriod = planStartPeriod.replace(".", "-")
-            val responsePlan = getRetrofit().create(RetrofitInterface::class.java) // 이걸 따로 빼내는 방법....
-            responsePlan.MakePlan(
+    private suspend fun makePlan(planName: String, teamId: Int, planStartDate: String, intent: Intent) {
+        return suspendCoroutine { continuation2 ->
+            val refreshToken = getRefreshToken(this)
+            val authHeader = "Bearer $refreshToken"
+            val planStartDate = planStartDate.replace(".", "-")
+            val responsePlan =
+                getRetrofit().create(RetrofitInterface::class.java) // 이걸 따로 빼내는 방법....
+            responsePlan.makePlan(
+                authHeader,
                 MakePlanInfo(
-                    groupId,
+                    teamId,
                     planName,
-                    planStartPeriod
+                    planStartDate
                 )
             ).enqueue(object :
                 Callback<ResponseMakePlan> { // 서버와 비동기적으로 데이터 주고받을 수 있는 방법 enqueue사용
@@ -129,18 +139,20 @@ class CreatePlanActivity() : AppCompatActivity() {
                     if (response.isSuccessful) {
                         val resp = response.body()// 성공했을 경우 response body불러오기
                         Log.d("API-CREATE/SUCCESS", resp.toString())
-                        Log.d("성공!","success")
+                        Log.d("성공!", "success")
 
-                        val planId =  resp!!.result.planId
+                        val planId = resp!!.result.planId
                         intent.putExtra("planName", binding.etCreatePlanName.text.toString())
-                        intent.putExtra("planStartPeriod",binding.tvCreatePlanDate.text.toString())
-                        intent.putExtra("GroupId",groupId)
-                        intent.putExtra("planId",planId)
+                        intent.putExtra("planStartDate", binding.tvCreatePlanDate.text.toString())
+                        intent.putExtra("teamId", teamId)
+                        intent.putExtra("planId", planId)
                         startActivity(intent)
-                        Log.d("PlanTimeActivity 실행 완료", "startDate :"+binding.tvCreatePlanDate.text.toString())
+                        Log.d(
+                            "PlanTimeActivity 실행 완료",
+                            "startDate :" + binding.tvCreatePlanDate.text.toString()
+                        )
                         finish()
-                    }
-                    else{
+                    } else {
 
                     }
                 }

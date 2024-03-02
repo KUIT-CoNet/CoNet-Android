@@ -1,3 +1,4 @@
+/*
 package com.kuit.conet.UI.History
 
 import android.os.Bundle
@@ -65,3 +66,4 @@ class NonResigestedActivity : AppCompatActivity() {
 
     }
 }
+*/

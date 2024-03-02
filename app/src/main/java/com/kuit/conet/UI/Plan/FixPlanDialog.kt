@@ -1,6 +1,7 @@
 package com.kuit.conet.UI.Plan
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,13 +12,15 @@ import com.kuit.conet.Network.FixPlan
 import com.kuit.conet.Network.ResponseFixPlan
 import com.kuit.conet.Network.RetrofitInterface
 import com.kuit.conet.Network.getRetrofit
+import com.kuit.conet.R
 import com.kuit.conet.databinding.DialogFixPlanBinding
+import com.kuit.conet.getRefreshToken
 import org.threeten.bp.LocalDate
 import retrofit2.Call
 import retrofit2.Response
 import kotlin.collections.ArrayList
 
-class FixPlanDialog: Fragment() {
+class FixPlanDialog : Fragment() {
     lateinit var binding: DialogFixPlanBinding
 
     @SuppressLint("SetTextI18n")
@@ -28,32 +31,29 @@ class FixPlanDialog: Fragment() {
     ): View {
         binding = DialogFixPlanBinding.inflate(layoutInflater, container, false)
 
-        var groupId = requireArguments().getInt("groupId")
+        var teamId = requireArguments().getInt("teamId")
         var planName = requireArguments().getString("planName")
-        var planId = requireArguments().getInt("planId")
-        var fixed_date = requireArguments().getString("fixed_date")
-        var fixed_time = requireArguments().getInt("fixed_time")
-        var userId = requireArguments().getIntegerArrayList("userId")
-        var userName = requireArguments().getStringArrayList("userName")
+        val planId = requireArguments().getInt("planId")
+        val fixedDate = requireArguments().getString("fixedDate")
+        val fixedTime = requireArguments().getInt("fixedTime")
+        val memberIds = requireArguments().getIntegerArrayList("memberIds")
+        val userName = requireArguments().getStringArrayList("userName")
 
 
-        var year = fixed_date!!.substring(0,5)
-        var month = fixed_date!!.substring(6,8)
-        var date = fixed_date!!.substring(9,10)
-        //var Date = LocalDate.parse(fixed_date!!.replace("-","."))
+        val year = fixedDate!!.substring(0, 4)
+        val month = fixedDate!!.substring(5, 7)
+        val date = fixedDate!!.substring(8, 10)
+        //var Date = LocalDate.parse(fixedDate!!.replace("-","."))
 
         var changeDate = "${year}년 ${month}월 ${date}일 "
         //var changeDay  = "${getDay(Date)}요일"
 
-        binding.tvTime.text = "$fixed_time:00"
+        binding.tvTime.text = "$fixedTime:00"
         binding.tvDate.text = changeDate
 
         var userNames = ""
-        for (i in 0 until userName!!.size){
-            userNames = userNames + " " + userName[i].toString()
-        }
+        for (i in 0 until userName!!.size) userNames = userNames + " " + userName[i].toString()
         binding.tvParticipants.text = userNames
-
 
         binding.tvCancel.setOnClickListener {
             parentFragmentManager.beginTransaction()
@@ -62,48 +62,50 @@ class FixPlanDialog: Fragment() {
         }
 
         binding.tvConfirm.setOnClickListener {
-            postFixPlan(fixPlan(planId, fixed_date!!, fixed_time, userId!!)) //api 연동
-//            parentFragmentManager.beginTransaction().replace(R.id.fl_plan,
-//                FixPlanConfirm()
-//            ).commitAllowingStateLoss() => 화면이 왜 안 만들어지지..
+            postFixPlan(fixPlan(planId, fixedDate!!, fixedTime, memberIds!!)) //api 연동
+            parentFragmentManager.beginTransaction()
+                .remove(this)
+                .commit()
+
+            val intent = Intent(requireContext(), FixPlanConfirmActivity::class.java)
+            intent.putExtra("planId", planId)
+            intent.putExtra("planName", planName)
+            intent.putExtra("teamId", teamId)
+            intent.putExtra("fixedDate", fixedDate)
+            intent.putExtra("fixedTime", fixedTime)
+            startActivity(intent)
         }
 
         return binding.root
     }
 
-    fun getDay(date: LocalDate):String{
-        var n : String = date.dayOfWeek.toString()
-        var day = ""
-        when (n) {
-            "SUNDAY" -> day="일"
-            "MONDAY" -> day="월"
-            "TUESDAY" -> day="화"
-            "WEDNESDAY" -> day="수"
-            "THURSDAY" -> day="목"
-            "FRIDAY" -> day="금"
-            "SATURDAY" -> day="토"
-        }
-
-        return day
-    }
-
-    private fun fixPlan(planId: Int, fixed_date: String, fixed_time: Int, userId: ArrayList<Int>): FixPlan {
+    private fun fixPlan(
+        planId: Int,
+        fixedDate: String,
+        fixedTime: Int,
+        memberIds: ArrayList<Int>
+    ): FixPlan {
         return FixPlan(
             planId = planId,
-            fixed_date = fixed_date,
-            fixed_time = fixed_time,
-            userId = userId
+            fixedDate = fixedDate,
+            fixedTime = fixedTime,
+            memberIds = memberIds
         )
     }
 
-    fun postFixPlan(fixPlan: FixPlan){
+    private fun postFixPlan(fixPlan: FixPlan) {
         val fixPlanService = getRetrofit().create(RetrofitInterface::class.java)
-        fixPlanService.FixPlan(fixPlan).enqueue(object : retrofit2.Callback<ResponseFixPlan>{
+        val refreshToken = getRefreshToken(requireContext())
+        val authHeader = "Bearer $refreshToken"
+        fixPlanService.FixPlan(
+            authHeader,
+            fixPlan
+        ).enqueue(object : retrofit2.Callback<ResponseFixPlan> {
             override fun onResponse(
                 call: Call<ResponseFixPlan>,
                 response: Response<ResponseFixPlan>
             ) {
-                if (response.isSuccessful){
+                if (response.isSuccessful) {
                     val resp = response.body()
                     Log.d("FixPlan/SUCCESS", resp.toString())
                 }

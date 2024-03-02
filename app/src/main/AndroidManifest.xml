@@ -2,15 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!--11번줄 오류 떠서 추가된 내용-->
-    <uses-feature
-        android:name="android.hardware.camera"
-        android:required="false" />
-
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
 
     <application
         android:allowBackup="true"
@@ -27,10 +21,10 @@
             android:name=".UI.Plan.detail.PlanListActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
-        <activity
+        <!--<activity
             android:name=".UI.History.NonResigestedActivity"
             android:exported="false"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait" />-->
         <activity
             android:name=".UI.User.WithdrawDoneActivity"
             android:exported="false"
@@ -102,6 +96,10 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".UI.Plan.FixPlanConfirmActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
+        <!--<activity
             android:name=".UI.History.HistoryMainActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
@@ -109,7 +107,7 @@
         <activity
             android:name=".UI.History.RegistHistoryActivity"
             android:exported="false"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait" />-->
 
         <meta-data
             android:name="com.kakao.sdk.AppKey"

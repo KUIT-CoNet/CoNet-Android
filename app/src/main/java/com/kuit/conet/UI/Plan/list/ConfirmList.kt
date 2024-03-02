@@ -1,26 +1,13 @@
 package com.kuit.conet.UI.Plan.list
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.tabs.TabLayoutMediator
-import com.kuit.conet.Network.*
-import com.kuit.conet.UI.Home.RecyclerView.ConfirmRecyclerAdapter
+//import com.kuit.conet.UI.Home.RecyclerView.ConfirmRecyclerAdapter
 import com.kuit.conet.databinding.FragmentConfirmlistBinding
-import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
-import kotlin.coroutines.suspendCoroutine
 
 class ConfirmList(
     private val groupId: Int,
