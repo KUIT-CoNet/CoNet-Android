@@ -6,7 +6,6 @@ import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
-import com.bumptech.glide.Glide
 import com.kuit.conet.Network.Members
 import com.kuit.conet.Network.ResponseGetPlanDetail
 import com.kuit.conet.Network.ResultGetPlanDetail
@@ -17,7 +16,7 @@ import com.kuit.conet.UI.Plan.detail.ParticipantAdapter
 import com.kuit.conet.UI.Plan.dialog.EditTrashDialog
 import com.kuit.conet.Utils.TAG
 import com.kuit.conet.databinding.ActivityDetailPastBinding
-import com.kuit.conet.getRefreshToken
+import com.kuit.conet.Utils.getRefreshToken
 import retrofit2.Call
 import retrofit2.Response
 

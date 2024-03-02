@@ -13,7 +13,6 @@ import com.kuit.conet.Network.RetrofitInterface
 import com.kuit.conet.Network.getRetrofit
 import com.kuit.conet.UI.Home.RecyclerView.TodoRecyclerAdapter
 import com.kuit.conet.databinding.FragmentTodolistBinding
-import com.kuit.conet.getRefreshToken
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope

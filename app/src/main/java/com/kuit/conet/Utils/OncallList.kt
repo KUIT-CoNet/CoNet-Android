@@ -14,7 +14,6 @@ import com.kuit.conet.Network.RetrofitInterface
 import com.kuit.conet.Network.getRetrofit
 import com.kuit.conet.UI.Home.RecyclerView.AllTodoRecyclerAdapter
 import com.kuit.conet.databinding.FragmentOncallBinding
-import com.kuit.conet.getRefreshToken
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

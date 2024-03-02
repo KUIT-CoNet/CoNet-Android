@@ -12,7 +12,7 @@ import com.example.calenderdialog.CalenderDialog
 import com.kuit.conet.Network.*
 import com.kuit.conet.R
 import com.kuit.conet.databinding.ActivityCreatePlanBinding
-import com.kuit.conet.getRefreshToken
+import com.kuit.conet.Utils.getRefreshToken
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

@@ -12,7 +12,7 @@ import com.kuit.conet.UI.GroupMain.GroupMainActivity
 import com.kuit.conet.UI.Plan.detail.ParticipantAdapter
 import com.kuit.conet.Utils.NETWORK
 import com.kuit.conet.databinding.ActivityFixPlanConfirmBinding
-import com.kuit.conet.getRefreshToken
+import com.kuit.conet.Utils.getRefreshToken
 import retrofit2.Call
 import retrofit2.Response
 

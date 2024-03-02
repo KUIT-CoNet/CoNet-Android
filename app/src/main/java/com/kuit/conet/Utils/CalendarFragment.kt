@@ -14,7 +14,6 @@ import com.kuit.conet.R
 import com.kuit.conet.UI.Home.choose_date_dialog
 import com.kuit.conet.UI.Home.Calendar.*
 import com.kuit.conet.databinding.FragmentCalendarBinding
-import com.kuit.conet.getRefreshToken
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener
 import kotlinx.coroutines.*

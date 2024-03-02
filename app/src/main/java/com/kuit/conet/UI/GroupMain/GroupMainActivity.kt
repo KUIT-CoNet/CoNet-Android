@@ -1,7 +1,6 @@
 package com.kuit.conet.UI.GroupMain
 
 import android.content.Intent
-import android.icu.util.Calendar
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -20,8 +19,7 @@ import com.kuit.conet.UI.Plan.CreatePlanActivity
 import com.kuit.conet.UI.Plan.detail.PlanListActivity
 import com.kuit.conet.Utils.*
 import com.kuit.conet.databinding.ActivityGroupMainBinding
-import com.kuit.conet.getAccessToken
-import com.prolificinteractive.materialcalendarview.CalendarDay
+import com.kuit.conet.Utils.getAccessToken
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

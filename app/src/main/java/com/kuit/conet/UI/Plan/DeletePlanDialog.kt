@@ -8,12 +8,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.kuit.conet.Network.ResponseDeletePlan
-import com.kuit.conet.Network.ResponseUpdateWaiting
 import com.kuit.conet.Network.RetrofitInterface
 import com.kuit.conet.Network.getRetrofit
 import com.kuit.conet.UI.GroupMain.GroupMainActivity
 import com.kuit.conet.databinding.DialogDeletePlanBinding
-import com.kuit.conet.getRefreshToken
+import com.kuit.conet.Utils.getRefreshToken
 import retrofit2.Call
 import retrofit2.Response
 

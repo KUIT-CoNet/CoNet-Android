@@ -14,7 +14,7 @@ import com.kuit.conet.Network.RetrofitClient
 import com.kuit.conet.R
 import com.kuit.conet.Utils.TAG
 import com.kuit.conet.databinding.DialogBottomSheetMembersBinding
-import com.kuit.conet.getRefreshToken
+import com.kuit.conet.Utils.getRefreshToken
 import retrofit2.Call
 import retrofit2.Response
 

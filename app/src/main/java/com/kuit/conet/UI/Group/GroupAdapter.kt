@@ -16,7 +16,7 @@ import com.kuit.conet.R
 import com.kuit.conet.UI.GroupMain.GroupMainActivity
 import com.kuit.conet.Utils.NETWORK
 import com.kuit.conet.databinding.ItemGroupBinding
-import com.kuit.conet.getAccessToken
+import com.kuit.conet.Utils.getAccessToken
 import retrofit2.Call
 import retrofit2.Response
 

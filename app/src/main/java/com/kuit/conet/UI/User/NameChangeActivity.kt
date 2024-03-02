@@ -9,6 +9,9 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.kuit.conet.*
 import com.kuit.conet.Network.*
+import com.kuit.conet.Utils.getRefreshToken
+import com.kuit.conet.Utils.getUsername
+import com.kuit.conet.Utils.saveUsername
 import com.kuit.conet.databinding.ActivityNameChangeBinding
 import retrofit2.Call
 import retrofit2.Response

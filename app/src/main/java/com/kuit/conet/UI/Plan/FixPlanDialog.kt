@@ -12,10 +12,8 @@ import com.kuit.conet.Network.FixPlan
 import com.kuit.conet.Network.ResponseFixPlan
 import com.kuit.conet.Network.RetrofitInterface
 import com.kuit.conet.Network.getRetrofit
-import com.kuit.conet.R
 import com.kuit.conet.databinding.DialogFixPlanBinding
-import com.kuit.conet.getRefreshToken
-import org.threeten.bp.LocalDate
+import com.kuit.conet.Utils.getRefreshToken
 import retrofit2.Call
 import retrofit2.Response
 import kotlin.collections.ArrayList

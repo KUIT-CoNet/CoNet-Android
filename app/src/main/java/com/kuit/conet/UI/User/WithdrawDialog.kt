@@ -6,24 +6,14 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import com.kuit.conet.Network.DeleteUser
 import com.kuit.conet.Network.RetrofitInterface
-import com.kuit.conet.Network.ShowUser
 import com.kuit.conet.Network.getRetrofit
 import com.kuit.conet.databinding.DialogWithdrawBinding
-import com.kuit.conet.getRefreshToken
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import com.kuit.conet.Utils.getRefreshToken
 import retrofit2.Call
 import retrofit2.Response
-import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
-import kotlin.coroutines.suspendCoroutine
 
 class WithdrawDialog : Fragment() {
     lateinit var binding: DialogWithdrawBinding

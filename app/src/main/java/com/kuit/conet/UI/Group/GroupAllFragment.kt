@@ -13,7 +13,7 @@ import com.kuit.conet.Network.RetrofitClient
 import com.kuit.conet.Utils.LIFECYCLE
 import com.kuit.conet.Utils.NETWORK
 import com.kuit.conet.databinding.FragmentGroupListBinding
-import com.kuit.conet.getAccessToken
+import com.kuit.conet.Utils.getAccessToken
 import retrofit2.Call
 import retrofit2.Response
 

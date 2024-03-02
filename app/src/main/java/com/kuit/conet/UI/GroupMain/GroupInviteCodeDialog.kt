@@ -9,9 +9,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import com.kuit.conet.Network.ResponseGroupCode
 import com.kuit.conet.Network.RetrofitClient
-import com.kuit.conet.Utils.TAG
 import com.kuit.conet.databinding.DialogEnrollCodeBinding
-import com.kuit.conet.getAccessToken
+import com.kuit.conet.Utils.getAccessToken
 import retrofit2.Call
 import retrofit2.Response
 
