@@ -35,13 +35,13 @@ class DeletePlanDialog : Fragment() {
 
         var planId = requireArguments().getInt("planId")
 
-        binding.tvCancel.setOnClickListener {
+        binding.tvDialogDeleteBtnCancel.setOnClickListener {
             parentFragmentManager.beginTransaction()
                 .remove(this)
                 .commit()
         }
 
-        binding.tvDelete.setOnClickListener {
+        binding.tvDialogDeleteBtnDelete.setOnClickListener {
             deletePlan(planId)
             requireActivity().finish()
         }
