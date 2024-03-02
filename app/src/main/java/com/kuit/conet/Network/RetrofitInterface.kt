@@ -236,7 +236,7 @@ interface RetrofitInterface {
     ): Call<ShowMyTime>
 
     @GET("plan/{planId}/available-time-slot")  // :: 대기중인 약속의 구성원, 가능한 시간 조회 //
-    fun ShowMemTime(
+    fun showMemTime(
         @Path("planId")
         planId: Int,
     ): Call<ShowMemTime>

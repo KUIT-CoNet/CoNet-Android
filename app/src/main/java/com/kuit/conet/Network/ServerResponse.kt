@@ -467,7 +467,7 @@ data class AvailableDateTimes(
     @SerializedName("date")
     var date: String,
     @SerializedName("time")
-    val time: ArrayList<Int>,
+    var time: ArrayList<Int>,
 )
 
 //나의 가능한 시간 조회

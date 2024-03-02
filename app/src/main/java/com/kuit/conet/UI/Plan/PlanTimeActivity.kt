@@ -24,6 +24,7 @@ import retrofit2.Call
 import retrofit2.Response
 import java.time.LocalDate
 import kotlin.coroutines.suspendCoroutine
+import kotlin.math.log
 
 class PlanTimeActivity : AppCompatActivity() {
     lateinit var binding: ActivityPlanTimeBinding
@@ -75,13 +76,14 @@ class PlanTimeActivity : AppCompatActivity() {
             binding.day320, binding.day321, binding.day322, binding.day323
         )
 
-
+        Log.d(TAG, "onCreate: planTimeActivity 실행됨")
         planStartDate = intent.getStringExtra("planStartDate").toString()
         planId = intent.getIntExtra("planId", 0)
         val planName = intent.getStringExtra("planName")
 
         val coroutineScope = CoroutineScope(Dispatchers.Main)
         coroutineScope.launch {
+            Log.d(TAG, "onCreate: coroutine => planId $planId")
             getFrame(planId) //api로 정보 받아오기
         }
 
@@ -143,10 +145,9 @@ class PlanTimeActivity : AppCompatActivity() {
     }
 
     private suspend fun getFrame(planId: Int) {
-        Log.d(NETWORK, "Get showMemTime api 실행 중")
         return suspendCoroutine {
             val showMemberTimeService = getRetrofit().create(RetrofitInterface::class.java)
-            showMemberTimeService.ShowMemTime(planId)
+            showMemberTimeService.showMemTime(planId)
                 .enqueue(object : retrofit2.Callback<ShowMemTime> {
                     override fun onResponse(
                         call: Call<ShowMemTime>,
@@ -206,7 +207,6 @@ class PlanTimeActivity : AppCompatActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun setColorNumText(endNumberForEachSection: EndNumberForEachSection) {
-        Log.d(TAG, "setColorNumText() : $endNumberForEachSection")
         val section1 = endNumberForEachSection.section1
         val section2 = endNumberForEachSection.section2
         val section3 = endNumberForEachSection.section3
@@ -231,7 +231,6 @@ class PlanTimeActivity : AppCompatActivity() {
     }
 
     fun setFrame(page: Int) { //날짜 입력 후, 표채우기로 넘김
-        Log.d(TAG, "setFrame() : page = $page")
         var startDate = LocalDate.parse(planStartDate.replace(". ", "-"))
         when (page) {
             1 -> {
@@ -291,7 +290,6 @@ class PlanTimeActivity : AppCompatActivity() {
     }
 
     private fun colorTimeTable(page: Int) {
-        Log.d(TAG, "colorTimeTable() : page : $page")
         when (page) {
             1 -> for (i in 0..23) {
                 updateClickListener(1, i, true)
