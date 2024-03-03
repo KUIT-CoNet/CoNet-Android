@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.kuit.conet.Network.ResponseBookmark
 import com.kuit.conet.Network.ResultGetGroup
 import com.kuit.conet.Network.RetrofitClient
 import com.kuit.conet.R
@@ -17,6 +16,8 @@ import com.kuit.conet.UI.GroupMain.GroupMainActivity
 import com.kuit.conet.Utils.NETWORK
 import com.kuit.conet.databinding.ItemGroupBinding
 import com.kuit.conet.Utils.getAccessToken
+import com.kuit.conet.data.dto.request.member.RequestPostBookmark
+import com.kuit.conet.data.dto.response.member.ResponsePostBookmark
 import retrofit2.Call
 import retrofit2.Response
 
@@ -24,17 +25,6 @@ class GroupAdapter(
     private val context: Context,
     private var itemList: List<ResultGetGroup>,
 ) : RecyclerView.Adapter<GroupAdapter.ViewHolder>() {
-
-    /* // star 변경에 따른 업데이트를 위한 Listener
-    private var listener: AdapterCountListener? = null
-
-    interface AdapterCountListener {
-        fun onAdditionalGroupCount(count: Int)
-    }
-
-    fun setGroupAdapterListener(listener: AdapterCountListener) {
-        this.listener = listener
-    }*/
 
     class ViewHolder(
         private val binding: ItemGroupBinding,
@@ -44,7 +34,9 @@ class GroupAdapter(
 
             binding.tvGroupItemTitle.text = item.groupName
 
-            Glide.with(context).load(item.groupUrl).centerCrop()
+            Glide.with(context)
+                .load(item.groupUrl)
+                .centerCrop()
                 .placeholder(R.color.gray200) // 이미지 로딩 시작하기 전 표시할 이미지
                 .error(R.color.gray200) // 로딩 에러 발생 시 표시할 이미지
                 .fallback(R.color.gray200) // 로드할 url 이 비어있을(null 등) 경우 표시할 이미지
@@ -73,62 +65,72 @@ class GroupAdapter(
                 startActivity(context, mIntent, null)
             }
 
-            binding.ivGroupItemStar.setOnClickListener {
+            binding.ivGroupItemStar.setOnClickListener {    // 북마크 삭제
                 binding.ivGroupItemStar.visibility = View.GONE
                 binding.ivGroupItemStarUn.visibility = View.VISIBLE
                 item.favoriteTag = false
 
-                RetrofitClient.instance.checkBookmark(
-                    "Bearer " + getAccessToken(context),
-                    item.groupId
-                ).enqueue(object : retrofit2.Callback<ResponseBookmark> {
+                RetrofitClient.memberInstance.postBookmark(
+                    authorization = "Bearer ${getAccessToken(context)}",
+                    request = RequestPostBookmark(
+                        teamId = item.groupId
+                    )
+                ).enqueue(object : retrofit2.Callback<ResponsePostBookmark> {
                     override fun onResponse(
-                        call: Call<ResponseBookmark>,
-                        response: Response<ResponseBookmark>
+                        call: Call<ResponsePostBookmark>,
+                        response: Response<ResponsePostBookmark>
                     ) {
                         if (response.isSuccessful) {
+                            val result = response.body()?.result ?: "실행결과 불러오기 실패"
                             Log.d(
                                 NETWORK,
-                                "GroupAdapter - Retrofit checkBookmark() 북마크 삭제 실행결과 - 성공\n" + "result : ${response.body()!!.result}"
+                                "GroupAdapter - Retrofit postBookmark() 북마크 삭제 실행결과 - 성공\nresult : $result"
                             )
                         } else {
-                            Log.d(NETWORK, "GroupAdapter - Retrofit checkBookmark() 북마크 삭제 실행결과 - 안좋음")
+                            Log.d(
+                                NETWORK,
+                                "GroupAdapter - Retrofit postBookmark() 북마크 삭제 실행결과 - 안좋음"
+                            )
                         }
                     }
 
-                    override fun onFailure(call: Call<ResponseBookmark>, t: Throwable) {
-                        Log.d(NETWORK, "GroupAdapter - Retrofit checkBookmark() 북마크 삭제 실행결과 - 실패")
+                    override fun onFailure(call: Call<ResponsePostBookmark>, t: Throwable) {
+                        Log.d(NETWORK, "GroupAdapter - Retrofit postBookmark() 북마크 삭제 실행결과 - 실패")
                     }
-
                 })
             }
-
-            binding.ivGroupItemStarUn.setOnClickListener {
+            binding.ivGroupItemStarUn.setOnClickListener {  // 북마크 등록
                 binding.ivGroupItemStar.visibility = View.VISIBLE
                 binding.ivGroupItemStarUn.visibility = View.GONE
                 item.favoriteTag = true
 
-                RetrofitClient.instance.checkBookmark(
-                    "Bearer " + getAccessToken(context), item.groupId
-                ).enqueue(object : retrofit2.Callback<ResponseBookmark> {
+                RetrofitClient.memberInstance.postBookmark(
+                    authorization = "Bearer ${getAccessToken(context)}",
+                    request = RequestPostBookmark(
+                        teamId = item.groupId
+                    )
+                ).enqueue(object : retrofit2.Callback<ResponsePostBookmark> {
                     override fun onResponse(
-                        call: Call<ResponseBookmark>,
-                        response: Response<ResponseBookmark>
+                        call: Call<ResponsePostBookmark>,
+                        response: Response<ResponsePostBookmark>
                     ) {
                         if (response.isSuccessful) {
+                            val result = response.body()?.result ?: "실행결과 불러오기 실패"
                             Log.d(
                                 NETWORK,
-                                "GroupAdapter - Retrofit checkBookmark() 북마크 추가 실행결과 - 성공\n" + "result : ${response.body()!!.result}"
+                                "GroupAdapter - Retrofit postBookmark() 북마크 등록 실행결과 - 성공\nresult : $result"
                             )
                         } else {
-                            Log.d(NETWORK, "GroupAdapter - Retrofit checkBookmark() 북마크 추가 실행결과 - 안좋음")
+                            Log.d(
+                                NETWORK,
+                                "GroupAdapter - Retrofit postBookmark() 북마크 등록 실행결과 - 안좋음"
+                            )
                         }
                     }
 
-                    override fun onFailure(call: Call<ResponseBookmark>, t: Throwable) {
-                        Log.d(NETWORK, "GroupAdapter - Retrofit checkBookmark() 북마크 추가 실행결과 - 실패")
+                    override fun onFailure(call: Call<ResponsePostBookmark>, t: Throwable) {
+                        Log.d(NETWORK, "GroupAdapter - Retrofit postBookmark() 북마크 등록 실행결과 - 실패")
                     }
-
                 })
             }
         }
@@ -144,9 +146,7 @@ class GroupAdapter(
         holder.bind(itemList[position])
     }
 
-    override fun getItemCount(): Int {
-        return itemList.size
-    }
+    override fun getItemCount(): Int = itemList.size
 
     companion object {
         const val INTENT_GROUP = "GROUP"
