@@ -2,6 +2,7 @@ package com.kuit.conet.Network
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.kuit.conet.data.api.MemberAPI
+import com.kuit.conet.data.api.TeamAPI
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -19,6 +20,8 @@ object RetrofitClient {
     val jsonInstance = jsonRetrofit.create(RetrofitInterface::class.java)
     val memberInstance =
         requireNotNull(jsonRetrofit.create(MemberAPI::class.java)) { "NetworkModule's MemberAPI is null" }
+    val teamInstance =
+        requireNotNull(jsonRetrofit.create(TeamAPI::class.java)) { "NetworkModule's TeamAPI is null" }
 }
 
 fun okHttpClient(): OkHttpClient {
@@ -39,9 +42,14 @@ fun getRetrofit(): Retrofit {
 }
 
 fun getJsonRetrofit(): Retrofit {
+    val json = Json {
+        ignoreUnknownKeys = true
+        coerceInputValues = true
+    }
+
     return Retrofit.Builder()
         .baseUrl(BASE_URL)
-        .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
+        .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
         .client(okHttpClient())
         .build()
 }
