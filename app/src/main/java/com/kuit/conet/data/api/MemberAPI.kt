@@ -5,6 +5,7 @@ import com.kuit.conet.Network.EditUserName
 import com.kuit.conet.Network.ResponseGetGroup
 import com.kuit.conet.Network.ShowUser
 import com.kuit.conet.data.dto.request.member.RequestPostBookmark
+import com.kuit.conet.data.dto.response.member.ResponseGetBookmarkGroups
 import com.kuit.conet.data.dto.response.member.ResponsePostBookmark
 import okhttp3.MultipartBody
 import retrofit2.Call
@@ -40,10 +41,10 @@ interface MemberAPI {
     ): Call<EditUserImage>*/
 
     @GET("member/bookmark") // :: 북마크 된 모임 조회
-    fun getBookmarkGroup(
+    fun getBookmarkGroups(
         @Header("Authorization")
         authorization: String,
-    ): Call<ResponseGetGroup>
+    ): Call<ResponseGetBookmarkGroups>
 
     @POST("member/bookmark") // :: 북마크 추가/삭제
     fun postBookmark(
