@@ -1,4 +1,4 @@
-package com.kuit.conet.domain.entity
+package com.kuit.conet.domain.entity.group
 
 data class GroupSimple(
     val name: String,
