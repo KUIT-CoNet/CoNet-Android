@@ -7,8 +7,10 @@ import com.kuit.conet.Network.ResponseGetGroup
 import com.kuit.conet.Network.ResponseGetGroupMembers
 import com.kuit.conet.Network.ResponseGroupCode
 import com.kuit.conet.Network.ResponseUpdateGroup
+import com.kuit.conet.data.dto.request.team.RequestGetInviteCode
 import com.kuit.conet.data.dto.response.team.ResponseGetGroupDetail
 import com.kuit.conet.data.dto.response.team.ResponseGetGroups
+import com.kuit.conet.data.dto.response.team.ResponseGetInviteCode
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -91,10 +93,8 @@ interface TeamAPI {
     ): Call<ResponseUpdateGroup>*/
 
     @POST("team/code") // :: 초대 코드 재발급
-    fun getGroupCode(
-        @Header("Authorization")
-        authorization: String,
+    fun getInviteCode(
         @Body
-        teamId: Int,
-    ): Call<ResponseGroupCode>
+        request: RequestGetInviteCode,
+    ): Call<ResponseGetInviteCode>
 }
