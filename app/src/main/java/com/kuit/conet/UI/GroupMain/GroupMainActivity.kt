@@ -62,7 +62,7 @@ class GroupMainActivity : AppCompatActivity() {
             finish()
         }
 
-        binding.ivStar.setOnClickListener {
+        binding.ivStar.setOnClickListener {     // 북마크 삭제
             binding.ivStar.visibility = View.GONE
             binding.ivStarUn.visibility = View.VISIBLE
             RetrofitClient.memberInstance.postBookmark(
@@ -94,8 +94,7 @@ class GroupMainActivity : AppCompatActivity() {
                 }
             })
         }
-
-        binding.ivStarUn.setOnClickListener {
+        binding.ivStarUn.setOnClickListener {       // 북마크 등록
             binding.ivStar.visibility = View.VISIBLE
             binding.ivStarUn.visibility = View.GONE
             RetrofitClient.memberInstance.postBookmark(
