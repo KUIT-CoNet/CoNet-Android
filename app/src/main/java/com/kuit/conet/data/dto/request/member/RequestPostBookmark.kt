@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class RequestPostBookmark(
     @SerialName("teamId")
-    val teamId: Int,
+    val teamId: Long,
 )
