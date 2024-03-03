@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.kuit.conet.Network.ResultGetGroup
 import com.kuit.conet.Network.RetrofitClient
 import com.kuit.conet.R
 import com.kuit.conet.UI.GroupMain.GroupMainActivity
@@ -18,24 +17,25 @@ import com.kuit.conet.databinding.ItemGroupBinding
 import com.kuit.conet.Utils.getAccessToken
 import com.kuit.conet.data.dto.request.member.RequestPostBookmark
 import com.kuit.conet.data.dto.response.member.ResponsePostBookmark
+import com.kuit.conet.domain.entity.group.GroupSimple
 import retrofit2.Call
 import retrofit2.Response
 
 class GroupAdapter(
     private val context: Context,
-    private var itemList: List<ResultGetGroup>,
+    private var itemList: List<GroupSimple>,
 ) : RecyclerView.Adapter<GroupAdapter.ViewHolder>() {
 
     class ViewHolder(
-        private val binding: ItemGroupBinding,
+        val binding: ItemGroupBinding,
         private val context: Context,
     ) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: ResultGetGroup) {
+        fun bind(item: GroupSimple) {
 
-            binding.tvGroupItemTitle.text = item.groupName
+            binding.tvGroupItemTitle.text = item.name
 
             Glide.with(context)
-                .load(item.groupUrl)
+                .load(item.imageUrl)
                 .centerCrop()
                 .placeholder(R.color.gray200) // 이미지 로딩 시작하기 전 표시할 이미지
                 .error(R.color.gray200) // 로딩 에러 발생 시 표시할 이미지
@@ -44,7 +44,7 @@ class GroupAdapter(
 
             binding.ivGroupItemStar.bringToFront()
             binding.ivGroupItemStarUn.bringToFront()
-            if (item.favoriteTag) {
+            if (item.isFavorite) {
                 binding.ivGroupItemStar.visibility = View.VISIBLE
                 binding.ivGroupItemStarUn.visibility = View.GONE
             } else {
@@ -53,27 +53,20 @@ class GroupAdapter(
             }
 
             binding.clGroupItem.setOnClickListener {
-                val mIntent = Intent(context, GroupMainActivity::class.java)
-                val data = GroupData(
-                    item.groupId,
-                    item.groupName,
-                    item.groupUrl,
-                    item.groupMemberCount,
-                    item.favoriteTag
-                )
-                mIntent.putExtra(INTENT_GROUP, data)
-                startActivity(context, mIntent, null)
+                val intent = Intent(context, GroupMainActivity::class.java)
+                intent.putExtra(INTENT_GROUP_ID, item.id)
+                startActivity(context, intent, null)        // TODO : startActivity에 대해서 알아보기!
             }
 
             binding.ivGroupItemStar.setOnClickListener {    // 북마크 삭제
                 binding.ivGroupItemStar.visibility = View.GONE
                 binding.ivGroupItemStarUn.visibility = View.VISIBLE
-                item.favoriteTag = false
+                item.isFavorite = false
 
                 RetrofitClient.memberInstance.postBookmark(
                     authorization = "Bearer ${getAccessToken(context)}",
                     request = RequestPostBookmark(
-                        teamId = item.groupId
+                        teamId = item.id
                     )
                 ).enqueue(object : retrofit2.Callback<ResponsePostBookmark> {
                     override fun onResponse(
@@ -102,12 +95,12 @@ class GroupAdapter(
             binding.ivGroupItemStarUn.setOnClickListener {  // 북마크 등록
                 binding.ivGroupItemStar.visibility = View.VISIBLE
                 binding.ivGroupItemStarUn.visibility = View.GONE
-                item.favoriteTag = true
+                item.isFavorite = true
 
                 RetrofitClient.memberInstance.postBookmark(
                     authorization = "Bearer ${getAccessToken(context)}",
                     request = RequestPostBookmark(
-                        teamId = item.groupId
+                        teamId = item.id
                     )
                 ).enqueue(object : retrofit2.Callback<ResponsePostBookmark> {
                     override fun onResponse(
@@ -149,6 +142,6 @@ class GroupAdapter(
     override fun getItemCount(): Int = itemList.size
 
     companion object {
-        const val INTENT_GROUP = "GROUP"
+        const val INTENT_GROUP_ID = "group id"
     }
 }
