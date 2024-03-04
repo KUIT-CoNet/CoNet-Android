@@ -55,4 +55,8 @@
     <string name="group_main_making_plan">약속 만들기</string>
     <string name="today_plan">오늘의 약속</string>
 
+    <string name="invitecode_issue">초대코드가\n발급되었어요.</string>
+    <string name="invitecode_expiration_period">초대 코드 유효 기간 :  </string>
+
+
 </resources>
