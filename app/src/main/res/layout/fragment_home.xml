@@ -15,7 +15,7 @@
           app:layout_constraintLeft_toLeftOf="parent"
           android:layout_marginLeft="26dp"
           android:layout_marginBottom="7dp"
-          android:src="@drawable/logo_small"/>
+            android:src="@drawable/logo_image"
 
       <ImageView
           android:id="@+id/iv_conetfont"
@@ -23,7 +23,7 @@
           android:layout_height="30dp"
           app:layout_constraintBottom_toTopOf="@id/fl_calendarView"
           app:layout_constraintLeft_toRightOf="@id/iv_conetlogo"
-          android:layout_marginLeft="5dp"
+            android:src="@drawable/logo_text"
           android:layout_marginBottom="5dp"
           android:src="@drawable/logo_conetfont"/>
 

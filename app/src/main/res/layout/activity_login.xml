@@ -20,7 +20,7 @@
         android:id="@+id/login_logo_im"
         android:layout_width="133dp"
         android:layout_height="200dp"
-        android:src="@drawable/logo_conet"
+        android:src="@drawable/logo"
         android:layout_marginTop="246dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
