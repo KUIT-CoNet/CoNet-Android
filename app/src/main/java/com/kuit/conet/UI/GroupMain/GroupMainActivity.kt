@@ -68,13 +68,14 @@ class GroupMainActivity : AppCompatActivity() {
                         val sideBar = SideBar(
                             groupData.name,
                             groupData.memberCount,
-                            groupData.id.toInt(),
+                            groupData.id,
                             this@GroupMainActivity,
                             groupData.imageUrl
                         )
 
                         fragmentManager.commit {
-                            add(R.id.fl_group_image, sideBar)
+                            add(R.id.fl_sidebar_menu, sideBar)
+                            binding.flSidebarMenu.visibility = View.VISIBLE
                             setCustomAnimations(R.anim.to_left, R.anim.from_right)
                         }
 
@@ -86,7 +87,8 @@ class GroupMainActivity : AppCompatActivity() {
                             override fun exitSidebar() {
                                 fragmentManager.commit {
                                     val sideBarFragment =
-                                        fragmentManager.findFragmentById(R.id.fl_group_image) as SideBar
+                                        fragmentManager.findFragmentById(R.id.fl_sidebar_menu) as SideBar
+                                    binding.flSidebarMenu.visibility = View.GONE
                                     remove(sideBarFragment)
                                 }
                             }
@@ -235,10 +237,6 @@ class GroupMainActivity : AppCompatActivity() {
     }
 
     fun showDetail(option: Int, groupId: Int) {
-        /*binding.flSidebarMenu.visibility = View.VISIBLE
-        fragmentManager.beginTransaction()
-            .replace(R.id.fl_sidebar_menu, SideBarDetailMenu(option, groupId))
-            .commit()*/
         val intent = Intent(this, PlanListActivity::class.java)
         intent.putExtra(INTENT_GROUP_ID, groupId)
         intent.putExtra(INTENT_SIDE_OPTION, option)
