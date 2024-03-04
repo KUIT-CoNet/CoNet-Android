@@ -8,9 +8,11 @@ import com.kuit.conet.Network.ResponseGetGroupMembers
 import com.kuit.conet.Network.ResponseGroupCode
 import com.kuit.conet.Network.ResponseUpdateGroup
 import com.kuit.conet.data.dto.request.team.RequestGetInviteCode
+import com.kuit.conet.data.dto.request.team.RequestTeamJoin
 import com.kuit.conet.data.dto.response.team.ResponseGetGroupDetail
 import com.kuit.conet.data.dto.response.team.ResponseGetGroups
 import com.kuit.conet.data.dto.response.team.ResponseGetInviteCode
+import com.kuit.conet.data.dto.response.team.ResponseTeamJoin
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -59,8 +61,8 @@ interface TeamAPI {
         @Header("Authorization")
         authorization: String,
         @Body
-        inviteCode: String,
-    ): Call<ResponseEnrollGroup>
+        request: RequestTeamJoin,
+    ): Call<ResponseTeamJoin>
 
     @Multipart
     @POST("team") // :: 모임 생성
