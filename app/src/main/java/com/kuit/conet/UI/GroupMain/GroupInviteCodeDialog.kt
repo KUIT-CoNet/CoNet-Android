@@ -7,17 +7,32 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
-import com.kuit.conet.Network.ResponseGroupCode
 import com.kuit.conet.Network.RetrofitClient
+import com.kuit.conet.R
+import com.kuit.conet.Utils.LIFECYCLE
+import com.kuit.conet.Utils.NETWORK
 import com.kuit.conet.databinding.DialogEnrollCodeBinding
-import com.kuit.conet.Utils.getAccessToken
+import com.kuit.conet.data.dto.request.team.RequestGetInviteCode
+import com.kuit.conet.data.dto.response.team.ResponseGetInviteCode
 import retrofit2.Call
 import retrofit2.Response
 
 
-class GroupInviteCodeDialog(val groupId: Int): DialogFragment() {
+class GroupInviteCodeDialog() : DialogFragment() {
 
-    private lateinit var binding: DialogEnrollCodeBinding
+    private var _binding: DialogEnrollCodeBinding? = null
+    private val binding: DialogEnrollCodeBinding
+        get() = requireNotNull(_binding) { "GroupInviteCodeDialog's binding is null" }
+    private val groupId: Long by lazy { arguments?.getLong(SideBar.BUNDLE_GROUP_ID) ?: 0 }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        Log.d(LIFECYCLE, "GroupInviteCodeDialog - onCreate() called")
+        setStyle( // Background -> Transparent.
+            STYLE_NORMAL,
+            R.style.TransparentBottomSheetDialogFragment
+        )
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -25,12 +40,14 @@ class GroupInviteCodeDialog(val groupId: Int): DialogFragment() {
         savedInstanceState: Bundle?
     ): View {
         super.onCreateView(inflater, container, savedInstanceState)
-        binding = DialogEnrollCodeBinding.inflate(inflater, container, false)
+        Log.d(LIFECYCLE, "GroupInviteCodeDialog - onCreateView() called")
+        _binding = DialogEnrollCodeBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Log.d(LIFECYCLE, "GroupInviteCodeDialog - onViewCreated() called")
 
         binding.closeIbtn.setOnClickListener {
             dismiss()
@@ -51,35 +68,46 @@ class GroupInviteCodeDialog(val groupId: Int): DialogFragment() {
             dismiss()
         }
 
-        RetrofitClient.instance.getGroupCode(getAccessToken(requireContext()), groupId)
-            .enqueue(object : retrofit2.Callback<ResponseGroupCode> {
-                override fun onResponse(
-                    call: Call<ResponseGroupCode>,
-                    response: Response<ResponseGroupCode>
-                ) {
-                    Log.d(TAG, "response :  ${response}")
-                    if (response.isSuccessful) {
-                        Log.d(TAG, "GroupInviteCodeDialog - Retrofit getGroupCode()실행결과 - 성공")
-                        Log.d(TAG, "response.body: ${response.body()}")
-                        binding.enrollCodeTv.text = response.body()!!.result.inviteCode
-                        binding.expirationPeriodTv.text =
-                            "초대 코드 유효기간 : ${response.body()!!.result.codeDeadLine}"
-                        binding.enrollBtn.isEnabled = true
-                    } else {
-                        Log.d(TAG, "GroupInviteCodeDialog - Retrofit getGroupCode()실행결과 - 안좋음")
-                        Log.d(TAG, "response.errorbody: ${response.errorBody()}")
-                    }
-                }
+        RetrofitClient.teamInstance.getInviteCode(
+            request = RequestGetInviteCode(
+                groupId
+            )
+        ).enqueue(object : retrofit2.Callback<ResponseGetInviteCode> {
+            override fun onResponse(
+                call: Call<ResponseGetInviteCode>,
+                response: Response<ResponseGetInviteCode>
+            ) {
+                if (response.isSuccessful) {
+                    Log.d(NETWORK, "GroupInviteCodeDialog - Retrofit getGroupCode()실행결과 - 성공")
 
-                override fun onFailure(call: Call<ResponseGroupCode>, t: Throwable) {
-                    Log.d(TAG, "GroupInviteCodeDialog - Retrofit getGroupCode()실행결과 - 실패")
-                    Log.d(TAG, "error : $t")
-                }
+                    val resp =
+                        requireNotNull(response.body()) { "GroupInviteCodeDialog - getInviteCode 결과 불러오기 실패" }
 
-            })
+                    binding.enrollCodeTv.text = resp.result.inviteCode
+                    binding.expirationPeriodTv.text = " ${resp.result.codeDeadLine}"
+                    binding.enrollBtn.isEnabled = true
+
+                } else {
+                    Log.d(NETWORK, "GroupInviteCodeDialog - Retrofit getGroupCode()실행결과 - 안좋음")
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseGetInviteCode>, t: Throwable) {
+                Log.d(
+                    NETWORK,
+                    "GroupInviteCodeDialog - Retrofit getGroupCode()실행결과 - 실패\nbecause: $t"
+                )
+            }
+        })
+    }
+
+    override fun onDestroyView() {
+        _binding = null
+        super.onDestroyView()
+        Log.d(LIFECYCLE, "GroupInviteCodeDialog - onDestroyView() called")
     }
 
     companion object {
-        const val TAG = "GROUP ENROLL"
+        const val DIALOG_TAG = "GROUP ENROLL"
     }
 }
