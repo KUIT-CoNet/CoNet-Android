@@ -18,8 +18,9 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
-class Home : Fragment(){ //커밋푸쉬위해 임시로 주석써둠
-    lateinit var binding : FragmentHomeBinding
+class Home : Fragment() { //커밋푸쉬위해 임시로 주석써둠
+
+    lateinit var binding: FragmentHomeBinding
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -36,7 +37,7 @@ class Home : Fragment(){ //커밋푸쉬위해 임시로 주석써둠
                 date: CalendarDay,
                 selected: Boolean
             ) {
-                Log.d("인터페이스","실행")
+                Log.d("인터페이스", "실행")
                 val selectedDateString = dateString(date.date, 1)
                 val today = Date() // 오늘 날짜
                 val todayString = dateString(today, 1)
@@ -89,12 +90,14 @@ class Home : Fragment(){ //커밋푸쉬위해 임시로 주석써둠
         return binding.root
     }
 
-    fun dateString(date : Date, option : Int) : String{ // option이 1이면 m월 d일 형식, option이 2면 yyyy년 m월 d일 형식
-        var dateFormat : SimpleDateFormat
-        if(option == 1){
+    fun dateString(
+        date: Date,
+        option: Int
+    ): String { // option이 1이면 m월 d일 형식, option이 2면 yyyy년 m월 d일 형식
+        var dateFormat: SimpleDateFormat
+        if (option == 1) {
             dateFormat = SimpleDateFormat("M월 d일", Locale.getDefault())
-        }
-        else{
+        } else {
             dateFormat = SimpleDateFormat("yyyy년 M월 d일", Locale.getDefault())
         }
         val selectedDateString = dateFormat.format(date)
