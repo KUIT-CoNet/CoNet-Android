@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:elevation="4dp"
+    android:orientation="vertical"
+    android:paddingHorizontal="18dp"
+    android:paddingTop="32dp"
+    android:paddingBottom="30dp">
+
+    <LinearLayout
+        android:id="@+id/cl_select_year"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="2dp">
+
+        <ImageView
+            android:id="@+id/iv_prev_year"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/chevron_left" />
+
+        <TextView
+            android:id="@+id/tv_year"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/pretendard_bold"
+            android:gravity="center"
+            android:textColor="@color/texthigh"
+            android:textSize="20sp" />
+
+        <ImageView
+            android:id="@+id/iv_next_year"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/chevron_right" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/cl_month_group1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_month_1"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="99dp"
+            android:layout_height="38dp"
+            android:background="@drawable/button_design_gray_50"
+            android:text="@string/January"
+            android:textColor="@color/textMedium" />
+
+        <Button
+            android:id="@+id/btn_month_2"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="99dp"
+            android:layout_height="38dp"
+            android:layout_marginHorizontal="6dp"
+            android:background="@drawable/button_design_gray_50"
+            android:text="@string/February"
+            android:textColor="@color/textMedium" />
+
+        <Button
+            android:id="@+id/btn_month_3"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="99dp"
+            android:layout_height="38dp"
+            android:background="@drawable/button_design_gray_50"
+            android:text="@string/March"
+            android:textColor="@color/textMedium" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/cl_month_group2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_month_4"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="99dp"
+            android:layout_height="38dp"
+            android:background="@drawable/button_design_gray_50"
+            android:text="@string/April"
+            android:textColor="@color/textMedium" />
+
+        <Button
+            android:id="@+id/btn_month_5"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="99dp"
+            android:layout_height="38dp"
+            android:layout_marginHorizontal="6dp"
+            android:background="@drawable/button_design_gray_50"
+            android:text="@string/May"
+            android:textColor="@color/textMedium" />
+
+        <Button
+            android:id="@+id/btn_month_6"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="99dp"
+            android:layout_height="38dp"
+            android:background="@drawable/button_design_gray_50"
+            android:text="@string/June"
+            android:textColor="@color/textMedium" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/cl_month_group3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_month_7"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="99dp"
+            android:layout_height="38dp"
+            android:background="@drawable/button_design_gray_50"
+            android:text="@string/July"
+            android:textColor="@color/textMedium" />
+
+        <Button
+            android:id="@+id/btn_month_8"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="99dp"
+            android:layout_height="38dp"
+            android:layout_marginHorizontal="6dp"
+            android:background="@drawable/button_design_gray_50"
+            android:text="@string/August"
+            android:textColor="@color/textMedium" />
+
+        <Button
+            android:id="@+id/btn_month_9"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="99dp"
+            android:layout_height="38dp"
+            android:background="@drawable/button_design_gray_50"
+            android:text="@string/September"
+            android:textColor="@color/textMedium" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/cl_month_group4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_month_10"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="99dp"
+            android:layout_height="38dp"
+            android:background="@drawable/button_design_gray_50"
+            android:text="@string/October"
+            android:textColor="@color/textMedium" />
+
+        <Button
+            android:id="@+id/btn_month_11"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="99dp"
+            android:layout_height="38dp"
+            android:layout_marginHorizontal="6dp"
+            android:background="@drawable/button_design_gray_50"
+            android:text="@string/November"
+            android:textColor="@color/textMedium" />
+
+        <Button
+            android:id="@+id/btn_month_12"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="99dp"
+            android:layout_height="38dp"
+            android:background="@drawable/button_design_gray_50"
+            android:text="@string/December"
+            android:textColor="@color/textMedium" />
+    </LinearLayout>
+
+</LinearLayout>
