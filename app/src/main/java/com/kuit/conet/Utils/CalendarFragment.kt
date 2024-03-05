@@ -141,8 +141,8 @@ class CalendarFragment : Fragment() {
                 authorization = "Bearer ${getRefreshToken(requireContext())}",
                 searchDate = callDate
             ).enqueue(object :
-                retrofit2.Callback<HomePlanShow> { // 서버와 비동기적으로 데이터 주고받을 수 있는 방법 enqueue사용
-                override fun onResponse( // 통신에 성공했을 경우
+                retrofit2.Callback<HomePlanShow> {
+                override fun onResponse(
                     call: Call<HomePlanShow>,
                     response: Response<HomePlanShow>
                 ) {
