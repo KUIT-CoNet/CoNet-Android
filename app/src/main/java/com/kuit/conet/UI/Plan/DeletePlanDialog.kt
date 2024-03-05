@@ -33,7 +33,7 @@ class DeletePlanDialog : Fragment() {
     ): View {
         binding = DialogDeletePlanBinding.inflate(inflater, container, false)
 
-        var planId = requireArguments().getInt("planId")
+        val planId = requireArguments().getInt("planId")
 
         binding.tvDialogDeleteBtnCancel.setOnClickListener {
             parentFragmentManager.beginTransaction()
@@ -51,9 +51,8 @@ class DeletePlanDialog : Fragment() {
 
     private fun deletePlan(planId: Int) {
         val deletePlanService = getRetrofit().create(RetrofitInterface::class.java)
-        val authHeader = "Bearer ${getRefreshToken(requireContext())}"
         deletePlanService.deletePlan(
-            authHeader,
+            "Bearer ${getRefreshToken(requireContext())}",
             planId
         ).enqueue(object : retrofit2.Callback<ResponseDeletePlan> {
             override fun onResponse(
@@ -62,12 +61,12 @@ class DeletePlanDialog : Fragment() {
             ) {
                 if (response.isSuccessful) {
                     val resp = response.body()
-                    Log.d("API-deletePlan/Success", resp.toString())
+                    Log.d(NETWORK, "Success\n$resp")
                 }
             }
 
             override fun onFailure(call: Call<ResponseDeletePlan>, t: Throwable) {
-                Log.d("API-eletePlan/Fail", t.message.toString())
+                Log.d(NETWORK, "Failure\n" + t.message.toString())
             }
 
         })

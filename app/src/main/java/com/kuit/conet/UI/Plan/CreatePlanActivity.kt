@@ -118,29 +118,26 @@ class CreatePlanActivity() : AppCompatActivity() {
     }
 
     private suspend fun makePlan(planName: String, teamId: Int, planStartDate: String, intent: Intent) {
-        return suspendCoroutine { continuation2 ->
+        return suspendCoroutine {
             val refreshToken = getRefreshToken(this)
-            val authHeader = "Bearer $refreshToken"
             val planStartDate = planStartDate.replace(".", "-")
-            val responsePlan =
-                getRetrofit().create(RetrofitInterface::class.java) // 이걸 따로 빼내는 방법....
+            val responsePlan = getRetrofit().create(RetrofitInterface::class.java)
             responsePlan.makePlan(
-                authHeader,
+                "Bearer $refreshToken",
                 MakePlanInfo(
                     teamId,
                     planName,
                     planStartDate
                 )
             ).enqueue(object :
-                Callback<ResponseMakePlan> { // 서버와 비동기적으로 데이터 주고받을 수 있는 방법 enqueue사용
-                override fun onResponse( // 통신에 성공했을 경우
+                Callback<ResponseMakePlan> {
+                override fun onResponse(
                     call: Call<ResponseMakePlan>,
                     response: Response<ResponseMakePlan>
                 ) {
                     if (response.isSuccessful) {
                         val resp = response.body()// 성공했을 경우 response body불러오기
-                        Log.d("API-CREATE/SUCCESS", resp.toString())
-                        Log.d("성공!", "success")
+                        Log.d(NETWORK, "Success\n$resp")
 
                         val planId = resp!!.result.planId
                         intent.putExtra("planName", binding.etCreatePlanName.text.toString())
@@ -154,15 +151,10 @@ class CreatePlanActivity() : AppCompatActivity() {
                     }
                 }
 
-                override fun onFailure(call: Call<ResponseMakePlan>, t: Throwable) { // 통신에 실패했을 경우
-                    Log.d(NETWORK, t.message.toString()) // 실패한 이유 메세지 출력
+                override fun onFailure(call: Call<ResponseMakePlan>, t: Throwable) {
+                    Log.d(NETWORK, t.message.toString())
                 }
-
             })
-
         }
-
     }
-
-
 }

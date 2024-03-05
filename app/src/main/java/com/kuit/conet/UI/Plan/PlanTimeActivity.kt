@@ -13,9 +13,7 @@ import com.kuit.conet.Network.RetrofitInterface
 import com.kuit.conet.Network.ShowMemTime
 import com.kuit.conet.Network.getRetrofit
 import com.kuit.conet.R
-import com.kuit.conet.UI.GroupMain.GroupMainActivity
 import com.kuit.conet.Utils.NETWORK
-import com.kuit.conet.Utils.TAG
 import com.kuit.conet.databinding.ActivityPlanTimeBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -24,7 +22,6 @@ import retrofit2.Call
 import retrofit2.Response
 import java.time.LocalDate
 import kotlin.coroutines.suspendCoroutine
-import kotlin.math.log
 
 class PlanTimeActivity : AppCompatActivity() {
     lateinit var binding: ActivityPlanTimeBinding
@@ -122,14 +119,13 @@ class PlanTimeActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        val coroutineScope = CoroutineScope(Dispatchers.IO) //IO로 하는게 좋다
+        val coroutineScope = CoroutineScope(Dispatchers.IO)
         coroutineScope.launch {
             getFrame(planId) //api로 정보 받아오기
         }
     }
 
-    //요일 구하기
-    private fun getDay(date: LocalDate): String {
+    private fun getDay(date: LocalDate): String { //요일 구하기
         val n: String = date.dayOfWeek.toString()
         var day = ""
 
@@ -296,7 +292,7 @@ class PlanTimeActivity : AppCompatActivity() {
                 updateClickListener(1, i, true)
                 updateClickListener(2, i, true)
                 updateClickListener(3, i, true)
-                when (day1Info[i]!!.section) {
+                when (day1Info[i].section) {
                     0 -> {
                         day1[i].setBackgroundResource(R.drawable.view_border)
                         updateClickListener(1, i, false)
@@ -306,7 +302,7 @@ class PlanTimeActivity : AppCompatActivity() {
                     2 -> day1[i].setBackgroundResource(R.drawable.view_border_section2)
                     3 -> day1[i].setBackgroundResource(R.drawable.view_border_section3)
                 }
-                when (day2Info[i]!!.section) {
+                when (day2Info[i].section) {
                     0 -> {
                         day2[i].setBackgroundResource(R.drawable.view_border)
                         updateClickListener(2, i, false)
@@ -316,7 +312,7 @@ class PlanTimeActivity : AppCompatActivity() {
                     2 -> day2[i].setBackgroundResource(R.drawable.view_border_section2)
                     3 -> day2[i].setBackgroundResource(R.drawable.view_border_section3)
                 }
-                when (day3Info[i]!!.section) {
+                when (day3Info[i].section) {
                     0 -> {
                         day3[i].setBackgroundResource(R.drawable.view_border)
                         updateClickListener(3, i, false)
@@ -332,7 +328,7 @@ class PlanTimeActivity : AppCompatActivity() {
                 updateClickListener(1, i, true)
                 updateClickListener(2, i, true)
                 updateClickListener(3, i, true)
-                when (day4Info[i]!!.section) {
+                when (day4Info[i].section) {
                     0 -> {
                         day1[i].setBackgroundResource(R.drawable.view_border)
                         updateClickListener(1, i, false)
@@ -342,7 +338,7 @@ class PlanTimeActivity : AppCompatActivity() {
                     2 -> day1[i].setBackgroundResource(R.drawable.view_border_section2)
                     3 -> day1[i].setBackgroundResource(R.drawable.view_border_section3)
                 }
-                when (day5Info[i]!!.section) {
+                when (day5Info[i].section) {
                     0 -> {
                         day2[i].setBackgroundResource(R.drawable.view_border)
                         updateClickListener(2, i, false)
@@ -352,7 +348,7 @@ class PlanTimeActivity : AppCompatActivity() {
                     2 -> day2[i].setBackgroundResource(R.drawable.view_border_section2)
                     3 -> day2[i].setBackgroundResource(R.drawable.view_border_section3)
                 }
-                when (day6Info[i]!!.section) {
+                when (day6Info[i].section) {
                     0 -> {
                         day3[i].setBackgroundResource(R.drawable.view_border)
                         updateClickListener(3, i, false)
@@ -366,7 +362,7 @@ class PlanTimeActivity : AppCompatActivity() {
 
             3 -> for (i in 0..23) {
                 updateClickListener(1, i, true)
-                when (day7Info[i]!!.section) {
+                when (day7Info[i].section) {
                     0 -> {
                         day1[i].setBackgroundResource(R.drawable.view_border)
                         updateClickListener(1, i, false)
@@ -397,9 +393,8 @@ class PlanTimeActivity : AppCompatActivity() {
     }
 
     private fun getFixPlanDialog(day: Int, i: Int) {
-        var startDate = LocalDate.parse(planStartDate.replace(". ", "-"))
+        val startDate = LocalDate.parse(planStartDate.replace(". ", "-"))
         var fixedDate = ""
-        var fixedTime = i
         var memberIds: ArrayList<Int> = arrayListOf()
         var userName: ArrayList<String> = arrayListOf()
 
@@ -445,13 +440,13 @@ class PlanTimeActivity : AppCompatActivity() {
             }
         }
 
-        var fixPlanDialog = FixPlanDialog()
+        val fixPlanDialog = FixPlanDialog()
         val bundle = Bundle()
         bundle.putInt("teamId", teamId)
         bundle.putString("planName", planName)
         bundle.putInt("planId", planId)
         bundle.putString("fixedDate", fixedDate)
-        bundle.putInt("fixedTime", fixedTime)
+        bundle.putInt("fixedTime", i)
         bundle.putIntegerArrayList("memberIds", memberIds)
         bundle.putStringArrayList("userName", userName)
         fixPlanDialog.arguments = bundle

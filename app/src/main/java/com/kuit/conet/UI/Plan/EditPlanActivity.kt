@@ -70,7 +70,7 @@ class EditPlanActivity: AppCompatActivity() {
         })
 
         binding.ivEditTextCancel.setOnClickListener {
-            binding.etEditPlanName.setText(null)
+            binding.etEditPlanName.text = null
         }
     }
 
@@ -80,9 +80,6 @@ class EditPlanActivity: AppCompatActivity() {
 
             binding.cvEditDoneBtn.setOnClickListener {
                 updateWaiting()
-//                var intent = Intent(this, PlanTimeActivity::class.java)
-//                intent.putExtra("planId", planId)
-//                startActivity(intent)
                 finish()
             }
         }
