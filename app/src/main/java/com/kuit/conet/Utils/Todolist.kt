@@ -6,13 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.kuit.conet.Network.HomePlanInfo
-import com.kuit.conet.Network.Plan
-import com.kuit.conet.Network.RetrofitInterface
-import com.kuit.conet.Network.getRetrofit
+import com.kuit.conet.Network.RetrofitClient
 import com.kuit.conet.UI.Home.RecyclerView.TodoRecyclerAdapter
+import com.kuit.conet.data.dto.response.home.ResponseGetDailyPlan
+import com.kuit.conet.data.dto.response.plan.ResponseGetGroupDailyDecidedPlan
 import com.kuit.conet.databinding.FragmentTodolistBinding
+import com.kuit.conet.domain.entity.plan.DecidedPlan
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
@@ -21,147 +20,133 @@ import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import kotlin.collections.ArrayList
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-class Todolist(date : CalendarDay, groupId : Int) : Fragment() { // -1은 홈메뉴의 확정 약속 보여줌 1부터는 모임탭의 확정약속 보여줌(이 숫자가 teamId의 역할을 할 거임)
-    lateinit var binding : FragmentTodolistBinding
-    lateinit var todoRecyclerAdapter : TodoRecyclerAdapter
-    var plans = ArrayList<Plan>()
-    val date = date
-    val groupId = groupId
+class Todolist(
+    private val date: CalendarDay,
+    private val groupId: Int        // -1 : HomeFragment, 1 이상(groupId) : GroupMainActivity
+) : Fragment() {
 
+    private var _binding: FragmentTodolistBinding? = null
+    private val binding: FragmentTodolistBinding
+        get() = requireNotNull(_binding) { "Todolist's binding is null" }
+
+    private lateinit var todoRecyclerAdapter: TodoRecyclerAdapter
     private val initDeferred = CompletableDeferred<Unit>()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
-        binding = FragmentTodolistBinding.inflate(inflater, container, false)
+        _binding = FragmentTodolistBinding.inflate(inflater, container, false)
+        Log.d(LIFECYCLE, "Todolist - onCreateView() called")
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Log.d(LIFECYCLE, "Todolist - onViewCreated() called")
+
         val coroutineScope = CoroutineScope(Dispatchers.Main)
         coroutineScope.launch {
-            if(groupId < 0){
-                plans = showplaninfo(date)
+            val plans = if (groupId < 0) {      // HomeFragment
+                showplaninfo(date)
+            } else {                            // GroupMainActivity
+                showGroupplaninfo(date)
             }
-            else{
-                plans = showGroupplaninfo(date)
-            }
+
             initRecycler(plans)
             initDeferred.complete(Unit)
         }
     }
 
-    suspend fun showGroupplaninfo(date: CalendarDay): ArrayList<Plan> {
-        return suspendCoroutine { continuation2->
-            Log.d("callDate","${date}")
+    override fun onDestroyView() {
+        _binding = null
+        super.onDestroyView()
+        Log.d(LIFECYCLE, "Todolist - onDestroyView() called")
+    }
+
+    private suspend fun showplaninfo(date: CalendarDay): List<DecidedPlan> {
+        return suspendCoroutine { continuation2 ->
+
             val year = (date.year).toString()
-            val month = if(date.month + 1 < 10) "0" + (date.month + 1).toString() else (date.month + 1).toString()
-            val day = if(date.day < 10) "0" + (date.day).toString() else (date.day).toString()
-            val oncalldate = year + "-" + month + "-" + day
-            val responsePlan = getRetrofit().create(RetrofitInterface::class.java) // 이걸 따로 빼내는 방법....
-            responsePlan.ShowGroupConfirmPlan(
-                groupId,
-                oncalldate
-            ).enqueue(object :
-                Callback<HomePlanInfo> { // 서버와 비동기적으로 데이터 주고받을 수 있는 방법 enqueue사용
-                override fun onResponse( // 통신에 성공했을 경우
-                    call: Call<HomePlanInfo>,
-                    response: Response<HomePlanInfo>
+            val month = if (date.month < 9) "0${date.month + 1}" else "${date.month + 1}"
+            val day = if (date.day < 10) "0${date.day}" else "${date.day}"
+
+            RetrofitClient.homeInstance.getDailyPlan(
+                authorization = "Bearer ${getRefreshToken(requireContext())}",
+                searchDate = "$year-$month-$day",
+            ).enqueue(object : Callback<ResponseGetDailyPlan> {
+                override fun onResponse(
+                    call: Call<ResponseGetDailyPlan>,
+                    response: Response<ResponseGetDailyPlan>
                 ) {
                     if (response.isSuccessful) {
-                        val resp = response.body()// 성공했을 경우 response body불러오기
-                        Log.d("SIGNUP/SUCCESS", resp.toString())
-                        Log.d("성공!","success")
-                        continuation2.resume(resp!!.result.plans)
-                    }
-                    else{
+                        Log.d(NETWORK, "Todolist - getDailyPlan() 실행 결과 - 성공")
+                        val resp =
+                            requireNotNull(response.body()) { "Todolist - getDailyPlan() 실행 결과 불러오기 실패" }
+                        continuation2.resume(resp.result.plans.map { it.asDecidedPlan() })
+                    } else {
+                        Log.d(NETWORK, "Todolist - getDailyPlan() 실행 결과 - 안좋음")
                         continuation2.resumeWithException(Exception("Response not successful"))
                     }
                 }
 
-                override fun onFailure(call: Call<HomePlanInfo>, t: Throwable) { // 통신에 실패했을 경우
-                    Log.d("SIGNUP/FAILURE", t.message.toString()) // 실패한 이유 메세지 출력
+                override fun onFailure(call: Call<ResponseGetDailyPlan>, t: Throwable) {
+                    Log.d(NETWORK, "Todolist - getDailyPlan() 실행 결과 - 실해\nbecause : $t")
                     continuation2.resumeWithException(t)
                 }
 
             })
         }
-
     }
 
-    suspend fun showplaninfo(date : CalendarDay) : ArrayList<Plan>{
-        return suspendCoroutine { continuation2->
-            Log.d("callDate","${date}")
-            val year = (date.year).toString()
-            val month = if(date.month + 1 < 10) "0" + (date.month + 1).toString() else (date.month + 1).toString()
-            val day = if(date.day < 10) "0" + (date.day).toString() else (date.day).toString()
-            val oncalldate = year + "-" + month + "-" + day
-            val responsePlan = getRetrofit().create(RetrofitInterface::class.java)
-            val refreshToken = getRefreshToken(requireContext())
-            responsePlan.homepromiseinfo(
-                "Bearer $refreshToken",
-                oncalldate
-            ).enqueue(object :
-                Callback<HomePlanInfo> { // 서버와 비동기적으로 데이터 주고받을 수 있는 방법 enqueue사용
-                override fun onResponse( // 통신에 성공했을 경우
-                    call: Call<HomePlanInfo>,
-                    response: Response<HomePlanInfo>
+    private suspend fun showGroupplaninfo(date: CalendarDay): List<DecidedPlan> {
+        return suspendCoroutine { continuation2 ->
+
+            val year = date.year
+            val month = if (date.month < 9) "0${date.month + 1}" else "${date.month + 1}"
+            val day = if (date.day < 10) "0${date.day}" else "${date.day}"
+
+            RetrofitClient.planInstance.getGroupDailyDecidedPlan(
+                teamId = groupId.toLong(),
+                searchDate = "$year-$month-$day",
+            ).enqueue(object : Callback<ResponseGetGroupDailyDecidedPlan> {
+                override fun onResponse(
+                    call: Call<ResponseGetGroupDailyDecidedPlan>,
+                    response: Response<ResponseGetGroupDailyDecidedPlan>
                 ) {
                     if (response.isSuccessful) {
-                        val resp = response.body()// 성공했을 경우 response body불러오기
-                        Log.d("SIGNUP/SUCCESS", resp.toString())
-                        Log.d("성공!","success")
-                        continuation2.resume(resp!!.result.plans)
-                    }
-                    else{
+                        Log.d(NETWORK, "Todolist - getGroupDailyDecidedPlan() 실행 결과 - 성공")
+                        val resp =
+                            requireNotNull(response.body()) { "Todolist - getGroupDailyDecidedPlan() 실행 결과 불러오기 실패" }
+                        continuation2.resume(resp.result.plans.map { it.asDecidedPlan() })
+                    } else {
+                        Log.d(NETWORK, "Todolist - getGroupDailyDecidedPlan() 실행 결과 - 안좋음")
                         continuation2.resumeWithException(Exception("Response not successful"))
                     }
                 }
 
-                override fun onFailure(call: Call<HomePlanInfo>, t: Throwable) { // 통신에 실패했을 경우
-                    Log.d("SIGNUP/FAILURE", t.message.toString()) // 실패한 이유 메세지 출력
+                override fun onFailure(call: Call<ResponseGetGroupDailyDecidedPlan>, t: Throwable) {
+                    Log.d(NETWORK, "Todolist - getGroupDailyDecidedPlan() 실행 결과 - 실패\nbacause : $t")
                     continuation2.resumeWithException(t)
                 }
-
             })
         }
-
     }
 
-    suspend fun waitForInit(){
+    private fun initRecycler(plans: List<DecidedPlan>) {
+        todoRecyclerAdapter = TodoRecyclerAdapter(requireContext(), plans)
+        binding.rvTodolist.adapter = todoRecyclerAdapter
+    }
+
+    suspend fun waitForInit() {
         initDeferred.await()
     }
 
-    fun initRecycler(plans : ArrayList<Plan>?) {
-        Log.d("todolist","${plans}")
-        if(plans != null){
-            todoRecyclerAdapter = TodoRecyclerAdapter(requireContext())
-            binding.rvTodolist.adapter = todoRecyclerAdapter
-            binding.rvTodolist.layoutManager = LinearLayoutManager(context)
-            todoRecyclerAdapter.itemList = plans
-            todoRecyclerAdapter.notifyDataSetChanged()
-//            binding.tvPromiseCount.text = plans.count().toString()
-        }
-        else{
-            todoRecyclerAdapter = TodoRecyclerAdapter(requireContext())
-            binding.rvTodolist.adapter = todoRecyclerAdapter
-            binding.rvTodolist.layoutManager = LinearLayoutManager(context)
-            todoRecyclerAdapter.itemList = ArrayList()
-            todoRecyclerAdapter.notifyDataSetChanged()
-//            binding.tvPromiseCount.text = "0"
-        }
-    }
-
-    fun returnsize() : Int{
-        return todoRecyclerAdapter.itemList.size
-    }
+    fun returnsize(): Int = todoRecyclerAdapter.itemCount
 
 }
 
