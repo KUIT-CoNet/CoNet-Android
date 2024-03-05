@@ -3,12 +3,9 @@ package com.kuit.conet.UI.Home.RecyclerView
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
-import com.kuit.conet.Network.Oncall
-import com.kuit.conet.Network.Plan
 import com.kuit.conet.UI.Plan.detail.DetailFixActivity
 import com.kuit.conet.UI.Plan.PlanTimeActivity
 import com.kuit.conet.databinding.ItemTodolistBinding
@@ -67,40 +64,43 @@ class AllTodoRecyclerAdapter(
     }
 }
 
-class TodoRecyclerAdapter(private val context: Context) :
-    RecyclerView.Adapter<TodoRecyclerAdapter.ViewHolder>() {
-    var itemList = ArrayList<Plan>()
+class TodoRecyclerAdapter(
+    private val context: Context,
+    private val itemList: List<DecidedPlan>,
+) : RecyclerView.Adapter<TodoRecyclerAdapter.ViewHolder>() {
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding =
             ItemTodolistBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ViewHolder(binding)
+        return ViewHolder(binding, context)
     }
 
     override fun getItemCount(): Int = itemList.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(itemList[position])
+    }
 
-        holder.binding.itemCl.setOnClickListener {
-            val mIntent = Intent(context, DetailFixActivity::class.java)
-            mIntent.putExtra("PlanId", itemList[position].planId)
-            startActivity(context, mIntent, null)
+    class ViewHolder(
+        private val binding: ItemTodolistBinding,
+        private val context: Context,
+    ) : RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(item: DecidedPlan) {
+            binding.tvPromisstime.text = item.time
+            binding.tvPromisscontent.text = item.planName
+            binding.tvPromisscategory.text = item.groupName
+
+            binding.itemCl.setOnClickListener {
+                val intent = Intent(context, DetailFixActivity::class.java)
+                intent.putExtra(INTNET_PLAN_ID, item.planId.toInt())
+                startActivity(context, intent, null)
+            }
         }
     }
 
-    inner class ViewHolder(val binding: ItemTodolistBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-
-        fun bind(item: Plan) {
-            binding.tvPromisstime.text = item.time
-            binding.tvPromisscontent.text = item.planName
-            if (item.teamName == null) {
-                binding.tvPromisscategory.visibility = View.GONE
-            } else {
-                binding.tvPromisscategory.text = item.teamName
-            }
-
-        }
+    companion object {
+        const val INTNET_PLAN_ID = "planId"
     }
 }
 
