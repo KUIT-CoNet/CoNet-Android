@@ -1,6 +1,7 @@
 package com.kuit.conet.data.dto.response.home
 
 import com.google.gson.annotations.SerializedName
+import com.kuit.conet.domain.entity.plan.DecidedPlan
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -25,6 +26,15 @@ data class ResponseGetDailyPlan(
             val teamName: String,
             @SerializedName("planName")
             val planName: String,
-        )
+        ) {
+            fun asDecidedPlan(): DecidedPlan {
+                return DecidedPlan(
+                    planId = planId,
+                    planName = planName,
+                    groupName = teamName,
+                    time = time,
+                )
+            }
+        }
     }
 }

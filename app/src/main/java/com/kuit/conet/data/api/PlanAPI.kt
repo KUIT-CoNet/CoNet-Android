@@ -18,6 +18,7 @@ import com.kuit.conet.Network.ResponseUpdateWaiting
 import com.kuit.conet.Network.ShowMemTime
 import com.kuit.conet.Network.ShowMyTime
 import com.kuit.conet.Network.UpdateWaiting
+import com.kuit.conet.data.dto.response.plan.ResponseGetGroupDailyDecidedPlan
 import com.kuit.conet.data.dto.response.plan.ResponseGetGroupWaitingPlan
 import retrofit2.Call
 import retrofit2.http.Body
@@ -84,18 +85,17 @@ interface PlanAPI {
         authorization: String,
         @Path("planId")
         planId: Int,
-    ): Call<ResponseGetPlanDetail>
+    ): Call<ResponseGetPlanDetail>*/
 
-    //이거 뭐야 왜이래? 못찾겠다;;;
     @GET("plan/day") // :: 모임 내 특정 날짜의 확정된 약속 조회
-    fun ShowGroupConfirmPlan(
+    fun getGroupDailyDecidedPlan(
         @Query("teamId")
-        teamId: Int,
+        teamId: Long,
         @Query("searchDate")
-        searchDate: String,      // 2024-02-09 형식
-    ): Call<HomePlanInfo>
+        searchDate: String,      // 2024-02-09 형식 (2024. 02. 09)
+    ): Call<ResponseGetGroupDailyDecidedPlan>
 
-    @GET("plan/month") // :: 모임 내 특정 달의 확정된 약속이 존재하는 날짜 조회
+    /*@GET("plan/month") // :: 모임 내 특정 달의 확정된 약속이 존재하는 날짜 조회
     fun ShowGroupMonth(
         @Query("teamId")
         teamId: Int,
