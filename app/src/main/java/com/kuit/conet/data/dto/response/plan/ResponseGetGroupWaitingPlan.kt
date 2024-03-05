@@ -1,32 +1,32 @@
-package com.kuit.conet.data.dto.response.home
+package com.kuit.conet.data.dto.response.plan
 
+import com.google.gson.annotations.SerializedName
 import com.kuit.conet.domain.entity.plan.UndecidedPlan
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ResponseGetWaitingPlan(
-    @SerialName("result")
-    val result: ResultGetWaitingPlan,
+data class ResponseGetGroupWaitingPlan(
+    @SerializedName("result")
+    val result: ResultGetGroupWaitingPlan,
 ) {
     @Serializable
-    data class ResultGetWaitingPlan(
-        @SerialName("count")
+    data class ResultGetGroupWaitingPlan(
+        @SerializedName("count")
         val count: Int,
-        @SerialName("plans")
+        @SerializedName("plans")
         val plans: List<Plan>,
     ) {
         @Serializable
         data class Plan(
-            @SerialName("planId")
+            @SerializedName("planId")
             val planId: Long,
-            @SerialName("startDate")
+            @SerializedName("startDate")
             val startDate: String,          // 2024-01-07 형식
-            @SerialName("endDate")
+            @SerializedName("endDate")
             val endDate: String,            // 2024-01-07 형식
-            @SerialName("teamName")
+            @SerializedName("teamName")
             val teamName: String,
-            @SerialName("planName")
+            @SerializedName("planName")
             val planName: String,
         ) {
             fun asUndecidedPlan(): UndecidedPlan {
@@ -35,7 +35,7 @@ data class ResponseGetWaitingPlan(
                     planName = planName,
                     groupName = teamName,
                     startDate = startDate,
-                    endDate = endDate
+                    endDate = endDate,
                 )
             }
         }
