@@ -548,7 +548,7 @@ data class AvailableDateTimes(
     @SerializedName("date")
     var date: String,
     @SerializedName("time")
-    val time: ArrayList<Int>,
+    var time: ArrayList<Int>,
 )
 
 //나의 가능한 시간 조회
@@ -732,7 +732,7 @@ data class MemTimeInfo(
     @SerializedName("planEndPeriod")
     val planEndPeriod: String,
     @SerializedName("endNumberForEachSection")
-    val endNumberForEachSection: ArrayList<EndNumberForEachSection>,
+    val endNumberForEachSection: EndNumberForEachSection,
     @SerializedName("availableMemberDateTime")
     val availableMemberDateTime: ArrayList<AvailableMemberDateTime>
 )
@@ -740,15 +740,23 @@ data class MemTimeInfo(
 // 바꿔야함 EndNumberForEachSection, AvailableMemberDateTime, PossibleMember
 @Serializable
 data class EndNumberForEachSection(
-    @SerializedName("section") val section: Int,
-    @SerializedName("memberCount") val memberCount: Int
+    @SerializedName("section1") val section1: Int,
+    @SerializedName("section2") val section2: Int,
+    @SerializedName("section3") val section3: Int,
+    //@SerializedName("memberCount") val memberCount: Int
 )
 
 @Serializable
 data class AvailableMemberDateTime(
     @SerializedName("date") val date: String,
-    @SerializedName("possibleMember") val possibleMember: ArrayList<PossibleMember>
+    @SerializedName("sectionAndAvailableTimes") val sectionAndAvailableTimes: ArrayList<PossibleMember>
 )
+
+
+//data class AvailableMemberDateTime(
+//    @SerializedName("date") val date: String,
+//    @SerializedName("possibleMember") val possibleMember: ArrayList<PossibleMember>
+//)
 
 @Serializable
 data class PossibleMember(

@@ -2,12 +2,14 @@ package com.kuit.conet.UI.Home.RecyclerView
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.kuit.conet.UI.Plan.detail.DetailFixActivity
 import com.kuit.conet.UI.Plan.PlanTimeActivity
+import com.kuit.conet.Utils.TAG
 import com.kuit.conet.databinding.ItemTodolistBinding
 import com.kuit.conet.databinding.ItemTodolistallBinding
 import com.kuit.conet.domain.entity.plan.DecidedPlan
@@ -58,6 +60,7 @@ class AllTodoRecyclerAdapter(
                 val mIntent = Intent(context, PlanTimeActivity::class.java)
                 mIntent.putExtra("planId", item.planId.toInt())
                 mIntent.putExtra("planName", item.planName)
+                Log.d(TAG, "onBindViewHolder: ${item.planId} + ${item.planName}")
                 startActivity(context, mIntent, null)
             }
         }

@@ -80,9 +80,9 @@ class EditPlanActivity: AppCompatActivity() {
 
             binding.cvEditDoneBtn.setOnClickListener {
                 updateWaiting()
-                var intent = Intent(this, PlanTimeActivity::class.java)
-                intent.putExtra("planId", planId)
-                startActivity(intent)
+//                var intent = Intent(this, PlanTimeActivity::class.java)
+//                intent.putExtra("planId", planId)
+//                startActivity(intent)
                 finish()
             }
         }
