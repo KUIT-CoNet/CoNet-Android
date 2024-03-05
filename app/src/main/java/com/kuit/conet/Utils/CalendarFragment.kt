@@ -1,6 +1,5 @@
 package com.kuit.conet.Utils
 
-
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,10 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.kuit.conet.Network.HomePlanShow
-import com.kuit.conet.Network.RetrofitInterface
-import com.kuit.conet.Network.getRetrofit
+import com.kuit.conet.Network.RetrofitClient
 import com.kuit.conet.R
-import com.kuit.conet.UI.Home.choose_date_dialog
+import com.kuit.conet.UI.Home.MonthPicker
 import com.kuit.conet.UI.Home.Calendar.*
 import com.kuit.conet.databinding.FragmentCalendarBinding
 import com.prolificinteractive.materialcalendarview.CalendarDay
@@ -24,82 +22,82 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-class CalendarFragment() : Fragment() {
-    lateinit var binding : FragmentCalendarBinding
-    lateinit var eventDecorator : planDotDecorator
+class CalendarFragment : Fragment() {
 
-    val sundayDecorator = SundayDecorator()
-    var onedayDecorator = OnedayDecorator()
+    private var _binding: FragmentCalendarBinding? = null
+    private val binding: FragmentCalendarBinding
+        get() = requireNotNull(_binding) { "CalendarFragment's binding is null" }
+    private var _onDateChangedListener: OnDateSelectedListener? = null
+    private val onDateChangedListener: OnDateSelectedListener
+        get() = requireNotNull(_onDateChangedListener) { "CalendarFragment's listener is null" }
 
+    private lateinit var eventDecorator: planDotDecorator
+    private val sundayDecorator = SundayDecorator()
+    private var onedayDecorator = OnedayDecorator()
     var promiseDates = ArrayList<Int>() // 서버로 부터 약속 있는 날짜 받아오기
 
-    private var onDateChangedListener: OnDateSelectedListener? = null
-
     fun setOnDateChangedListener(listener: OnDateSelectedListener) {
-        Log.d(" 실행","실행")
-        onDateChangedListener = listener
+        _onDateChangedListener = listener
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
-        binding = FragmentCalendarBinding.inflate(inflater, container, false)
+        _binding = FragmentCalendarBinding.inflate(inflater, container, false)
+        Log.d(LIFECYCLE, "CalendarFragment - onCreateView() called")
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Log.d(LIFECYCLE, "CalendarFragment - onViewCreated() called")
+
         val today = CalendarDay.today()
-        Log.d("today","${today}")
         initUpdatePlan(today)
+
         binding.clSelectDate.setOnClickListener {
-            Log.d("click!","클릭감지!!!")
             showDialog()
         }
-        binding.viewCanlendar.selectedDate = CalendarDay.today()
-        binding.viewCanlendar.setDateTextAppearance(R.style.CalendarDateTextStyle)
-        binding.viewCanlendar.setHeaderTextAppearance(R.style.CalendarHeaderTextStyle)
-        binding.viewCanlendar.setWeekDayTextAppearance(R.style.CalendarWeekdayTextStyle)
 
         CoroutineScope(Dispatchers.Main).launch {
             val year = today.year.toString()
-            val month = if(today.month + 1 < 10) "0" + (today.month + 1).toString() else (today.month + 1).toString()
-            val callDate = year + "-" + month
-            binding.viewCanlendar.setTitleFormatter { day -> "${day!!.year}년  ${day.month + 1}월" }
-            promiseDates = UpdatePlanDates(callDate)
+            val month = if (today.month < 9) "0${today.month + 1}" else "${today.month + 1}"
+
+            binding.viewCanlendar.setTitleFormatter { "${today.year}년  ${today.month}월" }
+            promiseDates = UpdatePlanDates("$year-$month")
             binding.viewCanlendar.addDecorator(sundayDecorator)
-            eventDecorator = planDotDecorator(requireContext(), R.color.mainsub1, promiseDates) // 일정 있으면 날짜 밑에 점 찍기
+            eventDecorator = planDotDecorator(
+                requireContext(),
+                R.color.mainsub1,
+                promiseDates
+            ) // 일정 있으면 날짜 밑에 점 찍기
             binding.viewCanlendar.addDecorator(eventDecorator)
             binding.viewCanlendar.addDecorator(onedayDecorator)
         }
 
-
         val selectionDecortor = SelectionDecortor(requireContext(), R.color.purpleCircle)
         binding.viewCanlendar.addDecorator(selectionDecortor)
-
-
 
         val customWeekDayFormatter = CustomWeekDayFormatter(requireContext())
         binding.viewCanlendar.setWeekDayFormatter(customWeekDayFormatter)
 
         binding.viewCanlendar.setOnDateChangedListener { widget, date, selected ->
-            onDateChangedListener?.onDateSelected(widget, date, selected)
-            Log.d("호출","${date}")
+            onDateChangedListener.onDateSelected(widget, date, selected)
+            Log.d(TAG, "CalendarFragment - calendar 일 변경 event $date")
             selectionDecortor.setSelectedDate(date)
             binding.viewCanlendar.invalidateDecorators()
         }
 
         binding.viewCanlendar.setOnMonthChangedListener { widget, date ->
-            Log.d("월","${date}")
-            val year = date.year.toString()
-            val month = if(date.month + 1 < 10) "0" + (date.month + 1).toString() else (date.month + 1).toString()
-            val callDate = year + "-" + month
-            val coroutineScope = CoroutineScope(Dispatchers.Main)
-            coroutineScope.launch {
+            Log.d(TAG, "CalendarFragment - calendar 월 변경 event $date")
+            val year = date.year
+            val month = if (date.month < 9) "0${date.month + 1}" else "${date.month + 1}"
+
+            val callDate = "$year-$month"
+            CoroutineScope(Dispatchers.Main).launch {
                 promiseDates = UpdatePlanDates(callDate)
-                Log.d("delete","데코 지우기")
+                Log.d(TAG, "CalendarFragment - 데코 지우기")
                 binding.viewCanlendar.removeDecorator(eventDecorator)
                 eventDecorator = planDotDecorator(requireContext(), R.color.mainsub1, promiseDates)
                 binding.viewCanlendar.addDecorator(eventDecorator)
@@ -111,18 +109,22 @@ class CalendarFragment() : Fragment() {
             //UpdatePlanDates(callDate)
         }
 
-
     }
 
-    fun showDialog(){
-        binding.flSelectDate.visibility = View.VISIBLE
-        val chooseDateDialog = choose_date_dialog()
-        chooseDateDialog.setOnButtonClickListener(object :
-            choose_date_dialog.OnButtonClickListener {
-            override fun onButtonClicked(year: Int, month: Int) {
+    override fun onDestroyView() {
+        _binding = null
+        _onDateChangedListener = null
+        super.onDestroyView()
+        Log.d(LIFECYCLE, "CalendarFragment - onDestroyView() called")
+    }
 
-                binding.viewCanlendar.currentDate = CalendarDay.from(year, month-1, 1)
-                binding.viewCanlendar.selectedDate = CalendarDay.from(year, month-1, 1)
+    private fun showDialog() {
+        binding.flSelectDate.visibility = View.VISIBLE
+        val chooseDateDialog = MonthPicker()
+        chooseDateDialog.setOnButtonClickListener(object : MonthPicker.OnButtonClickListener {
+            override fun onButtonClicked(year: Int, month: Int) {
+                binding.viewCanlendar.currentDate = CalendarDay.from(year, month - 1, 1)
+                binding.viewCanlendar.selectedDate = CalendarDay.from(year, month - 1, 1)
                 binding.flSelectDate.visibility = View.GONE
             }
         })
@@ -131,14 +133,13 @@ class CalendarFragment() : Fragment() {
             .commitAllowingStateLoss()
     }
 
-    suspend fun UpdatePlanDates(callDate : String) : ArrayList<Int>{
-        return suspendCoroutine { continuation->
-            Log.d("callDate","${callDate}")
-            val responseDate = getRetrofit().create(RetrofitInterface::class.java) // 이걸 따로 빼내는 방법....
-            val refreshToken = getRefreshToken(requireContext())
-            responseDate.homepromiseshow(
-                "Bearer $refreshToken",
-                callDate
+    private suspend fun UpdatePlanDates(callDate: String): ArrayList<Int> {
+        return suspendCoroutine { continuation ->
+            Log.d(TAG, "CalendarFragment - UpdatePlanDates() called\n요청 날짜 : $callDate")
+
+            RetrofitClient.instance.homepromiseshow(
+                authorization = "Bearer ${getRefreshToken(requireContext())}",
+                searchDate = callDate
             ).enqueue(object :
                 retrofit2.Callback<HomePlanShow> { // 서버와 비동기적으로 데이터 주고받을 수 있는 방법 enqueue사용
                 override fun onResponse( // 통신에 성공했을 경우
@@ -146,31 +147,31 @@ class CalendarFragment() : Fragment() {
                     response: Response<HomePlanShow>
                 ) {
                     if (response.isSuccessful) {
-                        val resp = response.body()// 성공했을 경우 response body불러오기
-                        Log.d("SIGNUP/SUCCESS", resp.toString())
-                        Log.d("성공!","success")
-                        promiseDates = resp!!.result.dates
+                        Log.d(NETWORK, "CalendarFragment - homepromiseshow() 실행결과 - 성공")
+                        val resp =
+                            requireNotNull(response.body()) { "CalendarFragment - homepromiseshow() 실행결과 불러오기 실패" }
+                        promiseDates = resp.result.dates
                         continuation.resume(promiseDates)
-                    }
-                    else{
+                    } else {
+                        Log.d(NETWORK, "CalendarFragment - homepromiseshow() 실행결과 - 안좋음")
                         continuation.resumeWithException(Exception("Response not successful"))
                     }
                 }
 
                 override fun onFailure(call: Call<HomePlanShow>, t: Throwable) { // 통신에 실패했을 경우
-                    Log.d("SIGNUP/FAILURE", t.message.toString()) // 실패한 이유 메세지 출력
+                    Log.d(NETWORK, "CalendarFragment - homepromiseshow() 실행결과 - 실패\nbecause : $t")
                     continuation.resumeWithException(t)
                 }
-
             })
         }
-
     }
 
-    fun initUpdatePlan(today : CalendarDay){
-
-
+    private fun initUpdatePlan(today: CalendarDay) {
+        binding.viewCanlendar.setTitleFormatter { "${today.year}년  ${today.month + 1}월" }
+        binding.viewCanlendar.selectedDate = today
+        binding.viewCanlendar.setDateTextAppearance(R.style.CalendarDateTextStyle)
+        binding.viewCanlendar.setHeaderTextAppearance(R.style.CalendarHeaderTextStyle)
+        binding.viewCanlendar.setWeekDayTextAppearance(R.style.CalendarWeekdayTextStyle)
     }
-
 
 }

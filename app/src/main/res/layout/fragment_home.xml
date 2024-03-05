@@ -4,128 +4,228 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/grayWhite">
-   <androidx.constraintlayout.widget.ConstraintLayout
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content">
-      <ImageView
-          android:id="@+id/iv_conetlogo"
-          android:layout_width="23dp"
-          android:layout_height="26dp"
-          app:layout_constraintBottom_toTopOf="@id/fl_calendarView"
-          app:layout_constraintLeft_toLeftOf="parent"
-          android:layout_marginLeft="26dp"
-          android:layout_marginBottom="7dp"
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="86dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="26dp"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/logo_image_text" />
+
+        <FrameLayout
+            android:id="@+id/fl_calendarView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="23dp"
+            android:layout_marginTop="36dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_promise_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/pretendard_bold"
+                android:text="오늘의 약속"
+                android:textColor="@color/texthigh"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/tv_promise_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:background="@drawable/circle_planscount"
+                android:fontFamily="@font/pretendard_bold"
+                android:gravity="center"
+                android:textColor="@color/purpleMain"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/fl_todolist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginTop="16dp"
+            android:background="@color/grayWhite" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="24dp"
+            android:layout_marginTop="30dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/pretendard_bold"
+                android:text="대기 중인 약속"
+                android:textColor="@color/texthigh"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/tv_promiseall_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:background="@drawable/circle_planscount"
+                android:fontFamily="@font/pretendard_bold"
+                android:gravity="center"
+                android:textColor="@color/purpleMain"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/fl_oncalllist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginTop="16dp"
+            android:background="@color/grayWhite" />
+
+
+    </LinearLayout>
+
+    <!--<androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/iv_conetlogo"
+            android:layout_width="23dp"
+            android:layout_height="26dp"
+            android:layout_marginLeft="26dp"
+            android:layout_marginBottom="7dp"
             android:src="@drawable/logo_image"
+            app:layout_constraintBottom_toTopOf="@id/fl_calendarView"
+            app:layout_constraintLeft_toLeftOf="parent" />
 
-      <ImageView
-          android:id="@+id/iv_conetfont"
-          android:layout_width="63dp"
-          android:layout_height="30dp"
-          app:layout_constraintBottom_toTopOf="@id/fl_calendarView"
-          app:layout_constraintLeft_toRightOf="@id/iv_conetlogo"
+        <ImageView
+            android:id="@+id/iv_conetfont"
+            android:layout_width="63dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginBottom="5dp"
             android:src="@drawable/logo_text"
-          android:layout_marginBottom="5dp"
-          android:src="@drawable/logo_conetfont"/>
+            app:layout_constraintBottom_toTopOf="@id/fl_calendarView"
+            app:layout_constraintLeft_toRightOf="@id/iv_conetlogo" />
 
-      <FrameLayout
-          android:id="@+id/fl_calendarView"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          app:layout_constraintTop_toTopOf="parent"
-          android:layout_marginTop="43dp"/>
+        <FrameLayout
+            android:id="@+id/fl_calendarView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="43dp"
+            app:layout_constraintTop_toTopOf="parent" />
 
-      <androidx.constraintlayout.widget.ConstraintLayout
-          android:id="@+id/cl_promise_tv_set"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          app:layout_constraintTop_toBottomOf="@id/fl_calendarView"
-          app:layout_constraintLeft_toLeftOf="parent"
-          android:layout_marginLeft="24dp"
-          android:layout_marginTop="36dp">
-         <TextView
-             android:id="@+id/tv_promise_date"
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:text="오늘의 약속"
-             android:textSize="20sp"
-             android:fontFamily="@font/pretendard_bold"
-             android:textColor="@color/texthigh"
-             app:layout_constraintTop_toTopOf="parent"
-             app:layout_constraintLeft_toLeftOf="parent"/>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_promise_tv_set"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="24dp"
+            android:layout_marginTop="36dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/fl_calendarView">
 
-         <TextView
-             android:id="@+id/tv_promise_count"
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             app:layout_constraintTop_toTopOf="parent"
-             app:layout_constraintBottom_toBottomOf="parent"
-             app:layout_constraintLeft_toRightOf="@id/tv_promise_date"
-             android:text="0"
-             android:background="@drawable/circle_planscount"
-             android:textSize="12sp"
-             android:fontFamily="@font/pretendard_bold"
-             android:textColor="@color/purpleMain"
-             android:gravity="center"
-             android:layout_marginLeft="6dp"
-             android:layout_marginTop="3dp"/>
+            <TextView
+                android:id="@+id/tv_promise_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/pretendard_bold"
+                android:text="오늘의 약속"
+                android:textColor="@color/texthigh"
+                android:textSize="20sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-      </androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:id="@+id/tv_promise_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="6dp"
+                android:layout_marginTop="3dp"
+                android:background="@drawable/circle_planscount"
+                android:fontFamily="@font/pretendard_bold"
+                android:gravity="center"
+                android:text="0"
+                android:textColor="@color/purpleMain"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toRightOf="@id/tv_promise_date"
+                app:layout_constraintTop_toTopOf="parent" />
 
-      <FrameLayout
-          android:id="@+id/fl_todolist"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:background="@color/grayWhite"
-          app:layout_constraintTop_toBottomOf="@id/cl_promise_tv_set"
-          android:layout_marginTop="16dp"
-          android:layout_marginHorizontal="24dp"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-      <androidx.constraintlayout.widget.ConstraintLayout
-          android:id="@+id/cl_promiseall_tv_set"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          app:layout_constraintTop_toBottomOf="@id/fl_todolist"
-          app:layout_constraintLeft_toLeftOf="parent"
-          android:layout_marginTop="30dp"
-          android:layout_marginLeft="24dp">
-         <TextView
-             android:id="@+id/tv_promiseall_date"
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:text="대기 중인 약속"
-             android:textSize="20sp"
-             android:fontFamily="@font/pretendard_bold"
-             android:textColor="@color/texthigh"
-             app:layout_constraintTop_toTopOf="parent"
-             app:layout_constraintLeft_toLeftOf="parent"/>
+        <FrameLayout
+            android:id="@+id/fl_todolist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginTop="16dp"
+            android:background="@color/grayWhite"
+            app:layout_constraintTop_toBottomOf="@id/cl_promise_tv_set" />
 
-         <TextView
-             android:id="@+id/tv_promiseall_count"
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             app:layout_constraintTop_toTopOf="parent"
-             app:layout_constraintBottom_toBottomOf="parent"
-             app:layout_constraintLeft_toRightOf="@id/tv_promiseall_date"
-             android:text="0"
-             android:background="@drawable/circle_planscount"
-             android:textSize="12sp"
-             android:fontFamily="@font/pretendard_bold"
-             android:textColor="@color/purpleMain"
-             android:gravity="center"
-             android:layout_marginLeft="6dp"
-             android:layout_marginTop="3dp"/>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_promiseall_tv_set"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="24dp"
+            android:layout_marginTop="30dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/fl_todolist">
 
-      </androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:id="@+id/tv_promiseall_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/pretendard_bold"
+                android:text="대기 중인 약속"
+                android:textColor="@color/texthigh"
+                android:textSize="20sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-      <FrameLayout
-          android:id="@+id/fl_oncalllist"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:background="@color/grayWhite"
-          app:layout_constraintTop_toBottomOf="@id/cl_promiseall_tv_set"
-          android:layout_marginTop="16dp"
-          android:layout_marginHorizontal="24dp"/>
+            <TextView
+                android:id="@+id/tv_promiseall_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="6dp"
+                android:layout_marginTop="3dp"
+                android:background="@drawable/circle_planscount"
+                android:fontFamily="@font/pretendard_bold"
+                android:gravity="center"
+                android:text="0"
+                android:textColor="@color/purpleMain"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toRightOf="@id/tv_promiseall_date"
+                app:layout_constraintTop_toTopOf="parent" />
 
-   </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <FrameLayout
+            android:id="@+id/fl_oncalllist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginTop="16dp"
+            android:background="@color/grayWhite"
+            app:layout_constraintTop_toBottomOf="@id/cl_promiseall_tv_set" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>-->
 
 </androidx.core.widget.NestedScrollView>
