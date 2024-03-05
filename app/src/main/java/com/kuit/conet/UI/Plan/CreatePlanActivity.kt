@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.calenderdialog.CalenderDialog
 import com.kuit.conet.Network.*
 import com.kuit.conet.R
+import com.kuit.conet.Utils.NETWORK
 import com.kuit.conet.databinding.ActivityCreatePlanBinding
 import com.kuit.conet.getRefreshToken
 import kotlinx.coroutines.CoroutineScope
@@ -147,10 +148,6 @@ class CreatePlanActivity() : AppCompatActivity() {
                         intent.putExtra("teamId", teamId)
                         intent.putExtra("planId", planId)
                         startActivity(intent)
-                        Log.d(
-                            "PlanTimeActivity 실행 완료",
-                            "startDate :" + binding.tvCreatePlanDate.text.toString()
-                        )
                         finish()
                     } else {
 
@@ -158,7 +155,7 @@ class CreatePlanActivity() : AppCompatActivity() {
                 }
 
                 override fun onFailure(call: Call<ResponseMakePlan>, t: Throwable) { // 통신에 실패했을 경우
-                    Log.d("API-CREATE/FAILURE", t.message.toString()) // 실패한 이유 메세지 출력
+                    Log.d(NETWORK, t.message.toString()) // 실패한 이유 메세지 출력
                 }
 
             })
