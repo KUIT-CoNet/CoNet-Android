@@ -1,101 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/cl_oncalllist"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="24dp"
+    android:layout_marginVertical="5dp"
     android:background="@drawable/layout_todolist"
-    android:padding="20dp"
-    android:layout_marginLeft="9dp"
-    android:layout_marginRight="10dp"
-    android:layout_marginBottom="10dp"
-    android:layout_marginTop="1dp"
-    android:elevation="8dp">
+    android:elevation="8dp"
+    android:orientation="horizontal"
+    android:padding="20dp">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cl_promise_text"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent">
+        android:gravity="center"
+        android:orientation="vertical">
+
         <TextView
             android:id="@+id/tv_promise_startdate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="2023.00.00"
-            android:textSize="14sp"
             android:fontFamily="@font/pretendard_bold"
+            android:maxLines="1"
+            android:text="2024. 00. 00"
             android:textColor="@color/gray800"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent" />
+            android:textSize="14sp" />
 
         <TextView
-            android:id="@+id/tv_promise_middle"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="-"
-            android:textSize="14sp"
+            android:layout_height="16dp"
             android:fontFamily="@font/pretendard_bold"
+            android:gravity="center"
+            android:text="-"
             android:textColor="@color/gray800"
-            app:layout_constraintTop_toBottomOf="@id/tv_promise_startdate"
-            app:layout_constraintBottom_toTopOf="@id/tv_promise_enddate"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"/>
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/tv_promise_enddate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="2023.00.00"
-            android:textSize="14sp"
             android:fontFamily="@font/pretendard_bold"
+            android:maxLines="1"
+            android:text="2024. 00. 00"
             android:textColor="@color/gray800"
-            app:layout_constraintTop_toBottomOf="@id/tv_promise_middle"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent" />
+            android:textSize="14sp" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
+    </LinearLayout>
 
     <View
-        android:id="@+id/v_promiss"
         android:layout_width="1dp"
         android:layout_height="26dp"
-        android:background="#C1C1C1"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toRightOf="@id/cl_promise_text"
+        android:layout_gravity="center_vertical"
         android:layout_marginHorizontal="20dp"
-        />
+        android:background="@color/iconDisabled" />
 
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:paddingVertical="3dp">
 
-    <TextView
-        android:id="@+id/tv_promisscontent"
-        android:layout_width="wrap_content"
-        android:maxWidth="183dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintLeft_toRightOf="@id/v_promiss"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="10dp"
-        android:fontFamily="@font/pretendard_medium"
-        android:textColor="@color/black"
-        android:textSize="16sp"
-        android:breakStrategy="simple"
-        android:text="2차 스터디"/>
+        <TextView
+            android:id="@+id/tv_promisscontent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:breakStrategy="simple"
+            android:ellipsize="end"
+            android:fontFamily="@font/pretendard_medium"
+            android:maxWidth="183dp"
+            android:maxLines="1"
+            android:text="ios 스터디"
+            android:textColor="@color/texthigh"
+            android:textSize="16sp" />
 
-    <TextView
-        android:id="@+id/tv_promisscategory"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/tv_promisscontent"
-        app:layout_constraintLeft_toRightOf="@id/v_promiss"
-        android:layout_marginLeft="20dp"
-        android:textSize="14sp"
-        android:fontFamily="@font/pretendard_medium"
-        android:text="ios 스터디"/>
+        <TextView
+            android:id="@+id/tv_promisscategory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:ellipsize="end"
+            android:fontFamily="@font/pretendard_medium"
+            android:maxLines="1"
+            android:text="ios 스터디"
+            android:textColor="@color/textMedium"
+            android:textSize="14sp" />
 
+    </LinearLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

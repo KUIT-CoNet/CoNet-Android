@@ -10,8 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.kuit.conet.R
 import com.kuit.conet.databinding.FragmentTermsConditionsBinding
-import com.kuit.conet.saveIsoption
-import retrofit2.http.Url
+import com.kuit.conet.Utils.saveIsoption
 
 
 class JoinMembershipContract : Fragment() {

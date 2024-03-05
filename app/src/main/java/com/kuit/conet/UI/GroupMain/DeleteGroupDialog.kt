@@ -5,22 +5,16 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.DialogFragment
 import com.kuit.conet.Network.EditUserName
 import com.kuit.conet.Network.RetrofitInterface
 import com.kuit.conet.Network.getRetrofit
 import com.kuit.conet.R
 import com.kuit.conet.databinding.DialogDeleteGroupBinding
-import com.kuit.conet.databinding.DialogExitGroupBinding
-import com.kuit.conet.getRefreshToken
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import com.kuit.conet.Utils.getRefreshToken
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import kotlin.coroutines.suspendCoroutine
 
 class DeleteGroupDialog(groupMainActivity: GroupMainActivity, groupId : Int) : DialogFragment() {
     lateinit var binding : DialogDeleteGroupBinding

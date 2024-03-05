@@ -13,6 +13,9 @@ import com.kuit.conet.*
 import com.kuit.conet.UI.ConetMainActivity
 import androidx.fragment.app.Fragment
 import com.kuit.conet.Network.*
+import com.kuit.conet.Utils.getAccessToken
+import com.kuit.conet.Utils.getUsername
+import com.kuit.conet.Utils.saveUsername
 import com.kuit.conet.databinding.FragmentNameInputBinding
 import retrofit2.Call
 import retrofit2.Response

@@ -5,16 +5,18 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardCornerRadius="10dp"
-    android:background="@color/white"
+    android:background="@android:color/transparent"
     android:elevation="1dp"
     android:layout_marginLeft="1dp"
     android:layout_marginRight="2dp"
     android:layout_marginBottom="10dp"
+    android:paddingVertical="5dp"
     android:id="@+id/plan_cv">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/white"
         android:padding="20dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -50,7 +52,7 @@
                 android:textColor="@color/gray800"
                 android:text="14:00"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
-        
+
         <View
             android:id="@+id/line"
             android:layout_width="1dp"
@@ -90,8 +92,8 @@
                 android:textColor="@color/gray800"
                 android:breakStrategy="simple"
                 android:text="제목"/>
-            
-            
+
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
         <ImageView

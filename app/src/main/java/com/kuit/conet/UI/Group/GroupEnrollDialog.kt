@@ -1,19 +1,23 @@
 package com.kuit.conet.UI.Group
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.DialogFragment
-import com.kuit.conet.Network.ResponseEnrollGroup
 import com.kuit.conet.Network.RetrofitClient
+import com.kuit.conet.Utils.LIFECYCLE
 import com.kuit.conet.Utils.NetworkUtil.getErrorResponse
 import com.kuit.conet.Utils.NETWORK
 import com.kuit.conet.databinding.DialogGroupEnrollBinding
-import com.kuit.conet.getAccessToken
+import com.kuit.conet.Utils.getAccessToken
+import com.kuit.conet.data.dto.request.team.RequestTeamJoin
+import com.kuit.conet.data.dto.response.team.ResponseTeamJoin
 import retrofit2.Call
 import retrofit2.Response
 
@@ -40,81 +44,85 @@ class GroupEnrollDialog : DialogFragment() {
         savedInstanceState: Bundle?
     ): View {
         super.onCreateView(inflater, container, savedInstanceState)
+        Log.d(LIFECYCLE, "GroupEnrollDialog - onCreateView() called")
         _binding = DialogGroupEnrollBinding.inflate(inflater, container, false)
+        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog?.window?.requestFeature(Window.FEATURE_NO_TITLE)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Log.d(LIFECYCLE, "GroupEnrollDialog - onViewCreated() called")
 
         binding.ivDialogGroupEnrollClose.setOnClickListener {
             dismiss()
         }
 
         binding.btnDialogGroupEnroll.setOnClickListener {
-            Log.d(NETWORK, "참여하기 버튼 클릭함!")
-            RetrofitClient.instance.enrollGroup(
-                "Bearer ${getAccessToken(requireContext())}",
-                binding.tfDialogGroupEnrollInputCode.text.toString()
-            ).enqueue(object : retrofit2.Callback<ResponseEnrollGroup> {
+            RetrofitClient.teamInstance.enrollGroup(
+                authorization = "Bearer ${getAccessToken(requireContext())}",
+                request = RequestTeamJoin(
+                    binding.tfDialogGroupEnrollInputCode.text.toString()
+                )
+            ).enqueue(object : retrofit2.Callback<ResponseTeamJoin> {
                 override fun onResponse(
-                    call: Call<ResponseEnrollGroup>,
-                    response: Response<ResponseEnrollGroup>
+                    call: Call<ResponseTeamJoin>,
+                    response: Response<ResponseTeamJoin>
                 ) {
                     if (response.isSuccessful) {
                         Log.d(NETWORK, "GroupEnrollDialog - Retrofit enrollGroup()실행결과 - 성공")
-                        Log.d(NETWORK, response.toString())
                         listener.onUpdateGroupList()
                         dismiss()
                     } else {
-                        Log.d(NETWORK, "GroupEnrollDialog - Retrofit enrollGroup()실행결과 - 성공x")
-                        val errorText = getErrorResponse(response.errorBody())!!.message
-                        Log.d(NETWORK, "response.errorbody : $errorText")
+                        Log.d(NETWORK, "GroupEnrollDialog - Retrofit enrollGroup()실행결과 - 안좋음")
+
+                        val errorText =
+                            getErrorResponse(response.errorBody())?.message ?: "오류 불러오기를 실패하였습니다."
                         binding.ivDialogGroupEnrollError.visibility = View.VISIBLE
                         binding.tvDialogGroupEnrollError.visibility = View.VISIBLE
                         binding.tvDialogGroupEnrollError.text = errorText
                     }
                 }
 
-                override fun onFailure(call: Call<ResponseEnrollGroup>, t: Throwable) {
-                    Log.d(NETWORK, "GroupEnrollDialog - Retrofit enrollGroup()실행결과 - 실패")
-                    Log.d(NETWORK, t.toString())
+                override fun onFailure(call: Call<ResponseTeamJoin>, t: Throwable) {
+                    Log.d(NETWORK, "GroupEnrollDialog - enrollGroup()실행결과 - 실패\nbecause : $t")
                 }
 
             })
         }
 
-        binding.tfDialogGroupEnrollInputCode.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        binding.tfDialogGroupEnrollInputCode.doAfterTextChanged {
+            val inviteCode = binding.tfDialogGroupEnrollInputCode.text.toString()
 
-            override fun afterTextChanged(s: Editable?) {
-
-                val inviteCode = binding.tfDialogGroupEnrollInputCode.text.toString()
-
-                if (validateInviteCode(inviteCode)) {    // 올바른 형식을 입력한 경우
-                    binding.ivDialogGroupEnrollError.visibility = View.INVISIBLE
-                    binding.tvDialogGroupEnrollError.visibility = View.INVISIBLE
-                    binding.tvDialogGroupEnrollInputCodeHint.visibility = View.GONE
-                    binding.btnDialogGroupEnroll.isEnabled = true
-                    return
-                }
-
-                if (inviteCode.isEmpty()) {    // 아무것도 입력하지 않은 경우
-                    binding.ivDialogGroupEnrollError.visibility = View.INVISIBLE
-                    binding.tvDialogGroupEnrollError.visibility = View.INVISIBLE
-                    binding.tvDialogGroupEnrollInputCodeHint.visibility = View.VISIBLE
-                    binding.btnDialogGroupEnroll.isEnabled = false
-                    return
-                }
-
-                binding.ivDialogGroupEnrollError.visibility = View.VISIBLE
-                binding.tvDialogGroupEnrollError.visibility = View.VISIBLE
-                binding.tvDialogGroupEnrollError.text = "올바른 초대코드를 입력해주세요."
+            if (validateInviteCode(inviteCode)) {    // 올바른 형식을 입력한 경우
+                binding.ivDialogGroupEnrollError.visibility = View.INVISIBLE
+                binding.tvDialogGroupEnrollError.visibility = View.INVISIBLE
                 binding.tvDialogGroupEnrollInputCodeHint.visibility = View.GONE
-                binding.btnDialogGroupEnroll.isEnabled = false
+                binding.btnDialogGroupEnroll.isEnabled = true
+                return@doAfterTextChanged
             }
-        })
+
+            if (inviteCode.isEmpty()) {    // 아무것도 입력하지 않은 경우
+                binding.ivDialogGroupEnrollError.visibility = View.INVISIBLE
+                binding.tvDialogGroupEnrollError.visibility = View.INVISIBLE
+                binding.tvDialogGroupEnrollInputCodeHint.visibility = View.VISIBLE
+                binding.btnDialogGroupEnroll.isEnabled = false
+                return@doAfterTextChanged
+            }
+
+            binding.ivDialogGroupEnrollError.visibility = View.VISIBLE
+            binding.tvDialogGroupEnrollError.visibility = View.VISIBLE
+            binding.tvDialogGroupEnrollError.text = "올바른 초대코드를 입력해주세요."
+            binding.tvDialogGroupEnrollInputCodeHint.visibility = View.GONE
+            binding.btnDialogGroupEnroll.isEnabled = false
+        }
+    }
+
+    override fun onDestroyView() {
+        _binding = null
+        super.onDestroyView()
+        Log.d(LIFECYCLE, "GroupEnrollDialog - onDestroyView() called")
     }
 
     private fun validateInviteCode(inviteCode: String): Boolean {

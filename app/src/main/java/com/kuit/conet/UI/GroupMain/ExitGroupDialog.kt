@@ -5,79 +5,90 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.DialogFragment
-import com.kuit.conet.Network.EditUserName
-import com.kuit.conet.Network.RetrofitInterface
-import com.kuit.conet.Network.getRetrofit
+import com.kuit.conet.Network.RetrofitClient
 import com.kuit.conet.R
+import com.kuit.conet.Utils.LIFECYCLE
+import com.kuit.conet.Utils.NETWORK
 import com.kuit.conet.databinding.DialogExitGroupBinding
-import com.kuit.conet.getRefreshToken
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import com.kuit.conet.Utils.getRefreshToken
+import com.kuit.conet.data.dto.request.team.RequestLeaveGroup
+import com.kuit.conet.data.dto.response.team.ResponseLeaveGroup
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import kotlin.coroutines.suspendCoroutine
 
-class ExitGroupDialog(groupMainActivity: GroupMainActivity, groupId : Int) : DialogFragment() {
-    lateinit var binding : DialogExitGroupBinding
-    val groupMainActivity = groupMainActivity
-    val groupId = groupId
+class ExitGroupDialog(
+    private val groupMainActivity: GroupMainActivity,
+    private val groupId: Int,
+) : DialogFragment() {
+
+    private var _binding: DialogExitGroupBinding? = null
+    private val binding: DialogExitGroupBinding
+        get() = requireNotNull(_binding) { "ExitGroupDialog's binding is null" }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.d(LIFECYCLE, "ExitGroupDialog - onCreate() called")
         setStyle( // Background -> Transparent.
             STYLE_NORMAL,
             R.style.TransparentBottomSheetDialogFragment
         )
     }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DialogExitGroupBinding.inflate(inflater, container, false)
-
-        binding.exitDone.setOnClickListener { // 나가기 메뉴 눌렀을 때
-            ExitGroup()
-            groupMainActivity.finish()
-            dismiss()
-        }
-
-        binding.exitCancel.setOnClickListener { // 취소 눌렀을 때
-            // 리프레쉬 엑세스 토큰 삭제
-           dismiss()
-        }
-
+        Log.d(LIFECYCLE, "ExitGroupDialog - onCreateView() called")
+        _binding = DialogExitGroupBinding.inflate(inflater, container, false)
         return binding.root
     }
 
-   fun ExitGroup(){
-        val exitgroup = getRetrofit().create(RetrofitInterface :: class.java)
-        val refreshToken = getRefreshToken(requireContext())
-        exitgroup.LeaveGroup(
-            "Bearer $refreshToken",
-            groupId
-        ).enqueue(object : Callback<EditUserName>{
-            override fun onResponse(
-                call: Call<EditUserName>,
-                response: Response<EditUserName>
-            ) {
-                val resp = response.body()// 성공했을 경우 response body불러오기
-                Log.d("SIGNUP/SUCCESS", resp.toString())
-                Log.d("성공!","success")
-            }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        Log.d(LIFECYCLE, "ExitGroupDialog - onViewCreated() called")
+        binding.exitDone.setOnClickListener {
+            RetrofitClient.teamInstance.leaveGroup(
+                "Bearer ${getRefreshToken(requireContext())}",
+                RequestLeaveGroup(
+                    groupId.toLong(),
+                ),
+            ).enqueue(object : Callback<ResponseLeaveGroup> {
+                override fun onResponse(
+                    call: Call<ResponseLeaveGroup>,
+                    response: Response<ResponseLeaveGroup>
+                ) {
+                    if (response.isSuccessful) {
+                        Log.d(NETWORK, "ExitGroupDialog - LeaveGroup() 실행결과 - 성공")
+                        dismiss()
+                        groupMainActivity.finish()
+                    } else {
+                        Log.d(NETWORK, "ExitGroupDialog - LeaveGroup() 실행결과 - 안좋음")
+                    }
 
-            override fun onFailure(call: Call<EditUserName>, t: Throwable) {
+                }
 
-            }
+                override fun onFailure(call: Call<ResponseLeaveGroup>, t: Throwable) {
+                    Log.d(NETWORK, "ExitGroupDialog - LeaveGroup() 실행결과 - 실패\nbecause : $t")
+                }
+            })
+        }
 
-        })
-   }
+        binding.exitCancel.setOnClickListener {
+            dismiss()
+        }
+    }
+
+    override fun onDestroyView() {
+        _binding = null
+        super.onDestroyView()
+        Log.d(LIFECYCLE, "ExitGroupDialog - onDestroyView() called")
+    }
 
     companion object {
-        const val TAG = "ExitGroupDialog"
+        const val DIALOG_TAG = "ExitGroupDialog"
     }
 
 }

@@ -8,7 +8,7 @@ import com.kuit.conet.Network.NoticeInfo
 import com.kuit.conet.Network.RetrofitClient
 import com.kuit.conet.Utils.NETWORK
 import com.kuit.conet.databinding.ActivityNoticeBinding
-import com.kuit.conet.getAccessToken
+import com.kuit.conet.Utils.getAccessToken
 import retrofit2.Call
 import retrofit2.Response
 

@@ -14,7 +14,7 @@ import com.kuit.conet.Network.UpdateWaiting
 import com.kuit.conet.Network.getRetrofit
 import com.kuit.conet.R
 import com.kuit.conet.databinding.ActivityEditPlanBinding
-import com.kuit.conet.getRefreshToken
+import com.kuit.conet.Utils.getRefreshToken
 import retrofit2.Call
 import retrofit2.Response
 

@@ -9,8 +9,8 @@ import androidx.fragment.app.DialogFragment
 import com.kuit.conet.R
 import com.kuit.conet.UI.Login.LoginActivity
 import com.kuit.conet.databinding.DialogLogoutBinding
-import com.kuit.conet.saveUserAccessToken
-import com.kuit.conet.saveUserRefreshToken
+import com.kuit.conet.Utils.saveUserAccessToken
+import com.kuit.conet.Utils.saveUserRefreshToken
 
 class LogoutDialog : DialogFragment() {
     lateinit var binding : DialogLogoutBinding

@@ -1,9 +1,7 @@
-package com.kuit.conet
+package com.kuit.conet.Utils
 
 import android.content.Context
-import android.text.Editable
 import androidx.appcompat.app.AppCompatActivity
-import com.kuit.conet.Network.ShowUserInfo
 
 fun saveUserAccessToken(context : Context, access:String?){
     val sdf = context.getSharedPreferences("tokensave", AppCompatActivity.MODE_PRIVATE) // 보안 위해 모드 프라이빗으로 선언

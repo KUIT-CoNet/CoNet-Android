@@ -177,7 +177,7 @@
                 app:layout_constraintTop_toBottomOf="@id/participants_tv"
                 app:spanCount="2" />
 
-            <View
+            <!--<View
                 android:id="@+id/line_view"
                 android:layout_width="match_parent"
                 android:layout_height="12dp"
@@ -332,7 +332,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"/>
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>-->
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
