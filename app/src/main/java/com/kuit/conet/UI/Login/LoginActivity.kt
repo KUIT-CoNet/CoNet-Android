@@ -19,8 +19,8 @@ import com.kuit.conet.Network.RetrofitInterface
 import com.kuit.conet.Network.getRetrofit
 import com.kuit.conet.R
 import com.kuit.conet.databinding.ActivityLoginBinding
-import com.kuit.conet.saveUserAccessToken
-import com.kuit.conet.saveUserRefreshToken
+import com.kuit.conet.Utils.saveUserAccessToken
+import com.kuit.conet.Utils.saveUserRefreshToken
 import retrofit2.Call
 import retrofit2.Response
 

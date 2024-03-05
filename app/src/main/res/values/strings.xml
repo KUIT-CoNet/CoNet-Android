@@ -4,7 +4,6 @@
     <string name="kakao_app_key">ca80d7d552460493e7e06a29b6eafb06</string>
     <!-- AndroidManifest.xml에서 사용 -->
     <string name="kakao_app_key2">kakaoca80d7d552460493e7e06a29b6eafb06</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="navigation_drawer_open">Open</string>
@@ -55,5 +54,22 @@
 
     <string name="group_main_making_plan">약속 만들기</string>
     <string name="today_plan">오늘의 약속</string>
+
+    <string name="invitecode_issue">초대코드가\n발급되었어요.</string>
+    <string name="invitecode_expiration_period">초대 코드 유효 기간 :  </string>
+
+    <string name="January">1월</string>
+    <string name="February">2월</string>
+    <string name="March">3월</string>
+    <string name="April">4월</string>
+    <string name="May">5월</string>
+    <string name="June">6월</string>
+    <string name="July">7월</string>
+    <string name="August">8월</string>
+    <string name="September">9월</string>
+    <string name="October">10월</string>
+    <string name="November">11월</string>
+    <string name="December">12월</string>
+
 
 </resources>

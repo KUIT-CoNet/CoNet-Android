@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.kuit.conet.R
 import com.kuit.conet.UI.Home.Calendar.*
-import com.kuit.conet.UI.Home.choose_date_dialog
+import com.kuit.conet.UI.Home.MonthPicker
 import com.kuit.conet.databinding.FragmentCalenderdialogBinding
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener
@@ -73,9 +73,9 @@ class CalenderDialog  : Fragment() {
 
     fun showDialog(){
         binding.flSelectDate2.visibility = View.VISIBLE
-        val chooseDateDialog = choose_date_dialog()
+        val chooseDateDialog = MonthPicker()
         chooseDateDialog.setOnButtonClickListener(object :
-            choose_date_dialog.OnButtonClickListener {
+            MonthPicker.OnButtonClickListener {
             override fun onButtonClicked(year: Int, month: Int) {
                 binding.viewCanlendar.currentDate = CalendarDay.from(year, month-1, 1)
                 binding.viewCanlendar.selectedDate = CalendarDay.from(year, month-1, 1)

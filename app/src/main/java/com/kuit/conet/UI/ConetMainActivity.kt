@@ -1,11 +1,10 @@
 package com.kuit.conet.UI
 
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import com.kuit.conet.*
-import com.kuit.conet.UI.Home.Home
+import com.kuit.conet.UI.Home.HomeFragment
 import com.kuit.conet.UI.User.User
 import com.kuit.conet.UI.Group.GroupFragment
 import androidx.appcompat.app.AppCompatActivity
@@ -28,7 +27,7 @@ class ConetMainActivity : AppCompatActivity() {
         val callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 val fragment = fragmentManager.findFragmentById(R.id.main_fragment)
-                if (fragment is Home) { // Home 프레그먼트에서 뒤로 가기 누르면
+                if (fragment is HomeFragment) { // Home 프레그먼트에서 뒤로 가기 누르면
                     killapp() // 앱 종료
                 } else {
                     binding.mainBnv.selectedItemId = R.id.home_menu // 선택된 프레그먼트를 강제로 홈 프레그먼트로
@@ -40,7 +39,7 @@ class ConetMainActivity : AppCompatActivity() {
 
     private fun initBottomNavigation() {
         fragmentManager.commit {
-            replace(R.id.main_fragment, Home())
+            replace(R.id.main_fragment, HomeFragment())
         }
 
         binding.mainBnv.setOnItemSelectedListener {
@@ -48,7 +47,7 @@ class ConetMainActivity : AppCompatActivity() {
                 R.id.home_menu -> {
                     fragmentManager.commit {
                         addToBackStack(null)
-                        replace(R.id.main_fragment, Home())
+                        replace(R.id.main_fragment, HomeFragment())
                     }
                     return@setOnItemSelectedListener true
                 }

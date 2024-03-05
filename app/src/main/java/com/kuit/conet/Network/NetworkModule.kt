@@ -1,5 +1,12 @@
 package com.kuit.conet.Network
 
+import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import com.kuit.conet.data.api.HomeAPI
+import com.kuit.conet.data.api.MemberAPI
+import com.kuit.conet.data.api.PlanAPI
+import com.kuit.conet.data.api.TeamAPI
+import kotlinx.serialization.json.Json
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -7,12 +14,23 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 const val BASE_URL = "https://conet.store/"
 
-object RetrofitClient{
+object RetrofitClient {
     val retrofit = getRetrofit()
     val instance = retrofit.create(RetrofitInterface::class.java)
+
+    private val jsonRetrofit = getJsonRetrofit()
+    val jsonInstance = jsonRetrofit.create(RetrofitInterface::class.java)
+    val memberInstance =
+        requireNotNull(jsonRetrofit.create(MemberAPI::class.java)) { "NetworkModule's MemberAPI is null" }
+    val teamInstance =
+        requireNotNull(jsonRetrofit.create(TeamAPI::class.java)) { "NetworkModule's TeamAPI is null" }
+    val homeInstance =
+        requireNotNull(jsonRetrofit.create(HomeAPI::class.java)) { "NetworkModule's HomeAPI is null" }
+    val planInstance =
+        requireNotNull(jsonRetrofit.create(PlanAPI::class.java)) { "NetworkModule's PlanAPI is null" }
 }
 
-fun okHttpClient() : OkHttpClient {
+fun okHttpClient(): OkHttpClient {
     val builder = OkHttpClient.Builder()
     val logging = HttpLoggingInterceptor()
     logging.level = HttpLoggingInterceptor.Level.BODY
@@ -27,4 +45,17 @@ fun getRetrofit(): Retrofit {
         .build()
 
     return retrofit
+}
+
+fun getJsonRetrofit(): Retrofit {
+    val json = Json {
+        ignoreUnknownKeys = true
+        coerceInputValues = true
+    }
+
+    return Retrofit.Builder()
+        .baseUrl(BASE_URL)
+        .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
+        .client(okHttpClient())
+        .build()
 }

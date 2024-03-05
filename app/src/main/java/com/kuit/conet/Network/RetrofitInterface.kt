@@ -249,7 +249,7 @@ interface RetrofitInterface {
         authorization: String,
     ): Call<ShowUser>
 
-    @GET("user/bookmark") // :: 북마크 조회
+    @GET("member/bookmark") // :: 북마크 된 모임 조회
     fun getBookmarkGroup(
         @Header("Authorization")
         authorization: String,

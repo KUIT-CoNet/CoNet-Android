@@ -11,11 +11,11 @@ import com.kuit.conet.UI.Group.GroupPlusActivity
 import com.kuit.conet.databinding.FragmentSidebarBinding
 
 class SideBar(
-    private val title: String?,
+    private val title: String,
     private val memberCount: Int,
-    private val groupId: Int,
+    private val groupId: Long,
     private val groupMainActivity: GroupMainActivity,
-    private val image: String?
+    private val image: String,
 ) : Fragment(), View.OnClickListener {
 
     private var _binding: FragmentSidebarBinding? = null
@@ -46,7 +46,7 @@ class SideBar(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.tvSidebarGroupName.text = title
-        binding.tvSidebarGroupCount.text = memberCount.toString() + "명"
+        binding.tvSidebarGroupCount.text = "$memberCount 명"
 
         binding.clSidebar.setOnClickListener(this)
         binding.ivSidebarClose.setOnClickListener(this)
@@ -65,6 +65,7 @@ class SideBar(
                 itemClickListener.exitSidebar()
                 destoryFragment()
             }
+
             R.id.iv_sidebar_group_name_edit -> {
                 destoryFragment()
                 groupMainActivity.finish()
@@ -75,30 +76,39 @@ class SideBar(
                 intent.putExtra("groupImage", image)
                 startActivity(intent)
             }
+
             R.id.ll_sidebar_invite_code -> {
-                val dlg = GroupInviteCodeDialog(groupId)
+                val dlg = GroupInviteCodeDialog()
+                val bundle = Bundle()
+                bundle.putLong(BUNDLE_GROUP_ID, groupId)
+                dlg.arguments = bundle
                 dlg.isCancelable = false
-                dlg.show(parentFragmentManager, GroupInviteCodeDialog.TAG)
+                dlg.show(parentFragmentManager, GroupInviteCodeDialog.DIALOG_TAG)
                 destoryFragment()
             }
+
             R.id.ll_sidebar_waiting_plan -> {
                 itemClickListener.onItemClick(1)
                 destoryFragment()
             }
+
             R.id.ll_sidebar_plan -> {
                 itemClickListener.onItemClick(2)
                 destoryFragment()
             }
+
             R.id.ll_sidebar_group_delete -> {
-                val deleteGroupDialog = DeleteGroupDialog(groupMainActivity, groupId)
+                val deleteGroupDialog = DeleteGroupDialog(groupMainActivity, groupId.toInt())
                 destoryFragment()
-                deleteGroupDialog.show(parentFragmentManager, DeleteGroupDialog.TAG)
+                deleteGroupDialog.show(parentFragmentManager, DeleteGroupDialog.DIALOG_TAG)
             }
+
             R.id.ll_sidebar_group_out -> {
-                val exitGroupDialog = ExitGroupDialog(groupMainActivity, groupId)
+                val exitGroupDialog = ExitGroupDialog(groupMainActivity, groupId.toInt())
                 destoryFragment()
-                exitGroupDialog.show(parentFragmentManager, ExitGroupDialog.TAG)
+                exitGroupDialog.show(parentFragmentManager, ExitGroupDialog.DIALOG_TAG)
             }
+
             R.id.cl_sidebar -> {}
         }
     }
@@ -116,6 +126,10 @@ class SideBar(
                 .remove(fragment)
                 .commit()
         }
+    }
+
+    companion object {
+        const val BUNDLE_GROUP_ID = "groupId"
     }
 
 }

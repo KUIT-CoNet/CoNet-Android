@@ -11,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.textfield.TextInputEditText
-import com.kuit.conet.Data.Group
 import com.kuit.conet.Network.Members
 import com.kuit.conet.Network.ResultGetPlanDetail
 import com.kuit.conet.R
@@ -62,7 +61,6 @@ class DetailEditFixActivity
         participantAdapter = ParticipantAdapter(this, data.members.map { it.asMembers() } as ArrayList<Members>, 1)
         participantAdapter.supportFragmentManager = supportFragmentManager
         binding.participantsRv.adapter = participantAdapter
-        participantAdapter.groupId = Group.groupId
         binding.participantsRv.layoutManager = GridLayoutManager(this, 2)
 
         binding.nameTf.addTextChangedListener {

@@ -1,6 +1,5 @@
 package com.kuit.conet.UI.Plan
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,20 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.kuit.conet.Network.ResponseDeletePlan
-import com.kuit.conet.Network.ResponseGetGroupDetail
-import com.kuit.conet.Network.ResponseUpdateWaiting
 import com.kuit.conet.Network.RetrofitInterface
 import com.kuit.conet.Network.getRetrofit
-import com.kuit.conet.UI.Group.GroupAdapter
-import com.kuit.conet.UI.Group.GroupData
-import com.kuit.conet.UI.GroupMain.GroupMainActivity
-import com.kuit.conet.Utils.NETWORK
-import com.kuit.conet.Utils.TAG
 import com.kuit.conet.databinding.DialogDeletePlanBinding
-import com.kuit.conet.getRefreshToken
+import com.kuit.conet.Utils.getRefreshToken
 import retrofit2.Call
 import retrofit2.Response
-import retrofit2.create
 
 class DeletePlanDialog : Fragment() {
     lateinit var binding: DialogDeletePlanBinding
@@ -33,7 +24,7 @@ class DeletePlanDialog : Fragment() {
     ): View {
         binding = DialogDeletePlanBinding.inflate(inflater, container, false)
 
-        var planId = requireArguments().getInt("planId")
+        val planId = requireArguments().getInt("planId")
 
         binding.tvDialogDeleteBtnCancel.setOnClickListener {
             parentFragmentManager.beginTransaction()

@@ -12,15 +12,13 @@ import com.kuit.conet.Network.ResponseDeletePlan
 import com.kuit.conet.Network.ResponseGetPlanDetail
 import com.kuit.conet.Network.ResultGetPlanDetail
 import com.kuit.conet.Network.RetrofitClient
-import com.kuit.conet.Network.RetrofitInterface
-import com.kuit.conet.Network.getRetrofit
 import com.kuit.conet.R
 import com.kuit.conet.UI.Plan.dialog.EditTrashDialog
 import com.kuit.conet.Utils.LIFECYCLE
 import com.kuit.conet.Utils.NETWORK
 import com.kuit.conet.Utils.TAG
 import com.kuit.conet.databinding.ActivityDetailFixBinding
-import com.kuit.conet.getRefreshToken
+import com.kuit.conet.Utils.getRefreshToken
 import retrofit2.Call
 import retrofit2.Response
 

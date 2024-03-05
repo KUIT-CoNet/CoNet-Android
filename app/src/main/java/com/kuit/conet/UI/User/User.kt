@@ -10,6 +10,12 @@ import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.kuit.conet.*
 import com.kuit.conet.Network.*
+import com.kuit.conet.Utils.getRefreshToken
+import com.kuit.conet.Utils.getUserImg
+import com.kuit.conet.Utils.getUsername
+import com.kuit.conet.Utils.saveUserEmail
+import com.kuit.conet.Utils.saveUserImgUrl
+import com.kuit.conet.Utils.saveUsername
 import com.kuit.conet.databinding.FragmentUserBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

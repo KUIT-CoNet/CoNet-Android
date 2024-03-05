@@ -11,9 +11,8 @@ import com.kuit.conet.Network.RetrofitInterface
 import com.kuit.conet.Network.getRetrofit
 import com.kuit.conet.R
 import com.kuit.conet.UI.Home.Calendar.*
-import com.kuit.conet.UI.Home.choose_date_dialog
+import com.kuit.conet.UI.Home.MonthPicker
 import com.kuit.conet.databinding.FragmentCalendarBinding
-import com.kuit.conet.getRefreshToken
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener
 import kotlinx.coroutines.CoroutineScope
@@ -118,9 +117,9 @@ class GroupCalendarFragment (planId : Int) : Fragment() {
 
     fun showDialog(){
         binding.flSelectDate.visibility = View.VISIBLE
-        val chooseDateDialog = choose_date_dialog()
+        val chooseDateDialog = MonthPicker()
         chooseDateDialog.setOnButtonClickListener(object :
-            choose_date_dialog.OnButtonClickListener {
+            MonthPicker.OnButtonClickListener {
             override fun onButtonClicked(year: Int, month: Int) {
 
                 binding.viewCanlendar.currentDate = CalendarDay.from(year, month-1, 1)

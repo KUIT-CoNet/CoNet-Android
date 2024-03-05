@@ -18,7 +18,7 @@ import com.kuit.conet.R
 import com.kuit.conet.Utils.NETWORK
 import com.kuit.conet.Utils.TAG
 import com.kuit.conet.databinding.ActivityTimeInputBinding
-import com.kuit.conet.getRefreshToken
+import com.kuit.conet.Utils.getRefreshToken
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
