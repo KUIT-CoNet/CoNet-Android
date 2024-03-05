@@ -122,7 +122,7 @@ class PlanTimeActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        val coroutineScope = CoroutineScope(Dispatchers.Main)
+        val coroutineScope = CoroutineScope(Dispatchers.IO) //IO로 하는게 좋다
         coroutineScope.launch {
             getFrame(planId) //api로 정보 받아오기
         }
