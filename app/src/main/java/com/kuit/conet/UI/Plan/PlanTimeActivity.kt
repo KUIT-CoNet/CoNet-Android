@@ -231,7 +231,7 @@ class PlanTimeActivity : AppCompatActivity() {
         }
     }
 
-    fun setFrame(page: Int) { //날짜 입력 후, 표채우기로 넘김
+    fun setFrame(page: Int) { //날짜 입력 후, 표 채우기로 넘김
         var startDate = LocalDate.parse(planStartDate.replace(". ", "-"))
         when (page) {
             1 -> {
@@ -381,41 +381,41 @@ class PlanTimeActivity : AppCompatActivity() {
     }
 
     private fun updateClickListener(day: Int, i: Int, activation: Boolean) {
-        if (!activation) { //마지막 인자값을 false로 하면 클릭기능을 비활성화
-            when (day) {
-                1 -> day1[i].setOnClickListener { }
-                2 -> day2[i].setOnClickListener { }
-                3 -> day3[i].setOnClickListener { }
-            }
-        } else { //클릭기능을 활성화
+        if (activation) { //클릭 기능 활성화
             when (day) {
                 1 -> day1[i].setOnClickListener { getFixPlanDialog(1, i) }
                 2 -> day2[i].setOnClickListener { getFixPlanDialog(2, i) }
                 3 -> day3[i].setOnClickListener { getFixPlanDialog(3, i) }
             }
+        } else { //클릭 기능 비활성화
+            when (day) {
+                1 -> day1[i].setOnClickListener { }
+                2 -> day2[i].setOnClickListener { }
+                3 -> day3[i].setOnClickListener { }
+            }
         }
     }
 
     private fun getFixPlanDialog(day: Int, i: Int) {
-        var startDate = LocalDate.parse(planStartDate.replace(".", "-"))
+        var startDate = LocalDate.parse(planStartDate.replace(". ", "-"))
         var fixedDate = ""
         var fixedTime = i
-        var userId: ArrayList<Int> = arrayListOf()
+        var memberIds: ArrayList<Int> = arrayListOf()
         var userName: ArrayList<String> = arrayListOf()
 
         when (day) {
             1 -> {
                 if (page == 1) {
                     fixedDate = startDate.toString()
-                    userId = day1Info[i].memberIds
+                    memberIds = day1Info[i].memberIds
                     userName = day1Info[i].memberNames
                 } else if (page == 2) {
                     fixedDate = startDate.plusDays(3).toString()
-                    userId = day4Info[i].memberIds
+                    memberIds = day4Info[i].memberIds
                     userName = day4Info[i].memberNames
                 } else if (page == 3) {
                     fixedDate = startDate.plusDays(6).toString()
-                    userId = day7Info[i].memberIds
+                    memberIds = day7Info[i].memberIds
                     userName = day7Info[i].memberNames
                 }
             }
@@ -423,11 +423,11 @@ class PlanTimeActivity : AppCompatActivity() {
             2 -> {
                 if (page == 1) {
                     fixedDate = startDate.plusDays(1).toString()
-                    userId = day2Info[i].memberIds
+                    memberIds = day2Info[i].memberIds
                     userName = day2Info[i].memberNames
                 } else if (page == 2) {
                     fixedDate = startDate.plusDays(4).toString()
-                    userId = day5Info[i].memberIds
+                    memberIds = day5Info[i].memberIds
                     userName = day5Info[i].memberNames
                 }
             }
@@ -435,11 +435,11 @@ class PlanTimeActivity : AppCompatActivity() {
             3 -> {
                 if (page == 1) {
                     fixedDate = startDate.plusDays(2).toString()
-                    userId = day3Info[i].memberIds
+                    memberIds = day3Info[i].memberIds
                     userName = day3Info[i].memberNames
                 } else if (page == 2) {
                     fixedDate = startDate.plusDays(5).toString()
-                    userId = day6Info[i].memberIds
+                    memberIds = day6Info[i].memberIds
                     userName = day6Info[i].memberNames
                 }
             }
@@ -452,7 +452,7 @@ class PlanTimeActivity : AppCompatActivity() {
         bundle.putInt("planId", planId)
         bundle.putString("fixedDate", fixedDate)
         bundle.putInt("fixedTime", fixedTime)
-        bundle.putIntegerArrayList("userId", userId)
+        bundle.putIntegerArrayList("memberIds", memberIds)
         bundle.putStringArrayList("userName", userName)
         fixPlanDialog.arguments = bundle
         supportFragmentManager.beginTransaction()

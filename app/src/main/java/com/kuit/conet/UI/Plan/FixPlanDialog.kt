@@ -13,6 +13,8 @@ import com.kuit.conet.Network.ResponseFixPlan
 import com.kuit.conet.Network.RetrofitInterface
 import com.kuit.conet.Network.getRetrofit
 import com.kuit.conet.R
+import com.kuit.conet.Utils.NETWORK
+import com.kuit.conet.Utils.TAG
 import com.kuit.conet.databinding.DialogFixPlanBinding
 import com.kuit.conet.getRefreshToken
 import org.threeten.bp.LocalDate
@@ -31,8 +33,8 @@ class FixPlanDialog : Fragment() {
     ): View {
         binding = DialogFixPlanBinding.inflate(layoutInflater, container, false)
 
-        var teamId = requireArguments().getInt("teamId")
-        var planName = requireArguments().getString("planName")
+        val teamId = requireArguments().getInt("teamId")
+        val planName = requireArguments().getString("planName")
         val planId = requireArguments().getInt("planId")
         val fixedDate = requireArguments().getString("fixedDate")
         val fixedTime = requireArguments().getInt("fixedTime")
@@ -40,28 +42,26 @@ class FixPlanDialog : Fragment() {
         val userName = requireArguments().getStringArrayList("userName")
 
 
-        val year = fixedDate!!.substring(0, 4)
-        val month = fixedDate!!.substring(5, 7)
-        val date = fixedDate!!.substring(8, 10)
-        //var Date = LocalDate.parse(fixedDate!!.replace("-","."))
+        val year = fixedDate?.substring(0, 4)
+        val month = fixedDate?.substring(5, 7)
+        val date = fixedDate?.substring(8, 10)
 
-        var changeDate = "${year}년 ${month}월 ${date}일 "
-        //var changeDay  = "${getDay(Date)}요일"
+        val changeDate = "${year}년 ${month}월 ${date}일 "
 
         binding.tvTime.text = "$fixedTime:00"
-        binding.tvDate.text = changeDate
+        binding.tvDialogFixDate.text = changeDate
 
         var userNames = ""
         for (i in 0 until userName!!.size) userNames = userNames + " " + userName[i].toString()
-        binding.tvParticipants.text = userNames
+        binding.tvDialogFixParticipants.text = userNames
 
-        binding.tvCancel.setOnClickListener {
+        binding.tvDialogFixCancel.setOnClickListener {
             parentFragmentManager.beginTransaction()
                 .remove(this)
                 .commit()
         }
 
-        binding.tvConfirm.setOnClickListener {
+        binding.tvDialogFixConfirm.setOnClickListener {
             postFixPlan(fixPlan(planId, fixedDate!!, fixedTime, memberIds!!)) //api 연동
             parentFragmentManager.beginTransaction()
                 .remove(this)
@@ -107,12 +107,12 @@ class FixPlanDialog : Fragment() {
             ) {
                 if (response.isSuccessful) {
                     val resp = response.body()
-                    Log.d("FixPlan/SUCCESS", resp.toString())
+                    Log.d(NETWORK, "FixPlan api Successful\n$resp")
                 }
             }
 
             override fun onFailure(call: Call<ResponseFixPlan>, t: Throwable) {
-                Log.d("FixPlan/FAILURE", t.message.toString())
+                Log.d(NETWORK, "FixPlan api Failure\n${t.message}")
             }
 
         })
