@@ -8,10 +8,12 @@ import com.kuit.conet.Network.ResponseGetGroupMembers
 import com.kuit.conet.Network.ResponseGroupCode
 import com.kuit.conet.Network.ResponseUpdateGroup
 import com.kuit.conet.data.dto.request.team.RequestGetInviteCode
+import com.kuit.conet.data.dto.request.team.RequestLeaveGroup
 import com.kuit.conet.data.dto.request.team.RequestTeamJoin
 import com.kuit.conet.data.dto.response.team.ResponseGetGroupDetail
 import com.kuit.conet.data.dto.response.team.ResponseGetGroups
 import com.kuit.conet.data.dto.response.team.ResponseGetInviteCode
+import com.kuit.conet.data.dto.response.team.ResponseLeaveGroup
 import com.kuit.conet.data.dto.response.team.ResponseTeamJoin
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -75,15 +77,15 @@ interface TeamAPI {
         request: RequestBody,
     ): Call<ResponseCreateGroup>
 
-    /*@POST("team/leave") // :: 모임 탈퇴
-    fun LeaveGroup(
+    @POST("team/leave") // :: 모임 탈퇴
+    fun leaveGroup(
         @Header("Authorization")
         authorization: String,
         @Body
-        teamId: Int,
-    ): Call<EditUserName>
+        request: RequestLeaveGroup
+    ): Call<ResponseLeaveGroup>
 
-    @Multipart
+    /*@Multipart
     @POST("team/update") // :: 모임 수정
     fun updateGroup(
         @Header("Authorization")
