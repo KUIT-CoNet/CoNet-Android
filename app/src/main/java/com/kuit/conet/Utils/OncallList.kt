@@ -24,8 +24,8 @@ import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 class OncallList(
-    private val groupId: Int,
-    private val option: Int     // -1 : HomeFragment, 1 : GroupMainActivity
+    private val groupId: Int,   // -1 : HomeFragment, 1 이상(groupId) : GroupMainActivity
+    private val option: Int     // 1 : HomeFragment, 2 : GroupMainActivity
 ) : Fragment() {
 
     private var _binding: FragmentOncallBinding? = null
