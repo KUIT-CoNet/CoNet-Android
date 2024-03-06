@@ -75,7 +75,7 @@ class PlanTimeActivity : AppCompatActivity() {
 
         planStartDate = intent.getStringExtra("planStartDate").toString()
         planId = intent.getIntExtra("planId", 0)
-        val planName = intent.getStringExtra("planName")
+        planName = intent.getStringExtra("planName").toString()
 
         binding.btnCloseIv.setOnClickListener {
 //            val intent = Intent(this, GroupMainActivity::class.java)
@@ -157,6 +157,7 @@ class PlanTimeActivity : AppCompatActivity() {
 
                             teamId = resp!!.result.teamId
                             this@PlanTimeActivity.planId = resp!!.result.planId
+                            Log.d(NETWORK, "onResponse: api 실행\n planName = $planName")
                             planName = resp!!.result.planName
                             planStartDate = resp!!.result.planStartPeriod
                             endNumberForEachSection = resp!!.result.endNumberForEachSection
