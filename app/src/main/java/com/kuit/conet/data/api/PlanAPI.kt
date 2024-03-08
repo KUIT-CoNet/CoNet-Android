@@ -20,6 +20,7 @@ import com.kuit.conet.Network.ShowMyTime
 import com.kuit.conet.Network.UpdateWaiting
 import com.kuit.conet.data.dto.response.plan.ResponseGetGroupDailyDecidedPlan
 import com.kuit.conet.data.dto.response.plan.ResponseGetGroupWaitingPlan
+import com.kuit.conet.data.dto.response.plan.ResponseGetSidebarPlan
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -109,17 +110,17 @@ interface PlanAPI {
         teamId: Long,
     ): Call<ResponseGetGroupWaitingPlan>
 
-    /*@GET("plan/fixed") // :: [사이드바] 모임 내 확정된 지난/다가오는 약속 조회
-    fun showSideBar(
+    @GET("plan/fixed") // :: [사이드바] 모임 내 확정된 지난/다가오는 약속 조회
+    fun getSidebarPlan(
         @Header("Authorization")
         authorization: String,
         @Query("teamId")
-        teamId: Int,
+        teamId: Long,
         @Query("period")
         period: String, //지난 약속 : past, 다가오는 : oncoming (대소문자 구분 필요 x)
-    ): Call<ResponseSideBarPlan>
+    ): Call<ResponseGetSidebarPlan>
 
-    @GET("plan/{planId}/available-time-slot/my") // :: 특정 약속의 나의 가능한 시간 조회 //
+    /*@GET("plan/{planId}/available-time-slot/my") // :: 특정 약속의 나의 가능한 시간 조회 //
     fun ShowMyTime(
         @Header("Authorization")
         authorization: String,
