@@ -19,13 +19,13 @@ class PlanVPAdapter(
         bundle.putInt(BUNDLE_OPTION, position)
 
         return when (position) {
-            1 -> {
+            1 -> {      // 지난 약속
                 val fragment = PlanListFragment()
                 fragment.arguments = bundle
                 fragment
             }
 
-            else -> {
+            else -> {   // 다가오는 약속
                 val fragment = PlanListFragment()
                 fragment.arguments = bundle
                 fragment
