@@ -234,7 +234,7 @@ class TimeInputActivity : AppCompatActivity() {
                         when (regiStatus) {
                             0 -> {
                                 if (resp != null) {
-                                    //requireNotNull(resp.result.timeSlot) { "TimeInputActivity onResponse() timeslot is null" }
+                                    //requireNotNull(resp.result.timeSlot) { "TimeInputActivity onResponse() timeslot is null" } 이거 오류나요..
                                 }
                                 time1.time.clear()
                                 time2.time.clear()

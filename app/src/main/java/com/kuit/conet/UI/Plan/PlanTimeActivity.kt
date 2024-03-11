@@ -78,9 +78,6 @@ class PlanTimeActivity : AppCompatActivity() {
         planName = intent.getStringExtra("planName").toString()
 
         binding.btnCloseIv.setOnClickListener {
-//            val intent = Intent(this, GroupMainActivity::class.java)
-//            intent.putExtra("teamId", teamId)
-//            startActivity(intent)
             finish()
         }
 

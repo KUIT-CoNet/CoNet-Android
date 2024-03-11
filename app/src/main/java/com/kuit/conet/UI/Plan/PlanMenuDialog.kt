@@ -35,7 +35,6 @@ class PlanMenuDialog : Fragment() {
             intent.putExtra("planDate", binding.dialogPlanDate.text.toString())
             intent.putExtra("planId", planId)
             intent.putExtra("teamId", teamId)
-            Log.d("Pmenu>planId!!", planId.toString())
             startActivity(intent)
             parentFragmentManager.beginTransaction().remove(this).commit()
         }
