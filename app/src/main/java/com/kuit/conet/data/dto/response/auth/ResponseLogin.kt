@@ -7,16 +7,16 @@ import kotlinx.serialization.Serializable
 data class ResponseLogin(
     @SerialName("result")
     val result: ResultLogin,
-)
-
-@Serializable
-data class ResultLogin(
-    @SerialName("email")
-    val email: String,
-    @SerialName("accessToken")
-    val accessToken: String,
-    @SerialName("refreshToken")
-    val refreshToken: String,
-    @SerialName("isRegistered")
-    val isRegistered: Boolean,
-)
+) {
+    @Serializable
+    data class ResultLogin(
+        @SerialName("email")
+        val email: String,
+        @SerialName("accessToken")
+        val accessToken: String,
+        @SerialName("refreshToken")
+        val refreshToken: String,
+        @SerialName("isRegistered")
+        val isRegistered: Boolean,
+    )
+}

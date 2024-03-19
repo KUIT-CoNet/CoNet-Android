@@ -7,14 +7,14 @@ import kotlinx.serialization.Serializable
 data class ResponseAgreeToTermsAndConditions(
     @SerialName("result")
     val result: ResultAgreeToTermsAndConditions,
-)
-
-@Serializable
-data class ResultAgreeToTermsAndConditions(
-    @SerialName("name")
-    val name: String,
-    @SerialName("email")
-    val email: String,
-    @SerialName("serviceTerm")
-    val serviceTerm: Boolean,
-)
+) {
+    @Serializable
+    data class ResultAgreeToTermsAndConditions(
+        @SerialName("name")
+        val name: String,
+        @SerialName("email")
+        val email: String,
+        @SerialName("serviceTerm")
+        val serviceTerm: Boolean,
+    )
+}
