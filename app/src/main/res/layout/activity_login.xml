@@ -1,82 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:gravity="center"
+    android:orientation="vertical">
 
     <TextView
-        android:id="@+id/login_tv"
         android:layout_width="wrap_content"
-        android:layout_height="21dp"
-        android:text="우리들의 모임관리"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="31dp"
         android:fontFamily="@font/pretendard_bold"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/login_logo_im" />
+        android:text="우리들의 모임관리"
+        android:textColor="@color/black"
+        android:textSize="18sp" />
 
     <ImageView
-        android:id="@+id/login_logo_im"
-        android:layout_width="133dp"
-        android:layout_height="200dp"
-        android:src="@drawable/logo"
-        android:layout_marginTop="246dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/logo" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/login_kakao_cv"
         android:layout_width="match_parent"
         android:layout_height="52dp"
-        android:layout_marginTop="554dp"
         android:layout_marginHorizontal="24dp"
-        app:cardCornerRadius="10dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:cardBackgroundColor="#F9EB00">
+        android:layout_marginTop="108dp"
+        android:outlineSpotShadowColor="@android:color/transparent"
+        app:cardBackgroundColor="@color/kakao_color"
+        app:cardCornerRadius="12dp">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="horizontal">
 
             <ImageView
-                android:id="@+id/login_kakao_iv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/kakao_logo"
-                app:layout_constraintHorizontal_chainStyle="packed"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/login_kakao_tv"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                android:layout_width="21dp"
+                android:layout_height="21dp"
+                android:src="@drawable/speech_bubble" />
 
             <TextView
-                android:id="@+id/login_kakao_tv"
                 android:layout_width="wrap_content"
-                android:layout_height="20dp"
-                android:text="카카오톡으로 3초만에 시작하기"
-                android:fontFamily="@font/pretendard_black"
-                android:textSize="16sp"
+                android:layout_height="24dp"
                 android:layout_marginStart="10dp"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/login_kakao_iv" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                android:fontFamily="@font/pretendard_black"
+                android:text="카카오톡으로 3초만에 시작하기"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+        </LinearLayout>
 
     </androidx.cardview.widget.CardView>
 
-    <TextView
-        android:id="@+id/tv_login_another"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="다른 카카오 아이디로 로그인"
-        app:layout_constraintTop_toBottomOf="@id/login_kakao_cv"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginTop="30dp"/>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
