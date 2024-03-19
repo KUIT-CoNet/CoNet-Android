@@ -5,6 +5,7 @@ import com.kuit.conet.data.dto.request.auth.RequestAgreeToTermsAndConditions
 import com.kuit.conet.data.dto.request.auth.RequestLogin
 import com.kuit.conet.data.dto.response.auth.ResponseAgreeToTermsAndConditions
 import com.kuit.conet.data.dto.response.auth.ResponseLogin
+import com.kuit.conet.data.dto.response.auth.ResponseRenewalRefreshToken
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.Header
@@ -26,9 +27,9 @@ interface AuthAPI {
     ): Call<ResponseAgreeToTermsAndConditions>
 
     @POST("auth/regenerate-token") // :: refresh token 재발급
-    fun getAccess(
+    fun renewalRefreshToken(
         @Header("Authorization")
         refreshToken: String,
-    ): Call<RefreshResponse>
+    ): Call<ResponseRenewalRefreshToken>
 
 }
