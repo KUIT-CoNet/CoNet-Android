@@ -1,6 +1,7 @@
 package com.kuit.conet.Network
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import com.kuit.conet.data.api.AuthAPI
 import com.kuit.conet.data.api.HomeAPI
 import com.kuit.conet.data.api.MemberAPI
 import com.kuit.conet.data.api.PlanAPI
@@ -28,6 +29,8 @@ object RetrofitClient {
         requireNotNull(jsonRetrofit.create(HomeAPI::class.java)) { "NetworkModule's HomeAPI is null" }
     val planInstance =
         requireNotNull(jsonRetrofit.create(PlanAPI::class.java)) { "NetworkModule's PlanAPI is null" }
+    val authInstance =
+        requireNotNull(jsonRetrofit.create(AuthAPI::class.java)) { "NetworkModule's AuthAPI is null" }
 }
 
 fun okHttpClient(): OkHttpClient {
