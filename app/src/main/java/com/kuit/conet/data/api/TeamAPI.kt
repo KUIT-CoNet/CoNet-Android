@@ -4,7 +4,7 @@ import com.kuit.conet.Network.EditUserName
 import com.kuit.conet.Network.ResponseCreateGroup
 import com.kuit.conet.Network.ResponseEnrollGroup
 import com.kuit.conet.Network.ResponseGetGroup
-import com.kuit.conet.Network.ResponseGetGroupMembers
+import com.kuit.conet.data.dto.response.team.ResponseGetGroupMembers
 import com.kuit.conet.Network.ResponseGroupCode
 import com.kuit.conet.Network.ResponseUpdateGroup
 import com.kuit.conet.data.dto.request.team.RequestGetInviteCode
@@ -34,13 +34,13 @@ interface TeamAPI {
         authorization: String
     ): Call<ResponseGetGroups>
 
-    /*@GET("team/{teamId}/members") // :: 모임 구성원 조회
+    @GET("team/{teamId}/members") // :: 모임 구성원 조회
     fun getGroupMembers(
         @Header("Authorization")
         authorization: String,
         @Path("teamId")
-        groupId: Int,
-    ): Call<ResponseGetGroupMembers>*/
+        groupId: Long,
+    ): Call<ResponseGetGroupMembers>
 
     @GET("team/{teamId}") // :: 모임 상세 조회
     fun getGroupDetail(
