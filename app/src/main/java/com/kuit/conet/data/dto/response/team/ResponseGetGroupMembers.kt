@@ -8,6 +8,7 @@ data class ResponseGetGroupMembers(
     @SerialName("result")
     val result: List<Member>,
 ) {
+    @Serializable
     data class Member(
         @SerialName("userId")
         val userId: Long,
