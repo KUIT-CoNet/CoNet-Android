@@ -6,10 +6,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.kuit.conet.*
 import com.kuit.conet.Network.*
+import com.kuit.conet.Utils.NETWORK
 import com.kuit.conet.Utils.getRefreshToken
 import com.kuit.conet.Utils.getUserImg
 import com.kuit.conet.Utils.getUsername
@@ -112,10 +114,12 @@ class User : Fragment(){
                 override fun onResponse(call: Call<ShowUser>, response: Response<ShowUser>) {
                     if (response.isSuccessful) {
                         val resp = response.body()// 성공했을 경우 response body불러오기
-                        Log.d("SIGNUP/SUCCESS", resp.toString())
-                        Log.d("성공!","success")
+                        Log.d(NETWORK, resp.toString())
                         val userData  = resp!!.result
                         continuation.resume(userData)
+
+                        binding.tvUserName.text = userData.name
+                        binding.ivUserProfile.setImageURI(userData.memberImgUrl.toUri())
                     }
                     else{
                         continuation.resumeWithException(Exception("Response not successful"))
@@ -123,7 +127,7 @@ class User : Fragment(){
                 }
 
                 override fun onFailure(call: Call<ShowUser>, t: Throwable) {
-                    Log.d("SIGNUP/FAILURE", t.message.toString()) // 실패한 이유 메세지 출력
+                    Log.d(NETWORK, t.message.toString()) // 실패한 이유 메세지 출력
                     continuation.resumeWithException(t)
                 }
 

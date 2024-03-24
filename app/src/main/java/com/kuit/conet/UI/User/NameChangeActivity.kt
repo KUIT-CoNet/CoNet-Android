@@ -1,6 +1,7 @@
 package com.kuit.conet.UI.User
 
 import android.content.Intent
+import android.net.Network
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -9,6 +10,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.kuit.conet.*
 import com.kuit.conet.Network.*
+import com.kuit.conet.Utils.NETWORK
 import com.kuit.conet.Utils.getRefreshToken
 import com.kuit.conet.Utils.getUsername
 import com.kuit.conet.Utils.saveUsername
@@ -26,6 +28,7 @@ class NameChangeActivity : AppCompatActivity() {
         binding = ActivityNameChangeBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+
         binding.etName.setText(intent.getStringExtra("name"))
         binding.ivNameBackBtn.setOnClickListener {
             finish()
@@ -108,12 +111,12 @@ class NameChangeActivity : AppCompatActivity() {
             override fun onResponse(call: Call<EditUserName>, response: Response<EditUserName>) {
                 if(response.isSuccessful){
                     val resp = response.body()
-                    Log.d("SIGNUP/SUCCESS", resp.toString())
+                    Log.d(NETWORK, resp.toString())
                 }
             }
 
             override fun onFailure(call: Call<EditUserName>, t: Throwable) {
-                Log.d("SIGNUP/FAILURE", t.message.toString()) // 실패한 이유 메세지 출력
+                Log.d(NETWORK, t.message.toString()) // 실패한 이유 메세지 출력
             }
 
         })

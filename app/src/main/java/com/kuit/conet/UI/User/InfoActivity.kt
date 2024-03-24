@@ -9,11 +9,16 @@ import android.util.Log
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.net.toUri
 import com.bumptech.glide.Glide
 import com.kuit.conet.*
 import com.kuit.conet.Network.EditUserImage
 import com.kuit.conet.Network.RetrofitInterface
+import com.kuit.conet.Network.ShowUser
+import com.kuit.conet.Network.ShowUserInfo
 import com.kuit.conet.Network.getRetrofit
+import com.kuit.conet.Utils.NETWORK
 import com.kuit.conet.Utils.getRefreshToken
 import com.kuit.conet.Utils.getUserEmail
 import com.kuit.conet.Utils.getUserImg
@@ -24,49 +29,57 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import retrofit2.Call
+import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 
 class InfoActivity : AppCompatActivity() {
-    lateinit var binding : ActivityInfoBinding
-    private val pickImageFromGallery = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            val data: Intent? = result.data
-            val imageUri = data?.data
-            saveUserImgUrl(this, imageUri.toString())
-            if (imageUri != null) {
-                val file = uriToFile(imageUri)
-                if (file != null) {
-                    Glide.with(this)
-                        .load(file) // 로컬 파일로 변환한 이미지를 로드
-                        .placeholder(R.drawable.profile_purple)
-                        .error(R.drawable.profile_purple)
-                        .fallback(R.drawable.profile_purple)
-                        .circleCrop()
-                        .into(binding.ivInfoPhoto)
-                    sendImage(file)
+    lateinit var binding: ActivityInfoBinding
+    private val pickImageFromGallery =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val data: Intent? = result.data
+                val imageUri = data?.data
+                saveUserImgUrl(this, imageUri.toString())
+                if (imageUri != null) {
+                    val file = uriToFile(imageUri)
+                    if (file != null) {
+                        Glide.with(this)
+                            .load(file) // 로컬 파일로 변환한 이미지를 로드
+                            .placeholder(R.drawable.profile_purple)
+                            .error(R.drawable.profile_purple)
+                            .fallback(R.drawable.profile_purple)
+                            .circleCrop()
+                            .into(binding.ivInfoPhoto)
+                        sendImage(file)
+                    }
                 }
             }
         }
-    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityInfoBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        val name = getUsername(this)
-        val imageUrl = getUserImg(this)
-        val email = getUserEmail(this)
-        binding.tvInfoUsername.text = name
-        Glide.with(this)
-            .load(imageUrl) // 불러올 이미지 url
-            .placeholder(R.drawable.profile_purple) // 이미지 로딩 시작하기 전 표시할 이미지
-            .error(R.drawable.profile_purple) // 로딩 에러 발생 시 표시할 이미지
-            .fallback(R.drawable.profile_purple) // 로드할 url 이 비어있을(null 등) 경우 표시할 이미지
-            .circleCrop() // 동그랗게 자르기 동그란 맘속에 피어난 How is the life...
-            .into(binding.ivInfoPhoto) // 이미지를 넣을 뷰
-
-        binding.tvInfoAccount.text = email
+//        var name = getUsername(this)
+//        var imageUrl = getUserImg(this)
+//        Log.d("conet", "onCreate: imageUrl $imageUrl")
+//        var email = getUserEmail(this)
+        callUserInfo()
+        //binding.tvInfoUsername.text = name
+//        Glide.with(this)
+//            .load(imageUrl) // 불러올 이미지 url
+//            .placeholder(R.drawable.profile_purple) // 이미지 로딩 시작하기 전 표시할 이미지
+//            .error(R.drawable.profile_purple) // 로딩 에러 발생 시 표시할 이미지
+//            .fallback(R.drawable.profile_purple) // 로드할 url 이 비어있을(null 등) 경우 표시할 이미지
+//            .circleCrop() // 동그랗게 자르기 동그란 맘속에 피어난 How is the life...
+//            .into(binding.ivInfoPhoto) // 이미지를 넣을 뷰
+//
+//        binding.tvInfoAccount.text = email
 
         binding.ivInfoBackBtn.setOnClickListener {
             finish()
@@ -74,7 +87,7 @@ class InfoActivity : AppCompatActivity() {
 
         binding.cvInfoMy.setOnClickListener {
             val intent = Intent(this, NameChangeActivity::class.java)
-            intent.putExtra("name",name)
+            intent.putExtra("name", binding.tvInfoUsername.text)
             startActivity(intent)
             finish()
         }
@@ -94,12 +107,19 @@ class InfoActivity : AppCompatActivity() {
 
     }
 
+    override fun onStart() {
+        super.onStart()
+//        Log.d("start","프래그먼트 시작")
+//        binding.tvInfoUsername.text = getUsername(this)
+        callUserInfo()
+    }
+
     private fun openGallery() {
         val galleryIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         pickImageFromGallery.launch(galleryIntent)
     }
 
-    fun sendImage(imageFile: File){
+    fun sendImage(imageFile: File) {
         val responseImage = getRetrofit().create(RetrofitInterface::class.java)
         val refreshToken = getRefreshToken(this)
 
@@ -107,22 +127,26 @@ class InfoActivity : AppCompatActivity() {
         val requestFile = imageFile.asRequestBody("image/png".toMediaTypeOrNull())
         val filePart = MultipartBody.Part.createFormData("file", imageFile.name, requestFile)
 
-        responseImage.editImage(authHeader, filePart).enqueue(object : retrofit2.Callback<EditUserImage> {
-            override fun onResponse(call: Call<EditUserImage>, response: Response<EditUserImage>) {
-                if (response.isSuccessful) {
-                    val resp = response.body() // 성공했을 경우 response body불러오기
-                    Log.d("UserInfo", resp.toString())
-                    Log.d("UserInfo!", "success")
-                } else {
-                    // 실패 처리
-                    Log.d("UserInfo", "failed")
+        responseImage.editImage(authHeader, filePart)
+            .enqueue(object : retrofit2.Callback<EditUserImage> {
+                override fun onResponse(
+                    call: Call<EditUserImage>,
+                    response: Response<EditUserImage>
+                ) {
+                    if (response.isSuccessful) {
+                        val resp = response.body() // 성공했을 경우 response body불러오기
+                        Log.d("UserInfo", resp.toString())
+                        Log.d("UserInfo!", "success")
+                    } else {
+                        // 실패 처리
+                        Log.d("UserInfo", "failed")
+                    }
                 }
-            }
 
-            override fun onFailure(call: Call<EditUserImage>, t: Throwable) {
-                Log.d("SIGNUP/FAILURE", t.message.toString()) // 실패한 이유 메세지 출력
-            }
-        })
+                override fun onFailure(call: Call<EditUserImage>, t: Throwable) {
+                    Log.d("SIGNUP/FAILURE", t.message.toString()) // 실패한 이유 메세지 출력
+                }
+            })
     }
 
     private fun uriToFile(uri: Uri): File? {
@@ -136,5 +160,44 @@ class InfoActivity : AppCompatActivity() {
             }
         }
         return null
+    }
+
+    private fun callUserInfo() {
+        val responseUser = getRetrofit().create(RetrofitInterface::class.java)
+        val refreshToken = getRefreshToken(this)
+        responseUser.showuser(
+            "Bearer $refreshToken"
+        ).enqueue(object :
+            Callback<ShowUser> {
+            override fun onResponse(call: Call<ShowUser>, response: Response<ShowUser>) {
+                if (response.isSuccessful) {
+                    val resp = response.body()// 성공했을 경우 response body불러오기
+                    Log.d(NETWORK, resp.toString())
+                    val userData = resp!!.result
+                    //continuation.resume(userData)
+
+                    binding.tvInfoUsername.text = userData.name
+                    binding.tvInfoAccount.text = userData.email
+                    Glide.with(this@InfoActivity)
+                        .load(userData.memberImgUrl) // 불러올 이미지 url
+                        .placeholder(R.drawable.profile_purple) // 이미지 로딩 시작하기 전 표시할 이미지
+                        .error(R.drawable.profile_purple) // 로딩 에러 발생 시 표시할 이미지
+                        .fallback(R.drawable.profile_purple) // 로드할 url 이 비어있을(null 등) 경우 표시할 이미지
+                        .circleCrop() // 동그랗게 자르기
+                        .into(binding.ivInfoPhoto) // 이미지를 넣을 뷰
+                } else {
+                    //continuation.resumeWithException(Exception("Response not successful"))
+                    Log.d(
+                        NETWORK,
+                        "[ShowUserInfo in InfoActivity]onResponse: Response not successful"
+                    )
+                }
+            }
+
+            override fun onFailure(call: Call<ShowUser>, t: Throwable) {
+                Log.d(NETWORK, t.message.toString()) // 실패한 이유 메세지 출력
+            }
+
+        })
     }
 }
