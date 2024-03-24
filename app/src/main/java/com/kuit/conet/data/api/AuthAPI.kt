@@ -1,6 +1,5 @@
 package com.kuit.conet.data.api
 
-import com.kuit.conet.Network.RefreshResponse
 import com.kuit.conet.data.dto.request.auth.RequestAgreeToTermsAndConditions
 import com.kuit.conet.data.dto.request.auth.RequestLogin
 import com.kuit.conet.data.dto.response.auth.ResponseAgreeToTermsAndConditions
