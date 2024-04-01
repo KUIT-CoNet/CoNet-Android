@@ -12,7 +12,8 @@
         android:id="@+id/cl_participant"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp">
+        android:background="@color/grayWhite"
+        android:paddingBottom="10dp">
 
         <ImageView
             android:id="@+id/iv_participant_image"
@@ -27,13 +28,13 @@
             android:id="@+id/tv_participant_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_marginStart="10dp"
             android:fontFamily="@font/pretendard"
             android:textColor="@color/texthigh"
             android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/iv_participant_image"
             app:layout_constraintStart_toEndOf="@id/iv_participant_image"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@id/iv_participant_image" />
 
         <ImageView
             android:id="@+id/iv_minus"
@@ -41,10 +42,10 @@
             android:layout_height="16dp"
             android:layout_marginEnd="15dp"
             android:src="@drawable/icon_minus_circle"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="@id/iv_participant_image"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@id/iv_participant_image" />
 
         <ImageView
             android:id="@+id/iv_check"
@@ -52,11 +53,10 @@
             android:layout_height="16dp"
             android:layout_marginEnd="15dp"
             android:src="@drawable/icon_check_circle_gray"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="@id/iv_participant_image"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
+            app:layout_constraintTop_toTopOf="@id/iv_participant_image" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
