@@ -14,5 +14,5 @@ data class RequestUpdateFixedPlan(
     @SerialName("time")
     val time: String,        // 19:00 형식
     @SerialName("memberIds")
-    val membersIds: List<Int>,
+    val membersIds: List<Long>,
 )
