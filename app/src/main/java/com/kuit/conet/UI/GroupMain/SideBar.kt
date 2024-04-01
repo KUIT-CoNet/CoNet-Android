@@ -98,7 +98,7 @@ class SideBar(
             }
 
             R.id.ll_sidebar_group_delete -> {
-                val deleteGroupDialog = DeleteGroupDialog(groupMainActivity, groupId.toInt())
+                val deleteGroupDialog = DeleteGroupDialog(groupMainActivity, groupId)
                 destoryFragment()
                 deleteGroupDialog.show(parentFragmentManager, DeleteGroupDialog.DIALOG_TAG)
             }

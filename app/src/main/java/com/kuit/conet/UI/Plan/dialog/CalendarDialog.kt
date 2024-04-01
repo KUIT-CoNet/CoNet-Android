@@ -1,4 +1,4 @@
-package com.example.calenderdialog
+package com.kuit.conet.UI.Plan.dialog
 
 import android.os.Bundle
 import android.util.Log
@@ -34,7 +34,7 @@ class CalenderDialog : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = DialogCalendarBinding.inflate(inflater, container, false)
         binding.cvCalendarSelectBtn.isEnabled = false
         binding.clCalendarSelectDate.setOnClickListener {
@@ -64,8 +64,7 @@ class CalenderDialog : Fragment() {
             Log.d("monthchange", "$date")
             val year = date.year.toString()
             val month = if(date.month + 1 >= 10) (date.month + 1).toString() else "0" + (date.month + 1)
-            val date = "$year-$month"
-            Log.d("date", date)
+            Log.d("date", "$year-$month")
 
         }
 

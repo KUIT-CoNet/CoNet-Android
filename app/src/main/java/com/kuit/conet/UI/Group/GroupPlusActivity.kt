@@ -24,7 +24,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.widget.doAfterTextChanged
 import com.bumptech.glide.Glide
 import com.google.android.material.textfield.TextInputEditText
-import com.kuit.conet.Network.ResponseCreateGroup
 import com.kuit.conet.Network.ResponseUpdateGroup
 import com.kuit.conet.Network.RetrofitClient
 import com.kuit.conet.Utils.permission.APIDetector
@@ -32,6 +31,7 @@ import com.kuit.conet.Utils.NETWORK
 import com.kuit.conet.Utils.TAG
 import com.kuit.conet.Utils.multipart.ContentUriRequestBody
 import com.kuit.conet.Utils.getAccessToken
+import com.kuit.conet.data.dto.response.team.ResponseCreateGroup
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -167,18 +167,18 @@ class GroupPlusActivity : AppCompatActivity(), View.OnClickListener {
                                         response: Response<ResponseUpdateGroup>
                                     ) {
                                         if (response.isSuccessful) {
-                                            /*Log.d(
+                                            Log.d(
                                                 NETWORK,
-                                                "GroupPlusActivity - Retrofit updateGroup() 실행결과 - 성공\n" +
-                                                        "그룹 id : ${response.body()?.result?.groupName}\n" +
-                                                        "초대코드 : ${response.body()?.result?.imageUrl}"
-                                            )*/
+                                                "GroupPlusActivity - Retrofit updateGroup() 실행결과 - 성공"
+                                            )
                                             finish()
 
-                                        } else Log.d(
-                                            NETWORK,
-                                            "GroupPlusActivity - Retrofit updateGroup() 실행결과 - 안좋음"
-                                        )
+                                        } else {
+                                            Log.d(
+                                                NETWORK,
+                                                "GroupPlusActivity - Retrofit updateGroup() 실행결과 - 안좋음"
+                                            )
+                                        }
                                     }
 
                                     override fun onFailure(
@@ -187,7 +187,7 @@ class GroupPlusActivity : AppCompatActivity(), View.OnClickListener {
                                     ) {
                                         Log.d(
                                             NETWORK,
-                                            "GroupPlusActivity - Retrofit updateGroup() 실행결과 - 실패\nt : $t"
+                                            "GroupPlusActivity - Retrofit updateGroup() 실행결과 - 실패\nbecause : $t"
                                         )
                                     }
                                 })
@@ -199,10 +199,10 @@ class GroupPlusActivity : AppCompatActivity(), View.OnClickListener {
                             val jsonList =
                                 jsonString.toRequestBody("application/json".toMediaTypeOrNull())
 
-                            RetrofitClient.instance.createGroup(
-                                "Bearer ${getAccessToken(this)}",
-                                body,
-                                jsonList
+                            RetrofitClient.teamInstance.createGroup(
+                                authorization = "Bearer ${getAccessToken(this)}",
+                                file = body,
+                                request = jsonList
                             ).enqueue(object : retrofit2.Callback<ResponseCreateGroup> {
                                 override fun onResponse(
                                     call: Call<ResponseCreateGroup>,
