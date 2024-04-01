@@ -9,45 +9,55 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
-import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.textfield.TextInputEditText
-import com.kuit.conet.Network.Members
-import com.kuit.conet.Network.ResultGetPlanDetail
+import com.kuit.conet.Network.RetrofitClient
 import com.kuit.conet.R
 import com.kuit.conet.UI.Plan.dialog.DateDialog
 import com.kuit.conet.UI.Plan.dialog.TimeDialog
+import com.kuit.conet.Utils.LIFECYCLE
+import com.kuit.conet.Utils.NETWORK
 import com.kuit.conet.Utils.TAG
+import com.kuit.conet.Utils.getRefreshToken
+import com.kuit.conet.Utils.intent.intentSerializable
+import com.kuit.conet.data.dto.request.plan.RequestUpdateFixedPlan
+import com.kuit.conet.data.dto.response.plan.ResponseUpdateFixedPlan
 import com.kuit.conet.databinding.ActivityDetailEditFixBinding
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.RequestBody.Companion.toRequestBody
+import com.kuit.conet.domain.entity.member.Member
+import com.kuit.conet.domain.entity.plan.PlanDetail
+import retrofit2.Call
+import retrofit2.Response
 
 class DetailEditFixActivity
-    : AppCompatActivity(), View.OnClickListener, TimeDialog.BottomSheetListener, DateDialog.OnButtonClickListener {
+    : AppCompatActivity(), View.OnClickListener, TimeDialog.BottomSheetListener,
+    DateDialog.OnButtonClickListener {
 
     private lateinit var binding: ActivityDetailEditFixBinding
+
     private lateinit var participantAdapter: ParticipantAdapter
-    lateinit var data: ResultGetPlanDetail
-    lateinit var dateData: ArrayList<String>
+    private lateinit var data: PlanDetail
+    private lateinit var dateData: List<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        ActivityDetailEditFixBinding.inflate(layoutInflater)
+        binding = ActivityDetailEditFixBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        Log.d(LIFECYCLE, "DetailEditFixActivity - onCreate() called")
 
-        data = intent.getParcelableExtra<ResultGetPlanDetail>("data")!!
-        Log.d(
-            TAG, "DetailEditPastActivity - onCreat() intent로 데이터 받아오기 성공!\n" +
-                    "data : $data"
+        data = requireNotNull(
+            intent.intentSerializable(
+                DetailFixActivity.INTENT_TAG,
+                PlanDetail::class.java,
+            )
         )
 
         val date = data.date.split(". ")
-        dateData = arrayListOf(date[0], date[1], date[2])
+        dateData = listOf(date[0], date[1], date[2])
 
         binding.nameTf.setText(data.planName)
         binding.dateTf.setText(data.date)
         binding.timeTf.setText(data.time)
 
-        checkEnable()
+        checkEnabled()
 
         binding.backIv.setOnClickListener(this)
         binding.finishTv.setOnClickListener(this)
@@ -56,15 +66,21 @@ class DetailEditFixActivity
         binding.timeTil.setOnClickListener(this)
         binding.timeTf.setOnClickListener(this)
 
-
-        data.members.add(ResultGetPlanDetail.Members(0, "추가하기", ""))
-        participantAdapter = ParticipantAdapter(this, data.members.map { it.asMembers() } as ArrayList<Members>, 1)
+        val members = data.members.toMutableList()
+        members.add(Member(0, "추가하기", ""))
+        participantAdapter =
+            ParticipantAdapter(
+                context = this,
+                membersList = members,
+                option = 1
+            )
+        participantAdapter.planId = data.id
         participantAdapter.supportFragmentManager = supportFragmentManager
         binding.participantsRv.adapter = participantAdapter
-        binding.participantsRv.layoutManager = GridLayoutManager(this, 2)
+
 
         binding.nameTf.addTextChangedListener {
-            checkEnable()
+            checkEnabled()
         }
     }
 
@@ -91,58 +107,50 @@ class DetailEditFixActivity
                         TAG, "DetailEditFPastActivity - 완료버튼 클릭됨\n" +
                                 "timeTf 빈값이라 안됨"
                     )
-                }
-//                여기에 picture와 content도 검사해야 하지 않나?
-                else {
-//                    TODO 서버에 해당 내용 전송하기
-                    val members: ArrayList<Int> = arrayListOf()
+                } else {
+                    val members: List<Long> = participantAdapter.getMembersList()
+                        .filter { it.name != "추가하기" }
+                        .map { it.id }
+                        .sorted()
 
-                    Log.d(
-                        "내용", "DetailEditFixActivity 최종 확인 members\n" +
-                                "members : ${participantAdapter.membersList}"
-                    )
-
-                    for (i in 0 until participantAdapter.membersList.count()) {
-                        if (participantAdapter.membersList[i].name == "추가하기") continue
-                        members.add(participantAdapter.membersList[i].id)
-                    }
-                    members.sort()
-                    Log.d(
-                        "내용", "DetailEditFixActivity 최종 확인 members\n" +
-                                "members : ${members}"
-                    )
-
-
-                    val jsonString = "{\"planId\":${data.planId}," +
-                            "\"planName\":\"${binding.nameTf.text}\"," +
-                            "\"date\":\"${dateData[0]}-${dateData[1]}-${dateData[2]}\"," +
-                            "\"time\":\"${binding.timeTf.text}\"," +
-                            "\"members\":${members}," +
-                            "\"isRegisteredToHistory\":false," +
-                            "\"historyDescription\":null}"
-                    val jsonList = jsonString.toRequestBody("application/json".toMediaTypeOrNull())
-
-                    Log.d(TAG, "jsonList : $jsonString")
-
-                    /*RetrofitClient.instance.updatePlanDetail(jsonList, null).enqueue(object: retrofit2.Callback<ResponseUpdatePlanDetail>{
+//                  TODO 서버에 내용 전달하기 -> /plan/update/fixed
+                    RetrofitClient.planInstance.updateFixedPlan(
+                        authorization = "Bearer ${getRefreshToken(this)}",
+                        planDetail = RequestUpdateFixedPlan(
+                            planId = data.id,
+                            planName = binding.nameTf.text.toString(),
+                            date = binding.dateTf.text.toString(),
+                            time = binding.timeTf.text.toString(),
+                            membersIds = members
+                        )
+                    ).enqueue(object : retrofit2.Callback<ResponseUpdateFixedPlan> {
                         override fun onResponse(
-                            call: Call<ResponseUpdatePlanDetail>,
-                            response: Response<ResponseUpdatePlanDetail>
+                            call: Call<ResponseUpdateFixedPlan>,
+                            response: Response<ResponseUpdateFixedPlan>
                         ) {
-                            if(response.isSuccessful){
-                                Log.d(TAG, "DetailEditPastActivity - Retrofit updatePlanDetail() 실행 결과 - 성공")
+                            if (response.isSuccessful) {
+                                Log.d(
+                                    NETWORK,
+                                    "DetailEditPastActivity - Retrofit updatePlanDetail() 실행 결과 - 성공"
+                                )
                                 finish()
-                            }else {
-                                Log.d(TAG, "DetailEditPastActivity - Retrofit updatePlanDetail() 실행 결과 - 안좋음\n" +
-                                        "response : $response")
+                            } else {
+                                Log.d(
+                                    NETWORK,
+                                    "DetailEditPastActivity - Retrofit updatePlanDetail() 실행 결과 - 안좋음"
+                                )
                             }
                         }
-                        override fun onFailure(call: Call<ResponseUpdatePlanDetail>, t: Throwable) {
-                            Log.d(TAG, "DetailEditPastActivity - Retrofit updatePlanDetail() 실행 결과 - 실패\n" +
-                                    "t : $t")
+
+                        override fun onFailure(call: Call<ResponseUpdateFixedPlan>, t: Throwable) {
+                            Log.d(
+                                NETWORK,
+                                "DetailEditPastActivity - Retrofit updatePlanDetail() 실행 결과 - 실패\nbecause : $t"
+                            )
                         }
 
-                    })*/
+                    })
+
                     finish()
                 }
             }
@@ -163,7 +171,7 @@ class DetailEditFixActivity
 
     override fun onAdditionalInfoSubmitted(info: String) {
         binding.timeTf.setText(info)
-        checkEnable()
+        checkEnabled()
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
@@ -183,7 +191,7 @@ class DetailEditFixActivity
         return super.dispatchTouchEvent(ev)
     }
 
-    fun checkEnable() {
+    private fun checkEnabled() {
         if (binding.nameTf.text!!.isNotEmpty() && binding.dateTf.text!!.isNotEmpty() && binding.timeTf.text!!.isNotEmpty() && binding.nameTil.error == null) {
             binding.finishTv.isEnabled = true
         }
@@ -195,7 +203,7 @@ class DetailEditFixActivity
                     "year : $year, month : $month, date: $date"
         )
         binding.dateTf.setText("$year. $month. $date")
-        dateData = arrayListOf(year, month, date)
-        checkEnable()
+        dateData = listOf(year, month, date)
+        checkEnabled()
     }
 }
