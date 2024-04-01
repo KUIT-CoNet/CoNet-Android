@@ -1,9 +1,11 @@
 package com.kuit.conet.data.api
 
 import com.kuit.conet.data.dto.request.plan.RequestUpdateFixedPlan
+import com.kuit.conet.data.dto.response.plan.ResponseDeletePlan
 import com.kuit.conet.data.dto.response.plan.ResponseGetGroupDailyDecidedPlan
 import com.kuit.conet.data.dto.response.plan.ResponseGetGroupWaitingPlan
 import com.kuit.conet.data.dto.response.plan.ResponseGetPlanDetail
+import com.kuit.conet.data.dto.response.plan.ResponseGetPlanParticipant
 import com.kuit.conet.data.dto.response.plan.ResponseGetSidebarPlan
 import com.kuit.conet.data.dto.response.plan.ResponseUpdateFixedPlan
 import retrofit2.Call
@@ -118,4 +120,10 @@ interface PlanAPI {
         @Query("planId")
         planId: Int,
     ): Call<ShowMemTime>*/
+
+    @GET("plan/{planId}/member-participation")  // :: [확정 약속 수정] 모임 구성원 약속 참여 여부 조회
+    fun getPlanParticipants(
+        @Path("planId")
+        planId: Long,
+    ): Call<ResponseGetPlanParticipant>
 }
