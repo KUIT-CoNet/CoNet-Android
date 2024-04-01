@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.lifecycleScope
 import com.kuit.conet.Network.RetrofitClient
 import com.kuit.conet.UI.Home.RecyclerView.ConfirmRecyclerAdapter
 import com.kuit.conet.Utils.LIFECYCLE
@@ -53,8 +54,7 @@ class PlanListFragment : Fragment() {
         super.onResume()
         Log.d(LIFECYCLE, "PlanListFragment - onResume() called")
 
-        val coroutineScope = CoroutineScope(Dispatchers.Main)
-        coroutineScope.launch {
+        lifecycleScope.launch {
             val plans = if (option == 1) {      // 지난 약속
                 showSideConfirmplaninfo()
             } else {                            // 다가오는 약속
