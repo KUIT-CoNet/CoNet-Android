@@ -46,7 +46,7 @@
         android:layout_width="match_parent"
         android:layout_height="44dp"
         android:layout_marginTop="35dp"
-        android:backgroundTint="@color/purpleMain"
+        android:background="@drawable/button_design_purple"
         android:fontFamily="@font/pretendard"
         android:text="추가하기"
         android:textColor="@color/grayWhite"

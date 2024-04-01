@@ -80,13 +80,13 @@
         android:id="@+id/apply_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginHorizontal="24dp"
+        android:background="@drawable/button_design_purple"
+        android:elevation="1dp"
         android:fontFamily="@font/pretendard_medium"
-        android:textSize="16sp"
-        android:textColor="@color/grayWhite"
-        android:background="@color/purpleMain"
         android:text="적용하기"
-        android:elevation="1dp"/>
+        android:textColor="@color/grayWhite"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

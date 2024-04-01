@@ -33,18 +33,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"
+        android:theme="@style/CustomTimePicker"
         android:timePickerMode="spinner"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/handler_bsdh"
-        android:theme="@style/CustomTimePicker"/>
+        app:layout_constraintTop_toBottomOf="@id/handler_bsdh" />
 
     <Button
         android:id="@+id/apply_btn"
         android:layout_width="match_parent"
         android:layout_height="44dp"
         android:layout_marginTop="35dp"
-        android:backgroundTint="@color/purpleMain"
+        android:background="@drawable/button_design_purple"
         android:fontFamily="@font/pretendard"
         android:text="적용하기"
         android:textColor="@color/grayWhite"
