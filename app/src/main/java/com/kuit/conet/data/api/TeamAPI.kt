@@ -1,15 +1,11 @@
 package com.kuit.conet.data.api
 
-import com.kuit.conet.Network.EditUserName
-import com.kuit.conet.Network.ResponseCreateGroup
-import com.kuit.conet.Network.ResponseEnrollGroup
-import com.kuit.conet.Network.ResponseGetGroup
 import com.kuit.conet.data.dto.response.team.ResponseGetGroupMembers
-import com.kuit.conet.Network.ResponseGroupCode
-import com.kuit.conet.Network.ResponseUpdateGroup
 import com.kuit.conet.data.dto.request.team.RequestGetInviteCode
 import com.kuit.conet.data.dto.request.team.RequestLeaveGroup
 import com.kuit.conet.data.dto.request.team.RequestTeamJoin
+import com.kuit.conet.data.dto.response.team.ResponseCreateGroup
+import com.kuit.conet.data.dto.response.team.ResponseDeleteGroup
 import com.kuit.conet.data.dto.response.team.ResponseGetGroupDetail
 import com.kuit.conet.data.dto.response.team.ResponseGetGroups
 import com.kuit.conet.data.dto.response.team.ResponseGetInviteCode
@@ -50,13 +46,13 @@ interface TeamAPI {
         groupId: Long,
     ): Call<ResponseGetGroupDetail>
 
-    /*@DELETE("team/{teamId}") // :: 모임 삭제
-    fun DeleteGroup(
+    @DELETE("team/{teamId}") // :: 모임 삭제
+    fun deleteGroup(
         @Header("Authorization")
         authorization: String,
         @Path("teamId")
-        teamId: Int,
-    ): Call<EditUserName>*/
+        teamId: Long,
+    ): Call<ResponseDeleteGroup>
 
     @POST("team/join") // :: 모임 참여
     fun enrollGroup(
