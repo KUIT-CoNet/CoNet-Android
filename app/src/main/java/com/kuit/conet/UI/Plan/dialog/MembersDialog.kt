@@ -22,7 +22,7 @@ class MembersDialog(
     private val planId: Long
 ) : BottomSheetDialogFragment() {
 
-    private var _binding: DialogBotomSheetMembersBinding? = null
+    private var _binding: DialogBottomSheetMembersBinding? = null
     private val binding: DialogBottomSheetMembersBinding
         get() = requireNotNull(_binding) { "MembersDialog's binding is null" }
     private var _listener: BottomSheetListener? = null
