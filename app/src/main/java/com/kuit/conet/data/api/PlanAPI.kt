@@ -57,13 +57,13 @@ interface PlanAPI {
         planDetail: RequestUpdateFixedPlan,
     ): Call<ResponseUpdateFixedPlan>
 
-    /*@DELETE("plan/{planId}") // :: 약속 삭제
+    @DELETE("plan/{planId}") // :: 약속 삭제
     fun deletePlan(
         @Header("Authorization")
         authorization: String,
         @Path("planId")
-        planId: Int,
-    ): Call<ResponseDeletePlan>*/
+        planId: Long,
+    ): Call<ResponseDeletePlan>
 
     @GET("plan/{planId}") // :: 약속 상세 정보 조회
     fun getPlanDetail(
