@@ -1,80 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@drawable/layout_sidedialog">
+    android:background="@drawable/layout_sidedialog"
+    app:cardCornerRadius="10dp">
+
     <TextView
-        android:id="@+id/delete_tv1"
+        android:id="@+id/tv_dialog_title"
         android:layout_width="wrap_content"
         android:layout_height="22sp"
-        android:text="모임을 삭제하시겠습니까?"
+        android:layout_marginTop="39dp"
         android:fontFamily="@font/pretendard_bold"
+        android:text="모임을 삭제하시겠습니까?"
+        android:textColor="@color/texthigh"
         android:textSize="18sp"
-        android:textColor="@color/gray800"
-        android:layout_marginTop="36dp"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/delete_tv2"
+        android:id="@+id/tv_dialog_content"
         android:layout_width="wrap_content"
         android:layout_height="22sp"
-        android:text="삭제된 모임 내 기록은 복구되지 않습니다."
-        android:fontFamily="@font/pretendard_medium"
-        android:textSize="14sp"
-        android:textColor="@color/gray800"
         android:layout_marginTop="11dp"
-        app:layout_constraintStart_toStartOf="parent"
+        android:fontFamily="@font/pretendard_medium"
+        android:text="삭제된 모임 내 기록은 복구되지 않습니다."
+        android:textColor="@color/texthigh"
+        android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/delete_tv1"/>
-
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_dialog_title" />
 
     <View
-        android:id="@+id/delete_v"
+        android:id="@+id/v_borderLine"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/gray100"
         android:layout_marginTop="31dp"
-        app:layout_constraintTop_toBottomOf="@id/delete_tv2"/>
+        android:background="@color/gray100"
+        app:layout_constraintTop_toBottomOf="@id/tv_dialog_content" />
 
     <TextView
-        android:id="@+id/delete_cancel"
+        android:id="@+id/tv_deleteDialog_cancel"
         android:layout_width="0dp"
-        android:layout_height="60dp"
-        android:text="취소"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:fontFamily="@font/pretendard"
-        android:textSize="16sp"
-        android:textColor="@color/gray500"
+        android:gravity="center"
         android:paddingVertical="18dp"
-        android:textAlignment="center"
-        app:layout_constraintWidth_percent="0.5"
-        app:layout_constraintTop_toBottomOf="@id/delete_v"
-        app:layout_constraintStart_toStartOf="parent"/>
-
-    <TextView
-        android:id="@+id/delete_done"
-        android:layout_width="0dp"
-        android:layout_height="60dp"
-        android:text="삭제"
-        android:fontFamily="@font/pretendard_bold"
+        android:text="@string/cancel"
+        android:textColor="@color/textMedium"
         android:textSize="16sp"
-        android:textColor="@color/purpleMain"
-        android:paddingVertical="18dp"
-        android:textAlignment="center"
-        app:layout_constraintWidth_percent="0.5"
-        app:layout_constraintTop_toBottomOf="@id/delete_v"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/v_button_borderLine"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/v_borderLine"
+        app:layout_constraintWidth_percent="0.5" />
 
     <View
+        android:id="@+id/v_button_borderLine"
         android:layout_width="1dp"
         android:layout_height="24dp"
         android:background="@color/gray100"
-        app:layout_constraintTop_toBottomOf="@id/delete_v"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintStart_toEndOf="@id/tv_deleteDialog_cancel"
+        app:layout_constraintTop_toBottomOf="@id/v_borderLine" />
+
+    <TextView
+        android:id="@+id/tv_deleteDialog_delete"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:fontFamily="@font/pretendard_bold"
+        android:gravity="center"
+        android:paddingVertical="18dp"
+        android:text="@string/delete"
+        android:textColor="@color/purpleMain"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/v_button_borderLine"
+        app:layout_constraintTop_toBottomOf="@id/v_borderLine"
+        app:layout_constraintWidth_percent="0.5" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
