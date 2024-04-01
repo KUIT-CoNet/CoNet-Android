@@ -5,7 +5,7 @@ import com.kuit.conet.data.dto.response.plan.ResponseDeletePlan
 import com.kuit.conet.data.dto.response.plan.ResponseGetGroupDailyDecidedPlan
 import com.kuit.conet.data.dto.response.plan.ResponseGetGroupWaitingPlan
 import com.kuit.conet.data.dto.response.plan.ResponseGetPlanDetail
-import com.kuit.conet.data.dto.response.plan.ResponseGetPlanParticipant
+import com.kuit.conet.data.dto.response.plan.ResponseGetPlanParticipants
 import com.kuit.conet.data.dto.response.plan.ResponseGetSidebarPlan
 import com.kuit.conet.data.dto.response.plan.ResponseUpdateFixedPlan
 import retrofit2.Call
@@ -125,5 +125,5 @@ interface PlanAPI {
     fun getPlanParticipants(
         @Path("planId")
         planId: Long,
-    ): Call<ResponseGetPlanParticipant>
+    ): Call<ResponseGetPlanParticipants>
 }
