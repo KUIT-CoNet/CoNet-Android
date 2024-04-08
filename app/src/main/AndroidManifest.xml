@@ -4,7 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
 
     <application
         android:allowBackup="true"
@@ -62,10 +62,10 @@
             android:name=".UI.JoinMemberShip.JoinMembershipActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
-        <activity
+        <!--<activity
             android:name=".UI.Plan.delete.DetailPastActivity"
             android:exported="false"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait" />-->
         <activity
             android:name=".UI.Plan.detail.DetailFixActivity"
             android:exported="false"
@@ -75,10 +75,10 @@
             android:exported="false"
             android:screenOrientation="portrait" />
 
-        <activity
+        <!--<activity
             android:name=".UI.Plan.delete.DetailEditPastActivity"
             android:exported="false"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait" />-->
         <activity
             android:name=".UI.Plan.CreatePlanActivity"
             android:exported="false"
@@ -98,7 +98,7 @@
         <activity
             android:name=".UI.Plan.FixPlanConfirmActivity"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <!--<activity
             android:name=".UI.History.HistoryMainActivity"
             android:exported="false"
