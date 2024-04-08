@@ -11,6 +11,7 @@ import com.kuit.conet.data.dto.response.team.ResponseGetGroups
 import com.kuit.conet.data.dto.response.team.ResponseGetInviteCode
 import com.kuit.conet.data.dto.response.team.ResponseLeaveGroup
 import com.kuit.conet.data.dto.response.team.ResponseTeamJoin
+import com.kuit.conet.data.dto.response.team.ResponseUpdateGroup
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -81,7 +82,7 @@ interface TeamAPI {
         request: RequestLeaveGroup
     ): Call<ResponseLeaveGroup>
 
-    /*@Multipart
+    @Multipart
     @POST("team/update") // :: 모임 수정
     fun updateGroup(
         @Header("Authorization")
@@ -90,7 +91,7 @@ interface TeamAPI {
         file: MultipartBody.Part,
         @Part("request")
         request: RequestBody,
-    ): Call<ResponseUpdateGroup>*/
+    ): Call<ResponseUpdateGroup>
 
     @POST("team/code") // :: 초대 코드 재발급
     fun getInviteCode(
