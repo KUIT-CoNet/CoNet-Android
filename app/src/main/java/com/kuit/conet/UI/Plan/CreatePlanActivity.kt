@@ -8,9 +8,9 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import com.example.calenderdialog.CalenderDialog
 import com.kuit.conet.Network.*
 import com.kuit.conet.R
+import com.kuit.conet.UI.Plan.dialog.CalenderDialog
 import com.kuit.conet.Utils.NETWORK
 import com.kuit.conet.databinding.ActivityCreatePlanBinding
 import com.kuit.conet.Utils.getRefreshToken
@@ -22,7 +22,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import kotlin.coroutines.suspendCoroutine
 
-class CreatePlanActivity() : AppCompatActivity() {
+class CreatePlanActivity : AppCompatActivity() {
     lateinit var binding: ActivityCreatePlanBinding
     var isNameInput = false
     var isDateInput = false

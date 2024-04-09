@@ -13,13 +13,17 @@ import com.kuit.conet.Utils.TAG
 import com.kuit.conet.databinding.DialogBottomSheetDateBinding
 import com.prolificinteractive.materialcalendarview.CalendarDay
 
-class DateDialog(var year:String, var month:String, var day:String): BottomSheetDialogFragment() {
+class DateDialog(
+    var year: String,
+    var month: String,
+    var day: String
+) : BottomSheetDialogFragment() {
 
     private lateinit var binding: DialogBottomSheetDateBinding
 
-    val sundayDecorator = SundayDecorator()
-    val onedayDecorator = OnedayDecorator()
-    val dayDecorator = DayDecorator()
+    private val sundayDecorator = SundayDecorator()
+    private val onedayDecorator = OnedayDecorator()
+    private val dayDecorator = DayDecorator()
 
     interface OnButtonClickListener {
         fun onButtonClicked(year: String, month: String, date: String)
@@ -45,7 +49,7 @@ class DateDialog(var year:String, var month:String, var day:String): BottomSheet
         super.onViewCreated(view, savedInstanceState)
 
         binding.clSelectDate.setOnClickListener {
-            Log.d("click!","클릭감지!!!")
+            Log.d("click!", "클릭감지!!!")
             showDialog()
         }
         binding.viewCanlendar.selectedDate = CalendarDay.today()
@@ -61,21 +65,24 @@ class DateDialog(var year:String, var month:String, var day:String): BottomSheet
         binding.viewCanlendar.addDecorator(selectionDecortor)
 
         binding.viewCanlendar.setOnDateChangedListener { widget, date, selected ->
-            Log.d("호출","호출")
+            Log.d("호출", "호출")
             selectionDecortor.setSelectedDate(date)
             binding.viewCanlendar.invalidateDecorators()
             year = date.year.toString()
-            month = if(date.month + 1 > 10) (date.month + 1).toString() else "0"+(date.month + 1).toString()
-            day = if(date.day > 10) date.day.toString() else "0"+date.day
+            month =
+                if (date.month + 1 > 10) (date.month + 1).toString() else "0" + (date.month + 1).toString()
+            day = if (date.day > 10) date.day.toString() else "0" + date.day
         }
 
         binding.viewCanlendar.setOnMonthChangedListener { widget, date ->
-            Log.d("monthchange", "${date}")
+            Log.d("monthchange", "$date")
             /*val year = date.year.toString()
             val month = if(date.month + 1 >= 10) (date.month + 1).toString() else "0" + (date.month + 1)
             val date = "$year-$month"*/
-            Log.d(TAG, "DateDialog - viewCalendar 날짜 변경됨\n" +
-                    "date : $date")
+            Log.d(
+                TAG, "DateDialog - viewCalendar 날짜 변경됨\n" +
+                        "date : $date"
+            )
         }
 
         binding.applyBtn.setOnClickListener {
@@ -97,13 +104,16 @@ class DateDialog(var year:String, var month:String, var day:String): BottomSheet
         }
 
         binding.dialogCalendarFl.setOnClickListener {
-            Log.d("달력이즈","사라짐")
+            Log.d("달력이즈", "사라짐")
             val date = binding.viewCanlendar.selectedDate
             year = (date.year).toString()
-            month = if(date.month + 1 < 10) "0"+(date.month + 1).toString() else (date.month + 1).toString()
-            day = if(date.day<10) "0${date.day}" else (date.day).toString()
-            Log.d(TAG, "DateDialog - calendar 날짜 변경\n" +
-                    "year : $year, month : $month, day: $day")
+            month =
+                if (date.month + 1 < 10) "0" + (date.month + 1).toString() else (date.month + 1).toString()
+            day = if (date.day < 10) "0${date.day}" else (date.day).toString()
+            Log.d(
+                TAG, "DateDialog - calendar 날짜 변경\n" +
+                        "year : $year, month : $month, day: $day"
+            )
             val sendDate = "$year. $month. $day"
 
 //            buttonClickListener?.onButtonClicked(year, month, day)
@@ -116,7 +126,6 @@ class DateDialog(var year:String, var month:String, var day:String): BottomSheet
             }
         }
         val customWeekDayFormatter = CustomWeekDayFormatter(requireContext())
-        customWeekDayFormatter
         binding.viewCanlendar.setWeekDayFormatter(customWeekDayFormatter)
     }
 
@@ -128,19 +137,19 @@ class DateDialog(var year:String, var month:String, var day:String): BottomSheet
         )
     }
 
-    fun showDialog(){
+    private fun showDialog() {
         binding.flSelectDate3.visibility = View.VISIBLE
         val chooseDateDialog = MonthPicker()
         chooseDateDialog.setOnButtonClickListener(object :
             MonthPicker.OnButtonClickListener {
             override fun onButtonClicked(year: Int, month: Int) {
-                binding.viewCanlendar.currentDate = CalendarDay.from(year, month-1, 1)
-                binding.viewCanlendar.selectedDate = CalendarDay.from(year, month-1, 1)
+                binding.viewCanlendar.currentDate = CalendarDay.from(year, month - 1, 1)
+                binding.viewCanlendar.selectedDate = CalendarDay.from(year, month - 1, 1)
                 binding.flSelectDate3.visibility = View.GONE
             }
         })
         childFragmentManager.beginTransaction()
-        .replace(R.id.fl_select_date3, chooseDateDialog)
-        .commitAllowingStateLoss()
+            .replace(R.id.fl_select_date3, chooseDateDialog)
+            .commitAllowingStateLoss()
     }
 }

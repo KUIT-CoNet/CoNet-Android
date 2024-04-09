@@ -1,3 +1,4 @@
+/*
 package com.kuit.conet.Utils
 
 import android.os.Bundle
@@ -63,8 +64,7 @@ class CalenderDialog  : Fragment() {
             Log.d("monthchange", "${date}")
             val year = date.year.toString()
             val month = if(date.month + 1 >= 10) (date.month + 1).toString() else "0" + (date.month + 1)
-            val date = year + "-" + month
-            Log.d("date","${date}")
+            Log.d("date","${"$year-$month"}")
         }
         val customWeekDayFormatter = CustomWeekDayFormatter(requireContext())
         binding.viewCanlendar.setWeekDayFormatter(customWeekDayFormatter)
@@ -86,4 +86,4 @@ class CalenderDialog  : Fragment() {
             .replace(R.id.fl_select_date2, chooseDateDialog)
             .commitAllowingStateLoss()
     }
-}
+}*/

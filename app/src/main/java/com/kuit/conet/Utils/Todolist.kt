@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.kuit.conet.Network.RetrofitClient
 import com.kuit.conet.UI.Home.RecyclerView.TodoRecyclerAdapter
 import com.kuit.conet.data.dto.response.home.ResponseGetDailyPlan
@@ -14,8 +15,6 @@ import com.kuit.conet.databinding.FragmentTodolistBinding
 import com.kuit.conet.domain.entity.plan.DecidedPlan
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
@@ -49,8 +48,7 @@ class Todolist(
         super.onViewCreated(view, savedInstanceState)
         Log.d(LIFECYCLE, "Todolist - onViewCreated() called")
 
-        val coroutineScope = CoroutineScope(Dispatchers.Main)
-        coroutineScope.launch {
+        lifecycleScope.launch {
             val plans = if (groupId < 0) {      // HomeFragment
                 showplaninfo(date)
             } else {                            // GroupMainActivity

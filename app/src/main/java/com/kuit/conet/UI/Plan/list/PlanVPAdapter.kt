@@ -7,7 +7,7 @@ import com.kuit.conet.UI.Group.GroupAllFragment
 import com.kuit.conet.UI.Group.GroupFavoriteFragment
 
 class PlanVPAdapter(
-    fragment: Fragment,
+    private val fragment: Fragment,
     private val groupId: Int,
     ) : FragmentStateAdapter(fragment) {
 
@@ -19,14 +19,14 @@ class PlanVPAdapter(
         bundle.putInt(BUNDLE_OPTION, position)
 
         return when (position) {
-            1 -> {
-                val fragment = PlanListFragment()
+            1 -> {      // 지난 약속
+                val fragment = PlanListFragment(fragment)
                 fragment.arguments = bundle
                 fragment
             }
 
-            else -> {
-                val fragment = PlanListFragment()
+            else -> {   // 다가오는 약속
+                val fragment = PlanListFragment(fragment)
                 fragment.arguments = bundle
                 fragment
             }

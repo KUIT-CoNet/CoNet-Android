@@ -1,20 +1,17 @@
 package com.kuit.conet.data.api
 
-import com.kuit.conet.Network.EditUserName
-import com.kuit.conet.Network.ResponseCreateGroup
-import com.kuit.conet.Network.ResponseEnrollGroup
-import com.kuit.conet.Network.ResponseGetGroup
-import com.kuit.conet.Network.ResponseGetGroupMembers
-import com.kuit.conet.Network.ResponseGroupCode
-import com.kuit.conet.Network.ResponseUpdateGroup
+import com.kuit.conet.data.dto.response.team.ResponseGetGroupMembers
 import com.kuit.conet.data.dto.request.team.RequestGetInviteCode
 import com.kuit.conet.data.dto.request.team.RequestLeaveGroup
 import com.kuit.conet.data.dto.request.team.RequestTeamJoin
+import com.kuit.conet.data.dto.response.team.ResponseCreateGroup
+import com.kuit.conet.data.dto.response.team.ResponseDeleteGroup
 import com.kuit.conet.data.dto.response.team.ResponseGetGroupDetail
 import com.kuit.conet.data.dto.response.team.ResponseGetGroups
 import com.kuit.conet.data.dto.response.team.ResponseGetInviteCode
 import com.kuit.conet.data.dto.response.team.ResponseLeaveGroup
 import com.kuit.conet.data.dto.response.team.ResponseTeamJoin
+import com.kuit.conet.data.dto.response.team.ResponseUpdateGroup
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -34,13 +31,13 @@ interface TeamAPI {
         authorization: String
     ): Call<ResponseGetGroups>
 
-    /*@GET("team/{teamId}/members") // :: 모임 구성원 조회
+    @GET("team/{teamId}/members") // :: 모임 구성원 조회
     fun getGroupMembers(
         @Header("Authorization")
         authorization: String,
         @Path("teamId")
-        groupId: Int,
-    ): Call<ResponseGetGroupMembers>*/
+        groupId: Long,
+    ): Call<ResponseGetGroupMembers>
 
     @GET("team/{teamId}") // :: 모임 상세 조회
     fun getGroupDetail(
@@ -50,13 +47,13 @@ interface TeamAPI {
         groupId: Long,
     ): Call<ResponseGetGroupDetail>
 
-    /*@DELETE("team/{teamId}") // :: 모임 삭제
-    fun DeleteGroup(
+    @DELETE("team/{teamId}") // :: 모임 삭제
+    fun deleteGroup(
         @Header("Authorization")
         authorization: String,
         @Path("teamId")
-        teamId: Int,
-    ): Call<EditUserName>*/
+        teamId: Long,
+    ): Call<ResponseDeleteGroup>
 
     @POST("team/join") // :: 모임 참여
     fun enrollGroup(
@@ -85,7 +82,7 @@ interface TeamAPI {
         request: RequestLeaveGroup
     ): Call<ResponseLeaveGroup>
 
-    /*@Multipart
+    @Multipart
     @POST("team/update") // :: 모임 수정
     fun updateGroup(
         @Header("Authorization")
@@ -94,7 +91,7 @@ interface TeamAPI {
         file: MultipartBody.Part,
         @Part("request")
         request: RequestBody,
-    ): Call<ResponseUpdateGroup>*/
+    ): Call<ResponseUpdateGroup>
 
     @POST("team/code") // :: 초대 코드 재발급
     fun getInviteCode(

@@ -10,11 +10,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.kuit.conet.UI.Plan.detail.DetailFixActivity
 import com.kuit.conet.UI.Plan.PlanTimeActivity
 import com.kuit.conet.Utils.TAG
+import com.kuit.conet.databinding.ItemCofirmlistBinding
 import com.kuit.conet.databinding.ItemTodolistBinding
 import com.kuit.conet.databinding.ItemTodolistallBinding
 import com.kuit.conet.domain.entity.plan.DecidedPlan
 import com.kuit.conet.domain.entity.plan.UndecidedPlan
 
+// (Home, Sidebar) 대기중인 약속 Adapter
 class AllTodoRecyclerAdapter(
     private val data: List<UndecidedPlan>,
     private val option: Int,
@@ -67,6 +69,7 @@ class AllTodoRecyclerAdapter(
     }
 }
 
+// (Home, GroupMain) 확정된 약속 - 특정 날짜의 약속
 class TodoRecyclerAdapter(
     private val context: Context,
     private val itemList: List<DecidedPlan>,
@@ -107,62 +110,59 @@ class TodoRecyclerAdapter(
     }
 }
 
-/*class ConfirmRecyclerAdapter(private val context: Context, val option: Int, var datas:List<SidePlanInfo>) : RecyclerView.Adapter<ConfirmRecyclerAdapter.ViewHolder>(){
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ConfirmRecyclerAdapter.ViewHolder {
-        val binding = ItemCofirmlistBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ViewHolder(binding)
+// (Sidebar) (확정된) 약속 - 다가오는, 지난
+class ConfirmRecyclerAdapter(
+    private val context: Context,
+    private val option: Int,            // 0,else : (확정된) 약속 - 다가오는, 1 : (확정된) 약속 - 지난
+    private var data: List<DecidedPlan>
+) : RecyclerView.Adapter<ConfirmRecyclerAdapter.ViewHolder>() {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): ViewHolder {
+        val binding =
+            ItemCofirmlistBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(binding, context, option)
     }
 
-    override fun onBindViewHolder(holder: ConfirmRecyclerAdapter.ViewHolder, position: Int) {
-        holder.bind(datas[position])
-
-        holder.binding.planCv.setOnClickListener {
-            when(option){
-                1 -> {
-                    val mIntent = Intent(context, DetailFixActivity::class.java)
-                    mIntent.putExtra("PlanId", datas[position].planId)
-                    startActivity(context, mIntent, null)
-                }
-                0 -> {
-                    Log.d(TAG, "RecyclerViewAdapter - onBindBiewHolder 에서 실행\n" +
-                            "planid : ${datas[position].planId}")
-                    val mIntent = Intent(context, DetailPastActivity::class.java)
-                    mIntent.putExtra("PlanId", datas[position].planId)
-                    startActivity(context, mIntent, null)
-                }
-                else -> {
-
-                }
-            }
-
-        }
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.bind(data[position])
     }
 
-    override fun getItemCount(): Int = datas.size
+    override fun getItemCount(): Int = data.size
 
-    inner class ViewHolder(val binding : ItemCofirmlistBinding) : RecyclerView.ViewHolder(binding.root){
-        fun bind(item : SidePlanInfo){
+    class ViewHolder(
+        val binding: ItemCofirmlistBinding,
+        val context: Context,
+        val option: Int,
+    ) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(item: DecidedPlan) {
             binding.tvDate.text = item.date
             binding.tvTime.text = item.time
-            if(item.dday != null){
-                binding.tvRemaindate.visibility = View.VISIBLE
-                binding.tvRemaindate.text = item.dday + "일 남았습니다."
-            } else{
-                binding.tvRemaindate.visibility = View.GONE
-            }
-            if(item.isRegisteredToHistory != null){
-                if(item.isRegisteredToHistory){
-                    binding.ivHistoryMark.visibility = View.VISIBLE
-                }
-                else{
-                    binding.tvRemaindate.visibility = View.GONE
-                }
-            }
-            else{
-                // 아무것도 안하쥬~ㅋㅋㅋㅋ
-            }
             binding.tvPromisename.text = item.planName
+            binding.tvRemaindate.text = "${item.dday}일 남았습니다."
+
+            binding.planCv.setOnClickListener {
+                when (option) {
+                    1 -> {      // 지난 약속
+//                        val intent = Intent(context, DetailPastActivity::class.java)
+                        val intent = Intent(context, DetailFixActivity::class.java)
+                        intent.putExtra("PlanId", item.planId.toInt())
+                        startActivity(context, intent, null)
+                    }
+
+                    else -> {   // 다가오는 약속
+                        val intent = Intent(context, DetailFixActivity::class.java)
+                        intent.putExtra("PlanId", item.planId.toInt())
+                        startActivity(context, intent, null)
+                    }
+                }
+            }
         }
     }
 
-}*/
+    fun updateData(data: List<DecidedPlan>) {
+        this.data = data
+        notifyDataSetChanged()
+    }
+}

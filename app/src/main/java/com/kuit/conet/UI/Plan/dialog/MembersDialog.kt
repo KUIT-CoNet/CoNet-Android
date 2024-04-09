@@ -6,30 +6,47 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.kuit.conet.Network.Members
-import com.kuit.conet.Network.ResponseGetGroupMembers
 import com.kuit.conet.Network.RetrofitClient
 import com.kuit.conet.R
-import com.kuit.conet.Utils.TAG
+import com.kuit.conet.Utils.LIFECYCLE
+import com.kuit.conet.Utils.NETWORK
 import com.kuit.conet.databinding.DialogBottomSheetMembersBinding
-import com.kuit.conet.Utils.getRefreshToken
+import com.kuit.conet.data.dto.response.plan.ResponseGetPlanParticipants
+import com.kuit.conet.domain.entity.member.Member
 import retrofit2.Call
 import retrofit2.Response
 
 class MembersDialog(
     private val context: Context,
-    private val participantList: ArrayList<Members>,
-    private val groupId: Int
+    private val planId: Long
 ) : BottomSheetDialogFragment() {
 
-    private lateinit var binding: DialogBottomSheetMembersBinding
+    private var _binding: DialogBottomSheetMembersBinding? = null
+    private val binding: DialogBottomSheetMembersBinding
+        get() = requireNotNull(_binding) { "MembersDialog's binding is null" }
+    private var _listener: BottomSheetListener? = null
+    private val listener: BottomSheetListener
+        get() = requireNotNull(_listener) { "MembersDialog's listener is null" }
+
     private lateinit var allParticipantAdapter: AllParticipantAdapter
-    private var listener: BottomSheetListener? = null
+
 
     interface BottomSheetListener {
-        fun onAdditionalInfoSubmitted(info: ArrayList<Members>)
+        fun onAdditionalInfoSubmitted(info: List<Member>)
+    }
+
+    fun setBottomSheetListener(listener: BottomSheetListener) {
+        this._listener = listener
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        Log.d(LIFECYCLE, "MembersDialog - onCreate() called")
+        setStyle( // Background -> Transparent.
+            STYLE_NORMAL,
+            R.style.TransparentBottomSheetDialogFragment
+        )
     }
 
     override fun onCreateView(
@@ -38,73 +55,61 @@ class MembersDialog(
         savedInstanceState: Bundle?
     ): View {
         super.onCreateView(inflater, container, savedInstanceState)
-        binding = DialogBottomSheetMembersBinding.inflate(layoutInflater, container, false)
+        _binding = DialogBottomSheetMembersBinding.inflate(layoutInflater, container, false)
+        Log.d(LIFECYCLE, "MembersDialog - onCreateView() called")
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val refreshToken = getRefreshToken(requireContext())
+        Log.d(LIFECYCLE, "MembersDialog - onViewCreated() called")
 
-        RetrofitClient.instance.getGroupMembers(
-            "Bearer $refreshToken",
-            groupId
-        ).enqueue(object : retrofit2.Callback<ResponseGetGroupMembers> {
-                override fun onResponse(
-                    call: Call<ResponseGetGroupMembers>,
-                    response: Response<ResponseGetGroupMembers>
-                ) {
-                    if (response.isSuccessful) {
-                        Log.d(TAG, "MembersDialog - Retrofit getGroupMembers() 실행 결과 - 성공")
+        RetrofitClient.planInstance.getPlanParticipants(
+            planId = planId,
+        ).enqueue(object : retrofit2.Callback<ResponseGetPlanParticipants> {
+            override fun onResponse(
+                call: Call<ResponseGetPlanParticipants>,
+                response: Response<ResponseGetPlanParticipants>
+            ) {
+                if (response.isSuccessful) {
+                    Log.d(NETWORK, "MembersDialog - Retrofit getPlanParticipant() 실행 결과 - 성공")
 
-                        val allParticipantList = response.body()!!.result
-                        Log.d(
-                            TAG, "내용 : $allParticipantList\n" +
-                                    "타입 : ${allParticipantList.javaClass}"
-                        )
-                        Log.d(
-                            "내용", "MembersDialog all members\n" +
-                                    "allmembers : $allParticipantList"
-                        )
+                    val resp =
+                        requireNotNull(response.body()) { "MembersDialog - getPlanParticipant() 실행 결과 불러 오기 실패" }
 
-                        allParticipantAdapter =
-                            AllParticipantAdapter(context, allParticipantList, participantList)
-                        binding.membersRv.adapter = allParticipantAdapter
-                        binding.membersRv.layoutManager = GridLayoutManager(context, 2)
-                    } else {
-                        Log.d(TAG, "MembersDialog - Retrofit getGroupMembers() 실행 결과 - 안좋음")
-                    }
+                    allParticipantAdapter =
+                        AllParticipantAdapter(
+                            context,
+                            resp.result.map { it.asMember() })//resp.result.map { it.asMember() }, participantList)
+                    binding.membersRv.adapter = allParticipantAdapter
+                } else {
+                    Log.d(NETWORK, "MembersDialog - Retrofit getGroupMembers() 실행 결과 - 안좋음")
                 }
+            }
 
-                override fun onFailure(call: Call<ResponseGetGroupMembers>, t: Throwable) {
-                    Log.d(TAG, "MembersDialog - Retrofit getGroupMembers() 실행 결과 - 실패")
-                    Log.d(TAG, "실패 원인 : $t")
-                }
-
-            })
+            override fun onFailure(call: Call<ResponseGetPlanParticipants>, t: Throwable) {
+                Log.d(
+                    NETWORK,
+                    "MembersDialog - Retrofit getGroupMembers() 실행 결과 - 실패\nbecause : $t"
+                )
+            }
+        })
 
         binding.plusBtn.setOnClickListener {
-//            TODO 서버에 해당 내용 전달하고 이전 화면에도 적용하기
             val giveList = allParticipantAdapter.updateEnrollList()
-            giveList.add(Members(0, "추가하기", null))
-            Log.d(
-                "내용", "MembersDialog members 변경\n" +
-                        "members : $giveList"
-            )
-            listener?.onAdditionalInfoSubmitted(giveList)
+            listener.onAdditionalInfoSubmitted(giveList)
             dismiss()
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setStyle( // Background -> Transparent.
-            STYLE_NORMAL,
-            R.style.TransparentBottomSheetDialogFragment
-        )
+    override fun onDestroyView() {
+        _binding = null
+        super.onDestroyView()
+        _listener = null
+        Log.d(LIFECYCLE, "MembersDialog - onDestroyView() called")
     }
 
-    fun setBottomSheetListener(listener: BottomSheetListener) {
-        this.listener = listener
+    companion object {
+        const val TAG = "MembersDialog"
     }
 }

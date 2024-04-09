@@ -2,12 +2,14 @@ package com.kuit.conet.UI.GroupMain
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.kuit.conet.R
 import com.kuit.conet.UI.Group.GroupPlusActivity
+import com.kuit.conet.Utils.LIFECYCLE
 import com.kuit.conet.databinding.FragmentSidebarBinding
 
 class SideBar(
@@ -40,11 +42,14 @@ class SideBar(
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentSidebarBinding.inflate(inflater, container, false)
+        Log.d(LIFECYCLE, "SideBar - onCreateView() called")
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Log.d(LIFECYCLE, "SideBar - onViewCreated() called")
+
         binding.tvSidebarGroupName.text = title
         binding.tvSidebarGroupCount.text = "$memberCount 명"
 
@@ -98,7 +103,7 @@ class SideBar(
             }
 
             R.id.ll_sidebar_group_delete -> {
-                val deleteGroupDialog = DeleteGroupDialog(groupMainActivity, groupId.toInt())
+                val deleteGroupDialog = DeleteGroupDialog(groupMainActivity, groupId)
                 destoryFragment()
                 deleteGroupDialog.show(parentFragmentManager, DeleteGroupDialog.DIALOG_TAG)
             }
@@ -114,9 +119,10 @@ class SideBar(
     }
 
     override fun onDestroyView() {
-        _itemClickListener = null
         _binding = null
         super.onDestroyView()
+        _itemClickListener = null
+        Log.d(LIFECYCLE, "SideBar - onDestroyView() called")
     }
 
     private fun destoryFragment() {
