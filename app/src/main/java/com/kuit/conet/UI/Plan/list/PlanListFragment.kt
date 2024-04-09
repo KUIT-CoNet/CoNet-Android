@@ -11,6 +11,7 @@ import com.kuit.conet.Network.RetrofitClient
 import com.kuit.conet.UI.Home.RecyclerView.ConfirmRecyclerAdapter
 import com.kuit.conet.Utils.LIFECYCLE
 import com.kuit.conet.Utils.NETWORK
+import com.kuit.conet.Utils.TAG
 import com.kuit.conet.Utils.getRefreshToken
 import com.kuit.conet.data.dto.response.plan.ResponseGetSidebarPlan
 import com.kuit.conet.databinding.FragmentPlanListBinding
@@ -26,7 +27,9 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-class PlanListFragment : Fragment() {
+class PlanListFragment(
+    private val fragment: Fragment
+) : Fragment() {
 
     private var _binding: FragmentPlanListBinding? = null
     private val binding: FragmentPlanListBinding
@@ -35,6 +38,9 @@ class PlanListFragment : Fragment() {
     private val option: Int by lazy { requireNotNull(arguments?.getInt(PlanVPAdapter.BUNDLE_OPTION)) { "PlanListFragment's option is null" } }      // 0,else : 다가오는 약속, 1 : 지난 약속
     private val groupId: Int by lazy { requireNotNull(arguments?.getInt(PlanVPAdapter.BUNDLE_GROUP_ID)) { "PlanListFragment's groupId is null" } }
     private val initDeferred = CompletableDeferred<Unit>()
+    private var plans: List<DecidedPlan> = emptyList()
+    private lateinit var recyclerAdapter: ConfirmRecyclerAdapter
+    private val parent: ConfirmList = fragment as ConfirmList
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,6 +54,12 @@ class PlanListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d(LIFECYCLE, "PlanListFragment - onViewCreated() called")
+
+        parent.setOnItemClickListener(object : ConfirmList.OnItemClickListener {
+            override fun onItemClick(isMyPlan: Boolean) {
+                showMyPlans(isMyPlan)
+            }
+        })
     }
 
     override fun onResume() {
@@ -55,13 +67,14 @@ class PlanListFragment : Fragment() {
         Log.d(LIFECYCLE, "PlanListFragment - onResume() called")
 
         lifecycleScope.launch {
-            val plans = if (option == 1) {      // 지난 약속
+            plans = if (option == 1) {      // 지난 약속
                 showSideConfirmplaninfo()
             } else {                            // 다가오는 약속
                 showSideLastPlan()
             }
 
-            binding.rvConfirmlist.adapter = ConfirmRecyclerAdapter(requireContext(), option, plans)
+            recyclerAdapter = ConfirmRecyclerAdapter(requireContext(), option, plans)
+            binding.rvConfirmlist.adapter = recyclerAdapter
             initDeferred.complete(Unit)
         }
     }
@@ -131,5 +144,17 @@ class PlanListFragment : Fragment() {
                 }
             })
         }
+    }
+
+    fun showMyPlans(isMyPlan: Boolean) {
+        Log.d(TAG, "PlanListFragment - showMyPlans() called\nplans: $plans")
+        if (isMyPlan) {
+            recyclerAdapter.updateData(
+                plans.filter { it.participant }
+            )
+        } else {
+            recyclerAdapter.updateData(plans)
+        }
+        Log.d(TAG, "PlanListFragment - showMyPlans() called\nplans: $plans")
     }
 }

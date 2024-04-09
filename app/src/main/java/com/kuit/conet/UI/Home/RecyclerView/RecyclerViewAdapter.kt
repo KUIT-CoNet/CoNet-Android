@@ -160,4 +160,9 @@ class ConfirmRecyclerAdapter(
             }
         }
     }
+
+    fun updateData(data: List<DecidedPlan>) {
+        this.data = data
+        notifyDataSetChanged()
+    }
 }
