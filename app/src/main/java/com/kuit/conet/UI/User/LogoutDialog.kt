@@ -29,11 +29,11 @@ class LogoutDialog : DialogFragment() {
     ): View {
         binding = DialogLogoutBinding.inflate(inflater, container, false)
 
-        binding.logoutCancel.setOnClickListener {
+        binding.tvLogoutCancelBtn.setOnClickListener {
             dismiss()
         }
 
-        binding.logoutDone.setOnClickListener {
+        binding.tvLogoutLogoutBtn.setOnClickListener {
             // 리프레쉬 엑세스 토큰 삭제
             saveUserRefreshToken(requireContext(),"")
             saveUserAccessToken(requireContext(),"")

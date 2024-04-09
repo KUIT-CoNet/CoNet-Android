@@ -56,8 +56,7 @@ class EditPlanActivity: AppCompatActivity() {
                 Log.d("texting","입력끝")
                 if(p0!!.isNotEmpty()){
                     binding.ivEditTextCancel.visibility = View.VISIBLE
-                    //원래 이름과 같은지 판별
-                    isNameChange = !p0.toString().equals(planName)
+                    isNameChange = p0.toString() != planName //원래 이름과 같은지 판별
                 }
                 else {
                     binding.ivEditTextCancel.visibility = View.GONE
@@ -70,19 +69,15 @@ class EditPlanActivity: AppCompatActivity() {
         })
 
         binding.ivEditTextCancel.setOnClickListener {
-            binding.etEditPlanName.setText(null)
+            binding.etEditPlanName.text = null
         }
     }
 
     fun changeBtn(isNameChange: Boolean, planId: Int){
         if(isNameChange){
             binding.clEditDoneBtn.setBackgroundResource(R.color.purpleMain)
-
             binding.cvEditDoneBtn.setOnClickListener {
                 updateWaiting()
-//                var intent = Intent(this, PlanTimeActivity::class.java)
-//                intent.putExtra("planId", planId)
-//                startActivity(intent)
                 finish()
             }
         }

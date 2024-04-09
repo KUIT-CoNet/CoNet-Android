@@ -144,7 +144,6 @@ class TimeInputActivity : AppCompatActivity() {
             intent.putExtra("planStartDate", intent.getStringExtra("planStartDate"))
             intent.putExtra("groupId", intent.getIntExtra("groupId", 0))
             startActivity(intent)
-
             finish()
         }
 
@@ -235,7 +234,7 @@ class TimeInputActivity : AppCompatActivity() {
                         when (regiStatus) {
                             0 -> {
                                 if (resp != null) {
-                                    //requireNotNull(resp.result.timeSlot) { "TimeInputActivity onResponse() timeslot is null" }
+                                    //requireNotNull(resp.result.timeSlot) { "TimeInputActivity onResponse() timeslot is null" } 이거 오류나요..
                                 }
                                 time1.time.clear()
                                 time2.time.clear()
@@ -268,7 +267,6 @@ class TimeInputActivity : AppCompatActivity() {
                                 if (resp != null) {
                                     resp.result.timeSlot?.let { it1 -> initTime(it1) }
                                 }
-                                Log.d(TAG, "[timeinput] onResponse: 2번 initTime 후")
                                 pdtToTable(1)
                             }
                         }
@@ -282,8 +280,7 @@ class TimeInputActivity : AppCompatActivity() {
         }
     }
 
-    //Time마다 date 입력
-    private fun setDateOfTime(date: String) {
+    private fun setDateOfTime(date: String) { //Time마다 date 입력
         time1.date = date.replace(". ", "-")
         val startDate = LocalDate.parse(time1.date)
         time2.date = startDate.plusDays(1).toString().replace(". ", "-")
@@ -295,17 +292,13 @@ class TimeInputActivity : AppCompatActivity() {
     }
 
     private fun initTime(timeslot: ArrayList<UserAvailableTimeDTO>) {
-        Log.d(TAG, "[timeinput] initTime: timeslot인자\n$timeslot")
-        for (j in 0 until timeslot[0].availableTimes.size) {
-            time1.time.add(timeslot[0].availableTimes[j])
-        }
+        for (j in 0 until timeslot[0].availableTimes.size) time1.time.add(timeslot[0].availableTimes[j])
         for (j in 0 until timeslot[1].availableTimes.size) time2.time.add(timeslot[1].availableTimes[j])
         for (j in 0 until timeslot[2].availableTimes.size) time3.time.add(timeslot[2].availableTimes[j])
         for (j in 0 until timeslot[3].availableTimes.size) time4.time.add(timeslot[3].availableTimes[j])
         for (j in 0 until timeslot[4].availableTimes.size) time5.time.add(timeslot[4].availableTimes[j])
         for (j in 0 until timeslot[5].availableTimes.size) time6.time.add(timeslot[5].availableTimes[j])
         for (j in 0 until timeslot[6].availableTimes.size) time7.time.add(timeslot[6].availableTimes[j])
-        Log.d(TAG, "initTime: 끝\n")
     }
 
     //클릭 동작 활성화 함수 (true 넣으면 동작)
@@ -339,7 +332,7 @@ class TimeInputActivity : AppCompatActivity() {
 
                 3, 6 -> day3[i].setBackgroundResource(R.drawable.view_border_check)
             }
-            updateSaveBtn() //저장버튼 활성화
+            updateSaveBtn() //저장 버튼 활성화
         } else {
             when (day) {
                 1, 4, 7 -> day1[i].setBackgroundResource(R.drawable.view_border)
@@ -348,7 +341,7 @@ class TimeInputActivity : AppCompatActivity() {
 
                 3, 6 -> day3[i].setBackgroundResource(R.drawable.view_border)
             }
-            updateSaveBtn() //저장버튼 비활성화
+            updateSaveBtn() //저장 버튼 비활성화
         }
     }
 
@@ -449,13 +442,11 @@ class TimeInputActivity : AppCompatActivity() {
                 }
             }
         }
-        Log.d(TAG, "[timeinput] tableToPDT: 실행\n$time1\n$time2\n$time3\n$time4\n$time5\n$time6\n$time7")
     }
 
     private fun pdtToTable( //저장된 PossibleDateTime 정보를 받아 이를 바탕으로 화면 구성
         day: Int, //시작 날이 1,4,7
     ) {
-        Log.d(TAG, "[timeinput] pdtToTable: 실행")
         var pdt1: AvailableDateTimes
         var pdt2: AvailableDateTimes?
         var pdt3: AvailableDateTimes?
@@ -567,7 +558,7 @@ class TimeInputActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateSaveBtn() { //저장버튼 색 및 기능 업데이트 함수
+    private fun updateSaveBtn() { //저장 버튼 색 및 기능 업데이트 함수
         binding.cvTimeInputSaveBtn.setBackgroundResource(R.drawable.background_rectangular_gray_10)
         binding.cvTimeInputSaveBtn.setOnClickListener { }
 
@@ -582,7 +573,7 @@ class TimeInputActivity : AppCompatActivity() {
         }
     }
 
-    private fun activateSaveBtn() { //저장버튼 활성화 함수
+    private fun activateSaveBtn() { //저장버 튼 활성화 함수
         binding.cvTimeInputSaveBtn.setOnClickListener {
             tableToPDT(page) //해당 페이지 변경 내용 저장
             inputTime(getMyTime()) //서버 연결

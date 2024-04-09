@@ -1,6 +1,7 @@
 package com.kuit.conet.UI.User
 
 import android.content.Intent
+import android.net.Network
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -9,6 +10,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.kuit.conet.*
 import com.kuit.conet.Network.*
+import com.kuit.conet.Utils.NETWORK
 import com.kuit.conet.Utils.getRefreshToken
 import com.kuit.conet.Utils.getUsername
 import com.kuit.conet.Utils.saveUsername
@@ -26,6 +28,7 @@ class NameChangeActivity : AppCompatActivity() {
         binding = ActivityNameChangeBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+
         binding.etName.setText(intent.getStringExtra("name"))
         binding.ivNameBackBtn.setOnClickListener {
             finish()
@@ -50,7 +53,6 @@ class NameChangeActivity : AppCompatActivity() {
                 if (binding.ivNameTextCancel.visibility == View.GONE && p0!!.length > 0) {
                     binding.ivNameTextCancel.visibility = View.VISIBLE
                 }
-
 
                 if (matcher.find() || p0!!.length >= 20 || p0!!.length <= 0) {
                     Log.d("texting", "오류")
@@ -90,15 +92,16 @@ class NameChangeActivity : AppCompatActivity() {
         binding.cvNameDoneBtn.setOnClickListener { // 완료 시 이름 저장
             if (edit) {
                 saveUsername(this, binding.etName.text.toString())
-                editUserName(getUsername(this)) //서버로 정보 보내기
-                val intent = Intent(this, InfoActivity::class.java)
-                startActivity(intent)
+                editUserName(binding.etName.text.toString()) //서버로 정보 보내기
+//                val intent = Intent(this, InfoActivity::class.java)
+//                startActivity(intent)
                 finish()
             }
         }
     }
 
     private fun editUserName(name : String){
+        Log.d(NETWORK, "editUserName: 실행")
         val refreshToken = getRefreshToken(this)
         val editName = getRetrofit().create(RetrofitInterface::class.java)
         editName.editName(
@@ -108,12 +111,14 @@ class NameChangeActivity : AppCompatActivity() {
             override fun onResponse(call: Call<EditUserName>, response: Response<EditUserName>) {
                 if(response.isSuccessful){
                     val resp = response.body()
-                    Log.d("SIGNUP/SUCCESS", resp.toString())
+                    Log.d(NETWORK, resp.toString())
+                } else {
+                    Log.d(NETWORK, "onResponse: 실패함")
                 }
             }
 
             override fun onFailure(call: Call<EditUserName>, t: Throwable) {
-                Log.d("SIGNUP/FAILURE", t.message.toString()) // 실패한 이유 메세지 출력
+                Log.d(NETWORK, t.message.toString()) // 실패한 이유 메세지 출력
             }
 
         })

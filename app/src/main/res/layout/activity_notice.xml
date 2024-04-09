@@ -16,7 +16,7 @@
         app:layout_constraintStart_toStartOf="parent"/>
 
     <TextView
-        android:id="@+id/tv_notice_text_1"
+        android:id="@+id/tv_notice_title"
         android:layout_width="wrap_content"
         android:layout_height="22dp"
         android:text="@string/user_notice"
@@ -29,6 +29,7 @@
         app:layout_constraintBottom_toBottomOf="@id/iv_notice_back_btn"/>
 
     <TextView
+        android:id="@+id/tv_notice_content"
         android:layout_width="wrap_content"
         android:layout_height="18dp"
         android:text="등록된 공지가 없습니다."
@@ -37,8 +38,19 @@
         android:textColor="@color/gray500"
         android:layout_marginTop="46dp"
         android:layout_marginStart="24dp"
-        app:layout_constraintTop_toBottomOf="@id/tv_notice_text_1"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@id/tv_notice_title"
+        app:layout_constraintStart_toStartOf="parent"
+        android:visibility="gone"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_notice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/tv_notice_title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="20dp"
+        android:layout_marginHorizontal="24dp"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

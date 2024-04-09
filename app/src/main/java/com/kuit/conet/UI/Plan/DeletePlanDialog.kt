@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import com.kuit.conet.Network.ResponseDeletePlan
 import com.kuit.conet.Network.RetrofitInterface
 import com.kuit.conet.Network.getRetrofit
+import com.kuit.conet.Utils.NETWORK
 import com.kuit.conet.databinding.DialogDeletePlanBinding
 import com.kuit.conet.Utils.getRefreshToken
 import retrofit2.Call
@@ -42,9 +43,8 @@ class DeletePlanDialog : Fragment() {
 
     private fun deletePlan(planId: Int) {
         val deletePlanService = getRetrofit().create(RetrofitInterface::class.java)
-        val authHeader = "Bearer ${getRefreshToken(requireContext())}"
         deletePlanService.deletePlan(
-            authHeader,
+            "Bearer ${getRefreshToken(requireContext())}",
             planId
         ).enqueue(object : retrofit2.Callback<ResponseDeletePlan> {
             override fun onResponse(
@@ -53,12 +53,12 @@ class DeletePlanDialog : Fragment() {
             ) {
                 if (response.isSuccessful) {
                     val resp = response.body()
-                    Log.d("API-deletePlan/Success", resp.toString())
+                    Log.d(NETWORK, "Success\n$resp")
                 }
             }
 
             override fun onFailure(call: Call<ResponseDeletePlan>, t: Throwable) {
-                Log.d("API-eletePlan/Fail", t.message.toString())
+                Log.d(NETWORK, "Failure\n" + t.message.toString())
             }
 
         })

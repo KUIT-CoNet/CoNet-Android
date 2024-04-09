@@ -72,7 +72,7 @@ class DeleteGroupDialog(groupMainActivity: GroupMainActivity, groupId : Int) : D
     }
 
     companion object {
-        const val TAG = "DeleteGroupDialog"
+        const val DIALOG_TAG = "DeleteGroupDialog"
     }
 
 }
