@@ -58,7 +58,7 @@ class JoinMembershipContract : Fragment() {
         }
 
         binding.tvTermsPersonalInfoLink.setOnClickListener {
-            val urlIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.notion.so/conet/86061acd8cbe4b2ebfbdff96470b34d7?pvs=4"))
+            val urlIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://conet.notion.site/86061acd8cbe4b2ebfbdff96470b34d7?pvs=4"))
             startActivity(urlIntent)
         }
 

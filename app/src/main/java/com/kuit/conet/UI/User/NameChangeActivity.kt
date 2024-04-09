@@ -54,7 +54,6 @@ class NameChangeActivity : AppCompatActivity() {
                     binding.ivNameTextCancel.visibility = View.VISIBLE
                 }
 
-
                 if (matcher.find() || p0!!.length >= 20 || p0!!.length <= 0) {
                     Log.d("texting", "오류")
                     binding.ivNameInfo1.setImageResource(R.drawable.ic_error_red)
@@ -93,15 +92,16 @@ class NameChangeActivity : AppCompatActivity() {
         binding.cvNameDoneBtn.setOnClickListener { // 완료 시 이름 저장
             if (edit) {
                 saveUsername(this, binding.etName.text.toString())
-                editUserName(getUsername(this)) //서버로 정보 보내기
-                val intent = Intent(this, InfoActivity::class.java)
-                startActivity(intent)
+                editUserName(binding.etName.text.toString()) //서버로 정보 보내기
+//                val intent = Intent(this, InfoActivity::class.java)
+//                startActivity(intent)
                 finish()
             }
         }
     }
 
     private fun editUserName(name : String){
+        Log.d(NETWORK, "editUserName: 실행")
         val refreshToken = getRefreshToken(this)
         val editName = getRetrofit().create(RetrofitInterface::class.java)
         editName.editName(
@@ -112,6 +112,8 @@ class NameChangeActivity : AppCompatActivity() {
                 if(response.isSuccessful){
                     val resp = response.body()
                     Log.d(NETWORK, resp.toString())
+                } else {
+                    Log.d(NETWORK, "onResponse: 실패함")
                 }
             }
 
