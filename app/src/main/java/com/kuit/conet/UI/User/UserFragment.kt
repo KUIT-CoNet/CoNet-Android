@@ -3,6 +3,7 @@ package com.kuit.conet.UI.User
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,22 +11,32 @@ import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.kuit.conet.*
 import com.kuit.conet.Network.*
+import com.kuit.conet.Utils.LIFECYCLE
 import com.kuit.conet.Utils.getUserImg
 import com.kuit.conet.Utils.getUsername
 import com.kuit.conet.databinding.FragmentUserBinding
 
 
-class UserFragment : Fragment(){
-    lateinit var binding : FragmentUserBinding
-    private lateinit var userData : ShowUserInfo
+class UserFragment : Fragment() {
+
+    private var _binding: FragmentUserBinding? = null
+    private val binding
+        get() = requireNotNull(_binding) { "UserFragment's binding is null" }
+    private lateinit var userData: ShowUserInfo
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
-        binding = FragmentUserBinding.inflate(inflater, container, false)
+        _binding = FragmentUserBinding.inflate(inflater, container, false)
+        Log.d(LIFECYCLE, "UserFragment: onCreateView called")
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        Log.d(LIFECYCLE, "UserFragment: onViewCreated called")
 
         binding.cvUserInfo.setOnClickListener {
             val intent = Intent(requireContext(), InfoActivity::class.java)
@@ -38,13 +49,16 @@ class UserFragment : Fragment(){
             startActivity(intent)
         }
 
-        binding.cvUserInquiry.setOnClickListener{
+        binding.cvUserInquiry.setOnClickListener {
             val intent = Intent(requireContext(), InquiryActivity::class.java)
             startActivity(intent)
         }
 
         binding.cvUserTerms.setOnClickListener {
-            val urlIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://conet.notion.site/f94cdd700d5e4ce3a38bffaa9719df07"))
+            val urlIntent = Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse("https://conet.notion.site/f94cdd700d5e4ce3a38bffaa9719df07")
+            )
             startActivity(urlIntent)
         }
 
@@ -55,12 +69,8 @@ class UserFragment : Fragment(){
                 .commit()
         }
 
-        return binding.root
-    }
-
-    override fun onStart() {
-        super.onStart()
         binding.tvUserName.text = getUsername(requireContext())
+
         Glide.with(requireContext())
             .load(getUserImg(requireContext())) // 불러올 이미지 url
             .placeholder(R.drawable.profile_purple) // 이미지 로딩 시작하기 전 표시할 이미지
@@ -68,6 +78,11 @@ class UserFragment : Fragment(){
             .fallback(R.drawable.profile_purple) // 로드할 url 이 비어있을(null 등) 경우 표시할 이미지
             .circleCrop() // 동그랗게 자르기 동그란 맘속에 피어난 How is the life...
             .into(binding.ivUserProfile) // 이미지를 넣을 뷰
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Log.d(LIFECYCLE, "UserFragment: onStart called")
 
     }
 
