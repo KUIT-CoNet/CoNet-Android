@@ -2,8 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:padding="20dp">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <TextView
         android:id="@+id/tv_item_notice_date"
@@ -12,6 +11,7 @@
         android:text="2024.02.24"
         android:textSize="12sp"
         android:textColor="@color/texthigh"
+        android:layout_marginTop="20dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
 
@@ -33,15 +33,6 @@
             android:textColor="@color/texthigh"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>
-        
-        <ImageView
-            android:id="@+id/iv_item_notice_top"
-            android:layout_width="22dp"
-            android:layout_height="22dp"
-            android:src="@drawable/ic_angle_top"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:visibility="gone"/>
 
         <ImageView
             android:id="@+id/iv_item_notice_down"
@@ -49,9 +40,8 @@
             android:layout_height="22dp"
             android:src="@drawable/ic_angle_down"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:visibility="visible"/>
-        
+            app:layout_constraintEnd_toEndOf="parent"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
@@ -62,23 +52,15 @@
         android:text="내용을 입력하세요. 내용을 입력하세요. 내용을 입력하세요. 내용을 입력하세요. 내용을 입력하세요. 내용을 입력하세요. 내용을 입력하세요. 내용을 입력하세요. 내용을 입력하세요."
         app:layout_constraintTop_toBottomOf="@id/cl_item_notice_title"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="12dp"/>
-    
-    <View
-        android:id="@+id/v_item_notice_show_content"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/gray100"
-        app:layout_constraintTop_toBottomOf="@id/tv_item_notice_content"
-        android:layout_marginTop="20dp"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="20dp"/>
 
     <View
         android:id="@+id/v_item_notice_hide_content"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/gray100"
-        app:layout_constraintTop_toBottomOf="@id/cl_item_notice_title"
-        android:layout_marginTop="20dp"
-        android:visibility="gone"/>
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
