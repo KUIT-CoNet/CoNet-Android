@@ -6,7 +6,7 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import com.kuit.conet.*
 import com.kuit.conet.UI.Home.HomeFragment
-import com.kuit.conet.UI.User.User
+import com.kuit.conet.UI.User.UserFragment
 import com.kuit.conet.UI.Group.GroupFragment
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.commit
@@ -66,7 +66,7 @@ class ConetMainActivity : AppCompatActivity() {
                 R.id.my_menu -> {
                     fragmentManager.commit {
                         addToBackStack(null)
-                        replace(R.id.main_fragment, User())
+                        replace(R.id.main_fragment, UserFragment())
                     }
                     return@setOnItemSelectedListener true
                 }
