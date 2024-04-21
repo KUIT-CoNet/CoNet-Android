@@ -20,16 +20,15 @@ class ParticipantAdapter(
     private val context: Context,
     private var membersList: MutableList<Member>,
     private val option: Int,
-) : RecyclerView.Adapter<ParticipantAdapter.ViewHolder>(), MembersDialog.BottomSheetListener {
+) : RecyclerView.Adapter<ParticipantAdapter.ViewHolder>() {
 
     lateinit var supportFragmentManager: FragmentManager
     var planId: Long = 1
 
-    class ViewHolder(
+    inner class ViewHolder(
         val binding: ItemParticipantBinding,
-        private val context: Context,
-//        private val membersList: ArrayList<Members>,
-        private val option: Int,
+//        private val context: Context,
+//        private val option: Int,
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: Member) {
@@ -87,8 +86,30 @@ class ParticipantAdapter(
                 }
             }
 
-            binding.ivMinus.setOnClickListener {
+            /*binding.ivMinus.setOnClickListener {      // adapterPosition 사용해서 삭제시 index 문제 발생 항상 Position이 -1이 나옴
+                notifyItemRemoved(adapterPosition)
+                Log.d(TAG, "ParticipantAdapter members removed in position: $adapterPosition\nmembers : $membersList")
+                membersList.remove(membersList[adapterPosition])
+                Log.d(TAG, "ParticipantAdapter members\nmembers : $membersList")
+            }*/
 
+            if (item.name == "추가하기") {
+                binding.clParticipant.setOnClickListener {
+                    val membersDialog = MembersDialog(context, planId)
+                    membersDialog.setBottomSheetListener(object :
+                        MembersDialog.BottomSheetListener {
+                        override fun onAdditionalInfoSubmitted(info: List<Member>) {
+                            membersList.clear()
+                            membersList.add(Member(0, "추가하기", ""))
+                            membersList.addAll(info)
+
+                            Log.d(TAG, "ParticipantAdapter members\nmembers : $membersList")
+                            notifyDataSetChanged()
+                        }
+                    })
+                    membersDialog.show(supportFragmentManager, MembersDialog.TAG)
+
+                }
             }
         }
     }
@@ -96,7 +117,7 @@ class ParticipantAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding: ItemParticipantBinding =
             ItemParticipantBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ViewHolder(binding, context, option)
+        return ViewHolder(binding)//, context, option)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -104,44 +125,34 @@ class ParticipantAdapter(
 
         holder.binding.ivMinus.setOnClickListener {
             notifyItemRemoved(position)
-            Log.d(TAG, "ParticipantAdapter members\nmembers : $membersList")
+            Log.d(TAG, "ParticipantAdapter members in position : $position\nmembers : $membersList")
             membersList.remove(membersList[position])
             Log.d(TAG, "ParticipantAdapter members\nmembers : $membersList")
 //            notifyDataSetChanged()
         }
 
-        holder.binding.clParticipant.setOnClickListener {
+        /*holder.binding.clParticipant.setOnClickListener {
             if (holder.binding.tvParticipantName.text == "추가하기") {
                 val membersDialog = MembersDialog(context, planId)
-                membersDialog.setBottomSheetListener(this)
+                membersDialog.setBottomSheetListener(object :
+                    MembersDialog.BottomSheetListener {
+                    override fun onAdditionalInfoSubmitted(info: List<Member>) {
+                        membersList.clear()
+                        membersList.add(Member(0, "추가하기", ""))
+                        membersList.addAll(info)
+
+                        Log.d(TAG, "ParticipantAdapter members\nmembers : $membersList")
+                        notifyDataSetChanged()
+                    }
+                })
                 membersDialog.show(supportFragmentManager, MembersDialog.TAG)
-                /*Log.d(
-                    TAG, "ParticipantAdapter members\n" +
-                            "members : $membersList"
-                )
-                membersList.remove(membersList[position])
-                Log.d(
-                    TAG, "ParticipantAdapter members 변경\n" +
-                            "members : $membersList"
-                )*/
             }
-        }
+        }*/
     }
 
     override fun getItemCount(): Int = membersList.size
 
-    override fun onAdditionalInfoSubmitted(info: List<Member>) {
-        val tempInfo = info.toMutableList()
-        tempInfo.add(
-            Member(0, "추가하기", "")
-        )
-        membersList = tempInfo
-
-        Log.d(TAG, "ParticipantAdapter members\nmembers : $membersList")
-        notifyDataSetChanged()
-    }
-
     fun getMembersList(): List<Member> {
-        return membersList
+        return membersList.filter { it.name != "추가하기" }
     }
 }

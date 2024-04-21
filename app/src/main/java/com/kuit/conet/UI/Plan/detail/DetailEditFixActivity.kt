@@ -67,7 +67,7 @@ class DetailEditFixActivity
         binding.timeTf.setOnClickListener(this)
 
         val members = data.members.toMutableList()
-        members.add(Member(0, "추가하기", ""))
+        members.add(0, Member(0, "추가하기", ""))
         participantAdapter =
             ParticipantAdapter(
                 context = this,
@@ -109,7 +109,6 @@ class DetailEditFixActivity
                     )
                 } else {
                     val members: List<Long> = participantAdapter.getMembersList()
-                        .filter { it.name != "추가하기" }
                         .map { it.id }
                         .sorted()
 
