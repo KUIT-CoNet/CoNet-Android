@@ -48,7 +48,7 @@ class DetailEditFixActivity
                 DetailFixActivity.INTENT_TAG,
                 PlanDetail::class.java,
             )
-        )
+        ) { "DetailEditFixActivity's intent 값 가져오기 실패" }
 
         val date = data.date.split(". ")
         dateData = listOf(date[0], date[1], date[2])
@@ -206,4 +206,5 @@ class DetailEditFixActivity
         dateData = listOf(year, month, date)
         checkEnabled()
     }
+
 }
