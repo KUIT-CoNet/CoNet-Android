@@ -41,6 +41,12 @@ class NoticeActivity : AppCompatActivity() {
             noticeAdapter = NoticeAdapter(this, noticeList)
             binding.rvNotice.adapter = noticeAdapter
             binding.rvNotice.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+
+            noticeAdapter!!.setOnItemClickListener(object : NoticeAdapter.OnItemClickListener{
+                override fun onItemClick(noticeInfo: NoticeInfo) {
+
+                }
+            })
         }
     }
 
@@ -59,9 +65,25 @@ class NoticeActivity : AppCompatActivity() {
                         )
 
                         response.body()?.let { listOf(it.result) }?.let {
-                            noticeList.addAll(
-                                it
-                            )
+                            noticeList.addAll(//it
+                                arrayListOf(
+                                    NoticeInfo("제목1", "content", "2024.04.13"),
+                                    NoticeInfo("제목1", "content", "2024.04.13"),
+                                    NoticeInfo("제목1", "content", "2024.04.13"),
+                                    NoticeInfo("제목1", "content", "2024.04.13"),
+                                    NoticeInfo("제목1", "content", "2024.04.13"),
+                                    NoticeInfo("제목1", "content", "2024.04.13"),
+                                    NoticeInfo("제목1", "content", "2024.04.13"),
+                                    NoticeInfo("제목1", "content", "2024.04.13"),
+                                    NoticeInfo("제목1", "content", "2024.04.13"),
+                                    NoticeInfo("제목1", "content", "2024.04.13"),
+                                    NoticeInfo("제목1", "content", "2024.04.13"),
+                                    NoticeInfo("제목1", "content", "2024.04.13"),
+                                    NoticeInfo("제목1", "content", "2024.04.13"),
+                                    NoticeInfo("제목1", "content", "2024.04.13"),
+                                    NoticeInfo("제목1", "content", "2024.04.13")
+                                )
+                         )
                         }
 
                         initNoticeList()

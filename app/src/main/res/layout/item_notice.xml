@@ -21,7 +21,8 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/tv_item_notice_date"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="4dp">
+        android:layout_marginTop="4dp"
+        android:paddingBottom="20dp">
 
         <TextView
             android:id="@+id/tv_item_notice_title"
@@ -53,7 +54,7 @@
         app:layout_constraintTop_toBottomOf="@id/cl_item_notice_title"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="-8dp"
         android:layout_marginBottom="20dp"/>
 
     <View
