@@ -48,7 +48,7 @@ class DetailEditFixActivity
                 DetailFixActivity.INTENT_TAG,
                 PlanDetail::class.java,
             )
-        )
+        ) { "DetailEditFixActivity's intent 값 가져오기 실패" }
 
         val date = data.date.split(". ")
         dateData = listOf(date[0], date[1], date[2])
@@ -67,7 +67,7 @@ class DetailEditFixActivity
         binding.timeTf.setOnClickListener(this)
 
         val members = data.members.toMutableList()
-        members.add(Member(0, "추가하기", ""))
+        members.add(0, Member(0, "추가하기", ""))
         participantAdapter =
             ParticipantAdapter(
                 context = this,
@@ -109,7 +109,6 @@ class DetailEditFixActivity
                     )
                 } else {
                     val members: List<Long> = participantAdapter.getMembersList()
-                        .filter { it.name != "추가하기" }
                         .map { it.id }
                         .sorted()
 
@@ -206,4 +205,5 @@ class DetailEditFixActivity
         dateData = listOf(year, month, date)
         checkEnabled()
     }
+
 }

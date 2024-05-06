@@ -10,19 +10,33 @@ data class ResponseGetGroupMembers(
 ) {
     @Serializable
     data class Member(
-        @SerialName("userId")
+        @SerialName("memberId")
         val userId: Long,
         @SerialName("name")
-        val name: String,
-        @SerialName("userImgUrl")
+        val name: String?,
+        @SerialName("memberImgUrl")
         val userImgUrl: String,
     ) {
         fun asMember(): com.kuit.conet.domain.entity.member.Member {
-            return com.kuit.conet.domain.entity.member.Member(
+            return if (name == null) {
+                com.kuit.conet.domain.entity.member.Member(
+                    userId,
+                    "이름 없음",
+                    userImgUrl,
+                )
+            } else {
+                com.kuit.conet.domain.entity.member.Member(
+                    userId,
+                    name,
+                    userImgUrl,
+                )
+            }
+
+            /*return com.kuit.conet.domain.entity.member.Member(
                 id = userId,
                 name = name,
                 imageUrl = userImgUrl,
-            )
+            )*/
         }
     }
 }

@@ -6,20 +6,22 @@ import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.commit
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.kuit.conet.Network.RetrofitClient
 import com.kuit.conet.R
 import com.kuit.conet.UI.Group.GroupAdapter
+import com.kuit.conet.UI.GroupMain.dialog.AllMembersDialog
 import com.kuit.conet.UI.Plan.CreatePlanActivity
 import com.kuit.conet.UI.Plan.detail.PlanListActivity
+import com.kuit.conet.UI.Plan.dialog.MembersDialog
 import com.kuit.conet.Utils.*
 import com.kuit.conet.databinding.ActivityGroupMainBinding
 import com.kuit.conet.Utils.getAccessToken
 import com.kuit.conet.data.dto.request.member.RequestPostBookmark
 import com.kuit.conet.data.dto.response.member.ResponsePostBookmark
 import com.kuit.conet.data.dto.response.team.ResponseGetGroupDetail
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import com.kuit.conet.domain.entity.member.Member
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Response
@@ -193,6 +195,14 @@ class GroupMainActivity : AppCompatActivity() {
             todolist.waitForInit()
             binding.tvGroupMainSelectPromiseCount.text = todolist.returnsize().toString()
         }*/
+
+        binding.llGroupMainMembers.setOnClickListener {
+            val allMembersDialog = AllMembersDialog()
+            allMembersDialog.arguments = Bundle().apply {
+                putLong(BUNDLE_GROUP_ID, groupId)
+            }
+            allMembersDialog.show(supportFragmentManager, AllMembersDialog.TAG)
+        }
     }
 
     override fun onResume() {
@@ -214,7 +224,7 @@ class GroupMainActivity : AppCompatActivity() {
             fragmentManager.commit {
                 replace(R.id.fl_todolist, todolist)
             }
-            CoroutineScope(Dispatchers.Main).launch {
+            lifecycleScope.launch {
                 todolist.waitForInit()
                 binding.tvGroupMainSelectPromiseCount.text = todolist.returnsize().toString()
             }
@@ -256,5 +266,6 @@ class GroupMainActivity : AppCompatActivity() {
     companion object {
         const val INTENT_GROUP_ID = "GroupId"
         const val INTENT_SIDE_OPTION = "OPTION"
+        const val BUNDLE_GROUP_ID = "groupId"
     }
 }

@@ -7,6 +7,7 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <FrameLayout
@@ -110,34 +111,40 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@id/tv_group_name" />
 
-                <ImageView
-                    android:id="@+id/iv_user"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_marginTop="6dp"
-                    android:src="@drawable/icon_people"
-                    app:layout_constraintStart_toStartOf="@id/tv_group_name"
-                    app:layout_constraintTop_toBottomOf="@id/tv_group_name" />
-
-                <TextView
-                    android:id="@+id/tv_count"
+                <LinearLayout
+                    android:id="@+id/ll_group_main_members"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
-                    android:fontFamily="@font/pretendard_medium"
-                    android:text="n명"
-                    android:textColor="@color/gray500"
-                    android:textSize="16sp"
-                    app:layout_constraintBottom_toBottomOf="@id/iv_user"
-                    app:layout_constraintStart_toEndOf="@id/iv_user"
-                    app:layout_constraintTop_toTopOf="@id/iv_user" />
+                    android:layout_marginTop="6dp"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    app:layout_constraintStart_toStartOf="@id/tv_group_name"
+                    app:layout_constraintTop_toBottomOf="@id/tv_group_name">
+
+                    <ImageView
+                        android:id="@+id/iv_user"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@drawable/icon_people" />
+
+                    <TextView
+                        android:id="@+id/tv_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:fontFamily="@font/pretendard_medium"
+                        android:text="n명"
+                        android:textColor="@color/gray500"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
 
                 <FrameLayout
                     android:id="@+id/fl_group_calendar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="36dp"
-                    app:layout_constraintTop_toBottomOf="@id/tv_count" />
+                    app:layout_constraintTop_toBottomOf="@id/ll_group_main_members" />
 
                 <LinearLayout
                     android:id="@+id/ll_group_main_today_plan"
