@@ -21,7 +21,7 @@ class NoticeAdapter(
     private var noticeList: ArrayList<NoticeInfo>
 ) : RecyclerView.Adapter<NoticeAdapter.ViewHolder>() {
     private lateinit var itemClickListener: OnItemClickListener
-    private lateinit var isClickedList: ArrayList<Boolean>
+    private var isClickedList: ArrayList<Boolean> = ArrayList()
 
     interface OnItemClickListener {
         fun onItemClick(noticeInfo: NoticeInfo) {
