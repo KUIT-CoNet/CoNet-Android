@@ -34,7 +34,7 @@ class NoticeAdapter(
             binding.tvItemNoticeTitle.text = item.title
             binding.tvItemNoticeContent.text = item.content
             binding.tvItemNoticeDate.text = item.date
-            //setItem(isClicked) //화면이 만들어질 때 화면 세팅
+            setItem(isClickedList[itemCount]) //화면이 만들어질 때 화면 세팅
 
             binding.ivItemNoticeDown.setOnClickListener {
                 itemClickListener.onItemClick(item)

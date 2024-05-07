@@ -68,20 +68,20 @@ class NoticeActivity : AppCompatActivity() {
                             noticeList.addAll(//it
                                 arrayListOf(
                                     NoticeInfo("제목1", "content", "2024.04.13"),
-                                    NoticeInfo("제목1", "content", "2024.04.13"),
-                                    NoticeInfo("제목1", "content", "2024.04.13"),
-                                    NoticeInfo("제목1", "content", "2024.04.13"),
-                                    NoticeInfo("제목1", "content", "2024.04.13"),
-                                    NoticeInfo("제목1", "content", "2024.04.13"),
-                                    NoticeInfo("제목1", "content", "2024.04.13"),
-                                    NoticeInfo("제목1", "content", "2024.04.13"),
-                                    NoticeInfo("제목1", "content", "2024.04.13"),
-                                    NoticeInfo("제목1", "content", "2024.04.13"),
-                                    NoticeInfo("제목1", "content", "2024.04.13"),
-                                    NoticeInfo("제목1", "content", "2024.04.13"),
-                                    NoticeInfo("제목1", "content", "2024.04.13"),
-                                    NoticeInfo("제목1", "content", "2024.04.13"),
-                                    NoticeInfo("제목1", "content", "2024.04.13")
+                                    NoticeInfo("제목2", "content", "2024.04.13"),
+                                    NoticeInfo("제목3", "content", "2024.04.13"),
+                                    NoticeInfo("제목4", "content", "2024.04.13"),
+                                    NoticeInfo("제목5", "content", "2024.04.13"),
+                                    NoticeInfo("제목6", "content", "2024.04.13"),
+                                    NoticeInfo("제목7", "content", "2024.04.13"),
+                                    NoticeInfo("제목8", "content", "2024.04.13"),
+                                    NoticeInfo("제목9", "content", "2024.04.13"),
+                                    NoticeInfo("제목10", "content", "2024.04.13"),
+                                    NoticeInfo("제목11", "content", "2024.04.13"),
+                                    NoticeInfo("제목12", "content", "2024.04.13"),
+                                    NoticeInfo("제목13", "content", "2024.04.13"),
+                                    NoticeInfo("제목14", "content", "2024.04.13"),
+                                    NoticeInfo("제목15", "content", "2024.04.13")
                                 )
                          )
                         }
