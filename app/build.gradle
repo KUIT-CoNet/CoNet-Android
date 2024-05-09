@@ -5,6 +5,10 @@ plugins {
     id 'kotlinx-serialization'
 }
 
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+def kakao_SDK_Appkey = properties.getProperty('kakao.app.key')
+
 android {
     namespace 'com.kuit.conet'
     compileSdk 33
@@ -17,6 +21,9 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField "String", "KAKAO_APP_KEY", properties['kakao.app.key']
+        manifestPlaceholders = [kakaoSDKAppkey: kakao_SDK_Appkey]
     }
 
     buildTypes {

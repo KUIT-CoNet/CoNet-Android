@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import com.kuit.conet.UI.Login.LoginActivity
 import com.kuit.conet.Network.RetrofitClient
+import com.kuit.conet.Utils.LIFECYCLE
 import com.kuit.conet.Utils.NETWORK
 import com.kuit.conet.databinding.ActivitySplashBinding
 import com.kuit.conet.Utils.getRefreshToken
@@ -22,18 +23,18 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        Log.d(LIFECYCLE, "SplashActivity - onCreate() called")
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
         renewalAccessToken(getRefreshToken(this))
     }
 
-    private fun renewalAccessToken(refreshToken: String) { // 리프레쉬 토큰 사용해서 AccessToken갱신하는 함수
+    private fun renewalAccessToken(refreshToken: String) {
         RetrofitClient.authInstance.renewalRefreshToken(
             refreshToken = "Bearer $refreshToken"
-        ).enqueue(object :
-            retrofit2.Callback<ResponseRenewalRefreshToken> { // 서버와 비동기적으로 데이터 주고받을 수 있는 방법 enqueue사용
-            override fun onResponse( // 통신에 성공했을 경우
+        ).enqueue(object : retrofit2.Callback<ResponseRenewalRefreshToken> {
+            override fun onResponse(
                 call: Call<ResponseRenewalRefreshToken>,
                 response: Response<ResponseRenewalRefreshToken>
             ) {
@@ -48,7 +49,7 @@ class SplashActivity : AppCompatActivity() {
                     startActivity(mIntent)
                     finish()
                 } else {
-                    Log.d(NETWORK, "SplashActivity - getAccess() 실행결과 안좋음")
+                    Log.d(NETWORK, "SplashActivity - getAccess() 실행결과 안좋음\nresponse : $response")
                     val mIntent = Intent(applicationContext, LoginActivity::class.java)
                     startActivity(mIntent)
                     finish()
@@ -58,7 +59,7 @@ class SplashActivity : AppCompatActivity() {
             override fun onFailure(
                 call: Call<ResponseRenewalRefreshToken>,
                 t: Throwable
-            ) { // 통신에 실패했을 경우
+            ) {
                 Log.d(NETWORK, "SplashActivity - getAccess() 실행결과 실패\n이유 : $t")
                 val mIntent = Intent(applicationContext, LoginActivity::class.java)
                 startActivity(mIntent)

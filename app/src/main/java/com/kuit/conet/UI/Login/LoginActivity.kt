@@ -10,10 +10,10 @@ import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.common.util.Utility
 import com.kakao.sdk.user.UserApiClient
+import com.kuit.conet.BuildConfig
 import com.kuit.conet.UI.JoinMemberShip.JoinMembershipActivity
 import com.kuit.conet.UI.ConetMainActivity
 import com.kuit.conet.Network.RetrofitClient
-import com.kuit.conet.R
 import com.kuit.conet.Utils.LIFECYCLE
 import com.kuit.conet.Utils.NETWORK
 import com.kuit.conet.Utils.TAG
@@ -42,8 +42,7 @@ class LoginActivity : AppCompatActivity() {
             val keyHash = Utility.getKeyHash(this)
             Log.d("hash", keyHash)
 
-            /** KakoSDK init */
-            KakaoSdk.init(this, this.getString(R.string.kakao_app_key))
+            KakaoSdk.init(this, BuildConfig.KAKAO_APP_KEY)
         }
 
         binding.loginKakaoCv.setOnClickListener {
@@ -53,13 +52,13 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun loginWithKakao() {
-        Log.d(TAG, "LoginActivity - kakaoLogin() called")
+        Log.d(TAG, "LoginActivity - loginWithKakao() called")
 
         // 카카오계정으로 로그인 공통 callback 구성
         // 카카오톡으로 로그인 할 수 없어 카카오계정으로 로그인할 경우 사용됨
         val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
             if (error != null) {
-                Log.d(TAG, "LoginActivity - loginWithKakao() called\n카카오계정으로 로그인 실패 : $error")
+                Log.d(TAG, "LoginActivity - loginWithKakao() called\n카카오계정으로 로그인 실패 : $error") // 2
                 setLogin("")
             } else if (token != null) {
                 //TODO: 최종적으로 카카오로그인 및 유저정보 가져온 결과
@@ -77,7 +76,7 @@ class LoginActivity : AppCompatActivity() {
         if (UserApiClient.instance.isKakaoTalkLoginAvailable(this)) {
             UserApiClient.instance.loginWithKakaoTalk(this) { token, error ->
                 if (error != null) {
-                    Log.d(TAG, "LoginActivity - loginWithKakao() called\n카카오계정으로 로그인 실패 : $error")
+                    Log.d(TAG, "LoginActivity - loginWithKakao()\n카카오계정으로 로그인 실패\nerror : $error") // 1
 
                     // 사용자가 카카오톡 설치 후 디바이스 권한 요청 화면에서 로그인을 취소한 경우,
                     // 의도적인 로그인 취소로 보고 카카오계정으로 로그인 시도 없이 로그인 취소로 처리 (예: 뒤로 가기)
@@ -105,8 +104,9 @@ class LoginActivity : AppCompatActivity() {
     private fun setLogin(idToken: String?) {
         Log.d(TAG, "LoginActivity - setLogin() called")
         if (idToken.isNullOrBlank()) {
-            Log.d(TAG, "LoginActivity - setLogin() called\n비정상적인 로그인입니다.")
+            Log.d(TAG, "LoginActivity - setLogin()\n비정상적인 로그인입니다.")
         } else {
+            Log.d(TAG, "LoginActivity - setLogin()\n정상적인 로그인입니다.")
             getKakaoResponse(idToken)
         }
     }
@@ -126,7 +126,8 @@ class LoginActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     Log.d(NETWORK, "LoginActivity - login() 실행결과 -  성공")
 
-                    val resp = requireNotNull(response.body()) { "LoginActivity - login() 실행결과 불러오기 실패" }
+                    val resp =
+                        requireNotNull(response.body()) { "LoginActivity - login() 실행결과 불러오기 실패" }
                     saveUserAccessToken(applicationContext, resp.result.accessToken)
                     saveUserRefreshToken(applicationContext, resp.result.refreshToken)
 

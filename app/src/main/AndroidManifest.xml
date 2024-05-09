@@ -21,10 +21,6 @@
             android:name=".UI.Plan.detail.PlanListActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
-        <!--<activity
-            android:name=".UI.History.NonResigestedActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />-->
         <activity
             android:name=".UI.User.WithdrawDoneActivity"
             android:exported="false"
@@ -74,11 +70,6 @@
             android:name=".UI.Group.GroupPlusActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
-
-        <!--<activity
-            android:name=".UI.Plan.delete.DetailEditPastActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />-->
         <activity
             android:name=".UI.Plan.CreatePlanActivity"
             android:exported="false"
@@ -99,19 +90,10 @@
             android:name=".UI.Plan.FixPlanConfirmActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
-        <!--<activity
-            android:name=".UI.History.HistoryMainActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name=".UI.History.RegistHistoryActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />-->
 
         <meta-data
             android:name="com.kakao.sdk.AppKey"
-            android:value="@string/kakao_app_key" />
+            android:value="${kakaoSDKAppkey}" />
 
         <activity
             android:name=".UI.Login.LoginActivity"
@@ -125,7 +107,9 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- 카카오 로그인, 인가코드를 받기 위한 액티비티 -->
+        </activity>
+
+        <!-- 카카오 로그인, 인가코드를 받기 위한 액티비티 -->
         <activity
             android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
             android:exported="true">
