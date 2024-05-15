@@ -17,12 +17,12 @@ android {
         applicationId "konkuk.kuit.conet"
         minSdk 28
         targetSdk 33
-        versionCode 3
+        versionCode 4
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField "String", "KAKAO_APP_KEY", properties['kakao.app.key']
+        buildConfigField("String", "KAKAO_APP_KEY", properties['kakao.app.key'])
         manifestPlaceholders = [kakaoSDKAppkey: kakao_SDK_Appkey]
     }
 
@@ -57,7 +57,7 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
-    def kakao_login_version = "2.19.0"
+    def kakao_login_version = "2.20.1"
     implementation "com.kakao.sdk:v2-user:$kakao_login_version" // 카카오 로그인
 
     def retrofit_version = "2.9.0"
