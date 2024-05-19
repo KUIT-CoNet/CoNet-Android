@@ -64,7 +64,7 @@ class CalendarFragment : Fragment() {
             val year = today.year.toString()
             val month = if (today.month < 9) "0${today.month + 1}" else "${today.month + 1}"
 
-            binding.viewCanlendar.setTitleFormatter { "${today.year}년  ${today.month}월" }
+            binding.viewCanlendar.setTitleFormatter { "${today.year}년  ${today.month + 1}월" }
             val promiseDates = UpdatePlanDates("$year-$month")
             binding.viewCanlendar.addDecorator(sundayDecorator)
             eventDecorator = planDotDecorator(
@@ -93,6 +93,7 @@ class CalendarFragment : Fragment() {
             Log.d(TAG, "CalendarFragment - calendar 월 변경 event $date")
             val year = date.year
             val month = if (date.month < 9) "0${date.month + 1}" else "${date.month + 1}"
+            binding.viewCanlendar.setTitleFormatter { "${date.year}년  ${date.month +1}월" }
 
             CoroutineScope(Dispatchers.Main).launch {
                 val promiseDates = UpdatePlanDates("$year-$month")
