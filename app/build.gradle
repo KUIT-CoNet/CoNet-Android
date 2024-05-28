@@ -96,4 +96,9 @@ dependencies {
     implementation "com.github.prolificinteractive:material-calendarview:$material_calendar_version"
 
     implementation "com.jakewharton.threetenabp:threetenabp:1.4.0"
+
+    def data_store_version = "1.0.0"
+    implementation("androidx.datastore:datastore-preferences:$data_store_version")
+    implementation("androidx.datastore:datastore-preferences-rxjava2:$data_store_version") // optional - RxJava2 support
+    implementation("androidx.datastore:datastore-preferences-rxjava3:$data_store_version") // optional - RxJava3 support
 }
