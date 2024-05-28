@@ -12,7 +12,7 @@ import com.kuit.conet.Utils.NETWORK
 import com.kuit.conet.databinding.ActivitySplashBinding
 import com.kuit.conet.Utils.getRefreshToken
 import com.kuit.conet.Utils.saveUserRefreshToken
-import com.kuit.conet.data.dto.response.auth.ResponseRenewalRefreshToken
+import com.kuit.conet.data.dto.response.auth.ResponseRenewTokens
 import retrofit2.Call
 import retrofit2.Response
 
@@ -27,16 +27,16 @@ class SplashActivity : AppCompatActivity() {
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
-        renewalAccessToken(getRefreshToken(this))
+        renewTokens(getRefreshToken(this))
     }
 
-    private fun renewalAccessToken(refreshToken: String) {
-        RetrofitClient.authInstance.renewalRefreshToken(
+    private fun renewTokens(refreshToken: String) {
+        RetrofitClient.authInstance.renewTokens(
             refreshToken = "Bearer $refreshToken"
-        ).enqueue(object : retrofit2.Callback<ResponseRenewalRefreshToken> {
+        ).enqueue(object : retrofit2.Callback<ResponseRenewTokens> {
             override fun onResponse(
-                call: Call<ResponseRenewalRefreshToken>,
-                response: Response<ResponseRenewalRefreshToken>
+                call: Call<ResponseRenewTokens>,
+                response: Response<ResponseRenewTokens>
             ) {
                 if (response.isSuccessful) {
                     Log.d(NETWORK, "SplashActivity - getAccess() 실행결과 성공")
@@ -57,7 +57,7 @@ class SplashActivity : AppCompatActivity() {
             }
 
             override fun onFailure(
-                call: Call<ResponseRenewalRefreshToken>,
+                call: Call<ResponseRenewTokens>,
                 t: Throwable
             ) {
                 Log.d(NETWORK, "SplashActivity - getAccess() 실행결과 실패\n이유 : $t")
