@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.kuit.conet.Network.RetrofitClient
 import com.kuit.conet.UI.Home.RecyclerView.AllTodoRecyclerAdapter
+import com.kuit.conet.UI.application.CoNetApplication
 import com.kuit.conet.data.dto.response.home.ResponseGetWaitingPlan
 import com.kuit.conet.data.dto.response.plan.ResponseGetGroupWaitingPlan
 import com.kuit.conet.databinding.FragmentOncallBinding
@@ -15,6 +16,7 @@ import com.kuit.conet.domain.entity.plan.UndecidedPlan
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
@@ -72,9 +74,12 @@ class OncallList(
     }
 
     private suspend fun showOncall(): List<UndecidedPlan> {
+        val bearerAccessToken =
+            CoNetApplication.getInstance().getDataStore().bearerAccessToken.first()
+
         return suspendCoroutine { continuation ->
             RetrofitClient.homeInstance.getWaitingPlan(
-                authorization = "Bearer ${getRefreshToken(requireContext())}",
+                authorization = bearerAccessToken,
             ).enqueue(object : Callback<ResponseGetWaitingPlan> {
                 override fun onResponse(
                     call: Call<ResponseGetWaitingPlan>,

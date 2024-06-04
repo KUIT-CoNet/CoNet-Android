@@ -12,12 +12,16 @@ import com.bumptech.glide.Glide
 import com.kuit.conet.Network.RetrofitClient
 import com.kuit.conet.R
 import com.kuit.conet.UI.GroupMain.GroupMainActivity
+import com.kuit.conet.UI.application.CoNetApplication
 import com.kuit.conet.Utils.NETWORK
 import com.kuit.conet.databinding.ItemGroupBinding
-import com.kuit.conet.Utils.getAccessToken
 import com.kuit.conet.data.dto.request.member.RequestPostBookmark
 import com.kuit.conet.data.dto.response.member.ResponsePostBookmark
 import com.kuit.conet.domain.entity.group.GroupSimple
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Response
 
@@ -63,10 +67,26 @@ class GroupAdapter(
                 binding.ivGroupItemStarUn.visibility = View.VISIBLE
                 item.isFavorite = false
 
+                postBookmark(item.id)
+            }
+            binding.ivGroupItemStarUn.setOnClickListener {  // 북마크 등록
+                binding.ivGroupItemStar.visibility = View.VISIBLE
+                binding.ivGroupItemStarUn.visibility = View.GONE
+                item.isFavorite = true
+
+                postBookmark(item.id)
+            }
+        }
+
+        private fun postBookmark(id: Long) {
+            CoroutineScope(Dispatchers.IO).launch {
+                val bearerAccessToken =
+                    CoNetApplication.getInstance().getDataStore().bearerAccessToken.first()
+
                 RetrofitClient.memberInstance.postBookmark(
-                    authorization = "Bearer ${getAccessToken(context)}",
+                    authorization = bearerAccessToken,
                     request = RequestPostBookmark(
-                        teamId = item.id
+                        teamId = id
                     )
                 ).enqueue(object : retrofit2.Callback<ResponsePostBookmark> {
                     override fun onResponse(
@@ -92,40 +112,6 @@ class GroupAdapter(
                     }
                 })
             }
-            binding.ivGroupItemStarUn.setOnClickListener {  // 북마크 등록
-                binding.ivGroupItemStar.visibility = View.VISIBLE
-                binding.ivGroupItemStarUn.visibility = View.GONE
-                item.isFavorite = true
-
-                RetrofitClient.memberInstance.postBookmark(
-                    authorization = "Bearer ${getAccessToken(context)}",
-                    request = RequestPostBookmark(
-                        teamId = item.id
-                    )
-                ).enqueue(object : retrofit2.Callback<ResponsePostBookmark> {
-                    override fun onResponse(
-                        call: Call<ResponsePostBookmark>,
-                        response: Response<ResponsePostBookmark>
-                    ) {
-                        if (response.isSuccessful) {
-                            val result = response.body()?.result ?: "실행결과 불러오기 실패"
-                            Log.d(
-                                NETWORK,
-                                "GroupAdapter - Retrofit postBookmark() 북마크 등록 실행결과 - 성공\nresult : $result"
-                            )
-                        } else {
-                            Log.d(
-                                NETWORK,
-                                "GroupAdapter - Retrofit postBookmark() 북마크 등록 실행결과 - 안좋음"
-                            )
-                        }
-                    }
-
-                    override fun onFailure(call: Call<ResponsePostBookmark>, t: Throwable) {
-                        Log.d(NETWORK, "GroupAdapter - Retrofit postBookmark() 북마크 등록 실행결과 - 실패")
-                    }
-                })
-            }
         }
     }
 
@@ -140,6 +126,7 @@ class GroupAdapter(
     }
 
     override fun getItemCount(): Int = itemList.size
+
 
     companion object {
         const val INTENT_GROUP_ID = "group id"

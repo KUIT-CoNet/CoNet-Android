@@ -10,14 +10,17 @@ import android.view.ViewGroup
 import android.view.Window
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.lifecycleScope
 import com.kuit.conet.Network.RetrofitClient
+import com.kuit.conet.UI.application.CoNetApplication
 import com.kuit.conet.Utils.LIFECYCLE
 import com.kuit.conet.Utils.NetworkUtil.getErrorResponse
 import com.kuit.conet.Utils.NETWORK
 import com.kuit.conet.databinding.DialogGroupEnrollBinding
-import com.kuit.conet.Utils.getAccessToken
 import com.kuit.conet.data.dto.request.team.RequestTeamJoin
 import com.kuit.conet.data.dto.response.team.ResponseTeamJoin
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Response
 
@@ -60,36 +63,12 @@ class GroupEnrollDialog : DialogFragment() {
         }
 
         binding.btnDialogGroupEnroll.setOnClickListener {
-            RetrofitClient.teamInstance.enrollGroup(
-                authorization = "Bearer ${getAccessToken(requireContext())}",
-                request = RequestTeamJoin(
-                    binding.tfDialogGroupEnrollInputCode.text.toString()
-                )
-            ).enqueue(object : retrofit2.Callback<ResponseTeamJoin> {
-                override fun onResponse(
-                    call: Call<ResponseTeamJoin>,
-                    response: Response<ResponseTeamJoin>
-                ) {
-                    if (response.isSuccessful) {
-                        Log.d(NETWORK, "GroupEnrollDialog - Retrofit enrollGroup()실행결과 - 성공")
-                        listener.onUpdateGroupList()
-                        dismiss()
-                    } else {
-                        Log.d(NETWORK, "GroupEnrollDialog - Retrofit enrollGroup()실행결과 - 안좋음")
+            viewLifecycleOwner.lifecycleScope.launch {
+                val bearerAccessToken =
+                    CoNetApplication.getInstance().getDataStore().bearerAccessToken.first()
+                enrollGroup(bearerAccessToken)
+            }
 
-                        val errorText =
-                            getErrorResponse(response.errorBody())?.message ?: "오류 불러오기를 실패하였습니다."
-                        binding.ivDialogGroupEnrollError.visibility = View.VISIBLE
-                        binding.tvDialogGroupEnrollError.visibility = View.VISIBLE
-                        binding.tvDialogGroupEnrollError.text = errorText
-                    }
-                }
-
-                override fun onFailure(call: Call<ResponseTeamJoin>, t: Throwable) {
-                    Log.d(NETWORK, "GroupEnrollDialog - enrollGroup()실행결과 - 실패\nbecause : $t")
-                }
-
-            })
         }
 
         binding.tfDialogGroupEnrollInputCode.doAfterTextChanged {
@@ -127,6 +106,39 @@ class GroupEnrollDialog : DialogFragment() {
 
     private fun validateInviteCode(inviteCode: String): Boolean {
         return regex.matches(inviteCode)
+    }
+
+    private fun enrollGroup(accessToken: String) {
+        RetrofitClient.teamInstance.enrollGroup(
+            authorization = accessToken,
+            request = RequestTeamJoin(
+                binding.tfDialogGroupEnrollInputCode.text.toString()
+            )
+        ).enqueue(object : retrofit2.Callback<ResponseTeamJoin> {
+            override fun onResponse(
+                call: Call<ResponseTeamJoin>,
+                response: Response<ResponseTeamJoin>
+            ) {
+                if (response.isSuccessful) {
+                    Log.d(NETWORK, "GroupEnrollDialog - Retrofit enrollGroup()실행결과 - 성공")
+                    listener.onUpdateGroupList()
+                    dismiss()
+                } else {
+                    Log.d(NETWORK, "GroupEnrollDialog - Retrofit enrollGroup()실행결과 - 안좋음")
+
+                    val errorText =
+                        getErrorResponse(response.errorBody())?.message ?: "오류 불러오기를 실패하였습니다."
+                    binding.ivDialogGroupEnrollError.visibility = View.VISIBLE
+                    binding.tvDialogGroupEnrollError.visibility = View.VISIBLE
+                    binding.tvDialogGroupEnrollError.text = errorText
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseTeamJoin>, t: Throwable) {
+                Log.d(NETWORK, "GroupEnrollDialog - enrollGroup()실행결과 - 실패\nbecause : $t")
+            }
+
+        })
     }
 
     companion object {

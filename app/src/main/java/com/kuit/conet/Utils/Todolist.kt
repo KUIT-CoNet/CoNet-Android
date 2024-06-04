@@ -9,12 +9,14 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.kuit.conet.Network.RetrofitClient
 import com.kuit.conet.UI.Home.RecyclerView.TodoRecyclerAdapter
+import com.kuit.conet.UI.application.CoNetApplication
 import com.kuit.conet.data.dto.response.home.ResponseGetDailyPlan
 import com.kuit.conet.data.dto.response.plan.ResponseGetGroupDailyDecidedPlan
 import com.kuit.conet.databinding.FragmentTodolistBinding
 import com.kuit.conet.domain.entity.plan.DecidedPlan
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
@@ -67,6 +69,9 @@ class Todolist(
     }
 
     private suspend fun showplaninfo(date: CalendarDay): List<DecidedPlan> {
+        val bearerAccessToken =
+            CoNetApplication.getInstance().getDataStore().bearerAccessToken.first()
+
         return suspendCoroutine { continuation2 ->
 
             val year = (date.year).toString()
@@ -74,7 +79,7 @@ class Todolist(
             val day = if (date.day < 10) "0${date.day}" else "${date.day}"
 
             RetrofitClient.homeInstance.getDailyPlan(
-                authorization = "Bearer ${getRefreshToken(requireContext())}",
+                authorization = bearerAccessToken,
                 searchDate = "$year-$month-$day",
             ).enqueue(object : Callback<ResponseGetDailyPlan> {
                 override fun onResponse(

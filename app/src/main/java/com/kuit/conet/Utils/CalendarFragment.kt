@@ -10,14 +10,15 @@ import com.kuit.conet.Network.RetrofitClient
 import com.kuit.conet.R
 import com.kuit.conet.UI.Home.MonthPicker
 import com.kuit.conet.UI.Home.Calendar.*
+import com.kuit.conet.UI.application.CoNetApplication
 import com.kuit.conet.data.dto.response.home.ResponseGetMonthlyPlan
 import com.kuit.conet.databinding.FragmentCalendarBinding
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.first
 import retrofit2.Call
 import retrofit2.Response
-import java.util.Calendar
 import kotlin.collections.ArrayList
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -93,13 +94,17 @@ class CalendarFragment : Fragment() {
             Log.d(TAG, "CalendarFragment - calendar 월 변경 event $date")
             val year = date.year
             val month = if (date.month < 9) "0${date.month + 1}" else "${date.month + 1}"
-            binding.viewCanlendar.setTitleFormatter { "${date.year}년  ${date.month +1}월" }
+            binding.viewCanlendar.setTitleFormatter { "${date.year}년  ${date.month + 1}월" }
 
             CoroutineScope(Dispatchers.Main).launch {
                 val promiseDates = updateDate("$year-$month")
                 Log.d(TAG, "CalendarFragment - 데코 지우기")
                 binding.viewCanlendar.removeDecorator(eventDecorator)
-                eventDecorator = planDotDecorator(requireContext(), R.color.mainsub1, promiseDates as ArrayList<Int>)
+                eventDecorator = planDotDecorator(
+                    requireContext(),
+                    R.color.mainsub1,
+                    promiseDates as ArrayList<Int>
+                )
                 binding.viewCanlendar.addDecorator(eventDecorator)
                 binding.viewCanlendar.removeDecorator(onedayDecorator)
                 onedayDecorator = OnedayDecorator()
@@ -133,11 +138,14 @@ class CalendarFragment : Fragment() {
     }
 
     private suspend fun updateDate(callDate: String): List<Int> {
+        val bearerAccessToken =
+            CoNetApplication.getInstance().getDataStore().bearerAccessToken.first()
+
         return suspendCoroutine { continuation ->
             Log.d(TAG, "CalendarFragment - updateDate() called\n요청 날짜 : $callDate")
 
             RetrofitClient.homeInstance.getMonthlyPlan(
-                authorization = "Bearer ${getRefreshToken(requireContext())}",
+                authorization = bearerAccessToken,
                 searchDate = callDate,
             ).enqueue(object : retrofit2.Callback<ResponseGetMonthlyPlan> {
                 override fun onResponse(

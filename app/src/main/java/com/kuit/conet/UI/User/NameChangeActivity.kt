@@ -7,15 +7,17 @@ import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
+import androidx.lifecycle.lifecycleScope
 import com.kuit.conet.*
 import com.kuit.conet.Network.*
+import com.kuit.conet.UI.application.CoNetApplication
 import com.kuit.conet.Utils.LIFECYCLE
 import com.kuit.conet.Utils.NETWORK
-import com.kuit.conet.Utils.getRefreshToken
-import com.kuit.conet.Utils.saveUsername
 import com.kuit.conet.data.dto.request.member.RequestEditUserName
 import com.kuit.conet.data.dto.response.member.ResponseEditUserName
 import com.kuit.conet.databinding.ActivityNameChangeBinding
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Response
 import java.util.regex.Pattern
@@ -79,9 +81,12 @@ class NameChangeActivity : AppCompatActivity() {
         }
 
         binding.cvNameDoneBtn.setOnClickListener { // 완료 시 이름 저장
-            if (edit) {
-                saveUsername(this, binding.etName.text.toString())
-                editUserName(binding.etName.text.toString())
+            if (!edit) return@setOnClickListener
+            binding.etName.text.toString().let { userName ->
+                lifecycleScope.launch {
+                    CoNetApplication.getInstance().getDataStore().setUserName(userName)
+                }
+                editUserName(userName)
             }
         }
     }
@@ -89,38 +94,43 @@ class NameChangeActivity : AppCompatActivity() {
     private fun editUserName(name: String) {
         Log.d(NETWORK, "editUserName: 실행")
 
-        RetrofitClient.memberInstance.editUserName(
-            authorization = "Bearer ${getRefreshToken(this)}",
-            request = RequestEditUserName(
-                name = name,
-            ),
-        ).enqueue(object : retrofit2.Callback<ResponseEditUserName> {
-            override fun onResponse(
-                call: Call<ResponseEditUserName>,
-                response: Response<ResponseEditUserName>
-            ) {
-                if (response.isSuccessful) {
-                    Log.d(NETWORK, "NameChangeActivity - editUsername 실행결과 - 성공")
+        lifecycleScope.launch {
+            val bearerAccessToken =
+                CoNetApplication.getInstance().getDataStore().bearerAccessToken.first()
 
-                    val returnIntent = Intent()
-                    returnIntent.putExtra(INTENT_TAG_NAME, name)
-                    setResult(Activity.RESULT_OK, returnIntent)
+            RetrofitClient.memberInstance.editUserName(
+                authorization = bearerAccessToken,
+                request = RequestEditUserName(
+                    name = name,
+                ),
+            ).enqueue(object : retrofit2.Callback<ResponseEditUserName> {
+                override fun onResponse(
+                    call: Call<ResponseEditUserName>,
+                    response: Response<ResponseEditUserName>
+                ) {
+                    if (response.isSuccessful) {
+                        Log.d(NETWORK, "NameChangeActivity - editUsername 실행결과 - 성공")
 
-                    finish()
+                        val returnIntent = Intent()
+                        returnIntent.putExtra(INTENT_TAG_NAME, name)
+                        setResult(Activity.RESULT_OK, returnIntent)
 
-                } else {
-                    Log.d(NETWORK, "NameChangeActivity - editUsername 실행결과 - 안좋음")
+                        finish()
+
+                    } else {
+                        Log.d(NETWORK, "NameChangeActivity - editUsername 실행결과 - 안좋음")
+                    }
                 }
-            }
 
-            override fun onFailure(call: Call<ResponseEditUserName>, t: Throwable) {
-                Log.d(
-                    NETWORK,
-                    "NameChangeActivity - editUsername 실행결과 - 실패\nbecause : ${t.message}"
-                )
-            }
+                override fun onFailure(call: Call<ResponseEditUserName>, t: Throwable) {
+                    Log.d(
+                        NETWORK,
+                        "NameChangeActivity - editUsername 실행결과 - 실패\nbecause : ${t.message}"
+                    )
+                }
 
-        })
+            })
+        }
     }
 
     companion object {

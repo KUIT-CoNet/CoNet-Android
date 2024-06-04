@@ -6,13 +6,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.lifecycleScope
 import com.kuit.conet.Network.RetrofitClient
 import com.kuit.conet.R
+import com.kuit.conet.UI.application.CoNetApplication
 import com.kuit.conet.Utils.LIFECYCLE
 import com.kuit.conet.Utils.NETWORK
 import com.kuit.conet.databinding.DialogDeleteGroupBinding
-import com.kuit.conet.Utils.getRefreshToken
 import com.kuit.conet.data.dto.response.team.ResponseDeleteGroup
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -34,6 +37,7 @@ class DeleteGroupDialog(
             R.style.TransparentBottomSheetDialogFragment
         )
     }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -49,27 +53,12 @@ class DeleteGroupDialog(
         Log.d(LIFECYCLE, "DeleteGroupDialog - onViewCreated() called")
 
         binding.tvDeleteDialogDelete.setOnClickListener {
-            RetrofitClient.teamInstance.deleteGroup(
-                authorization = "Bearer ${getRefreshToken(requireContext())}",
-                teamId = groupId
-            ).enqueue(object : Callback<ResponseDeleteGroup> {
-                override fun onResponse(
-                    call: Call<ResponseDeleteGroup>,
-                    response: Response<ResponseDeleteGroup>
-                ) {
-                    if (response.isSuccessful) {
-                        Log.d(NETWORK, "DeleteGroupDialog - deleteGroup() 실행 결과 - 성공")
-                        dismiss()
-                        groupMainActivity.finish()
-                    } else {
-                        Log.d(NETWORK, "DeleteGroupDialog - deleteGroup() 실행 결과 - 안좋음")
-                    }
-                }
+            viewLifecycleOwner.lifecycleScope.launch {
+                val bearerAccessToken =
+                    CoNetApplication.getInstance().getDataStore().bearerAccessToken.first()
 
-                override fun onFailure(call: Call<ResponseDeleteGroup>, t: Throwable) {
-                    Log.d(NETWORK, "DeleteGroupDialog - deleteGroup() 실행 결과 - 실패\nbecause : $t")
-                }
-            })
+                deleteGroup(bearerAccessToken, groupId)
+            }
         }
 
         binding.tvDeleteDialogCancel.setOnClickListener {
@@ -81,6 +70,30 @@ class DeleteGroupDialog(
         _binding = null
         super.onDestroyView()
         Log.d(LIFECYCLE, "DeleteGroupDialog - onDestroyView() called")
+    }
+
+    private fun deleteGroup(accessToken: String, groupId: Long) {
+        RetrofitClient.teamInstance.deleteGroup(
+            authorization = accessToken,
+            teamId = groupId
+        ).enqueue(object : Callback<ResponseDeleteGroup> {
+            override fun onResponse(
+                call: Call<ResponseDeleteGroup>,
+                response: Response<ResponseDeleteGroup>
+            ) {
+                if (response.isSuccessful) {
+                    Log.d(NETWORK, "DeleteGroupDialog - deleteGroup() 실행 결과 - 성공")
+                    dismiss()
+                    groupMainActivity.finish()
+                } else {
+                    Log.d(NETWORK, "DeleteGroupDialog - deleteGroup() 실행 결과 - 안좋음")
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseDeleteGroup>, t: Throwable) {
+                Log.d(NETWORK, "DeleteGroupDialog - deleteGroup() 실행 결과 - 실패\nbecause : $t")
+            }
+        })
     }
 
     companion object {

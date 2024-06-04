@@ -6,14 +6,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.lifecycleScope
 import com.kuit.conet.Network.RetrofitClient
 import com.kuit.conet.R
+import com.kuit.conet.UI.application.CoNetApplication
 import com.kuit.conet.Utils.LIFECYCLE
 import com.kuit.conet.Utils.NETWORK
 import com.kuit.conet.databinding.DialogExitGroupBinding
-import com.kuit.conet.Utils.getRefreshToken
 import com.kuit.conet.data.dto.request.team.RequestLeaveGroup
 import com.kuit.conet.data.dto.response.team.ResponseLeaveGroup
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -50,30 +53,12 @@ class ExitGroupDialog(
         super.onViewCreated(view, savedInstanceState)
         Log.d(LIFECYCLE, "ExitGroupDialog - onViewCreated() called")
         binding.exitDone.setOnClickListener {
-            RetrofitClient.teamInstance.leaveGroup(
-                "Bearer ${getRefreshToken(requireContext())}",
-                RequestLeaveGroup(
-                    groupId.toLong(),
-                ),
-            ).enqueue(object : Callback<ResponseLeaveGroup> {
-                override fun onResponse(
-                    call: Call<ResponseLeaveGroup>,
-                    response: Response<ResponseLeaveGroup>
-                ) {
-                    if (response.isSuccessful) {
-                        Log.d(NETWORK, "ExitGroupDialog - LeaveGroup() 실행결과 - 성공")
-                        dismiss()
-                        groupMainActivity.finish()
-                    } else {
-                        Log.d(NETWORK, "ExitGroupDialog - LeaveGroup() 실행결과 - 안좋음")
-                    }
+            viewLifecycleOwner.lifecycleScope.launch {
+                val bearerAccessToken =
+                    CoNetApplication.getInstance().getDataStore().bearerAccessToken.first()
 
-                }
-
-                override fun onFailure(call: Call<ResponseLeaveGroup>, t: Throwable) {
-                    Log.d(NETWORK, "ExitGroupDialog - LeaveGroup() 실행결과 - 실패\nbecause : $t")
-                }
-            })
+                leaveGroup(bearerAccessToken, groupId.toLong())
+            }
         }
 
         binding.exitCancel.setOnClickListener {
@@ -85,6 +70,33 @@ class ExitGroupDialog(
         _binding = null
         super.onDestroyView()
         Log.d(LIFECYCLE, "ExitGroupDialog - onDestroyView() called")
+    }
+
+    private fun leaveGroup(accessToken: String, groupId: Long) {
+        RetrofitClient.teamInstance.leaveGroup(
+            accessToken,
+            RequestLeaveGroup(
+                groupId,
+            ),
+        ).enqueue(object : Callback<ResponseLeaveGroup> {
+            override fun onResponse(
+                call: Call<ResponseLeaveGroup>,
+                response: Response<ResponseLeaveGroup>
+            ) {
+                if (response.isSuccessful) {
+                    Log.d(NETWORK, "ExitGroupDialog - LeaveGroup() 실행결과 - 성공")
+                    dismiss()
+                    groupMainActivity.finish()
+                } else {
+                    Log.d(NETWORK, "ExitGroupDialog - LeaveGroup() 실행결과 - 안좋음")
+                }
+
+            }
+
+            override fun onFailure(call: Call<ResponseLeaveGroup>, t: Throwable) {
+                Log.d(NETWORK, "ExitGroupDialog - LeaveGroup() 실행결과 - 실패\nbecause : $t")
+            }
+        })
     }
 
     companion object {

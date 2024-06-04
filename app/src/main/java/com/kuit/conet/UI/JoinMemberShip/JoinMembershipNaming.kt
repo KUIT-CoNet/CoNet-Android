@@ -11,15 +11,16 @@ import androidx.core.widget.doAfterTextChanged
 import com.kuit.conet.*
 import com.kuit.conet.UI.ConetMainActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.kuit.conet.Network.*
+import com.kuit.conet.UI.application.CoNetApplication
 import com.kuit.conet.Utils.LIFECYCLE
 import com.kuit.conet.Utils.NETWORK
-import com.kuit.conet.Utils.getAccessToken
-import com.kuit.conet.Utils.getUsername
-import com.kuit.conet.Utils.saveUsername
 import com.kuit.conet.data.dto.request.auth.RequestAgreeToTermsAndConditions
 import com.kuit.conet.data.dto.response.auth.ResponseAgreeToTermsAndConditions
 import com.kuit.conet.databinding.FragmentNameInputBinding
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Response
 import java.util.regex.Pattern
@@ -102,9 +103,16 @@ class JoinMembershipNaming : Fragment() {
 
         binding.cvNameInputDoneBtn.setOnClickListener {
             if (edit) {
-                saveUsername(requireContext(), binding.etNameInput.text.toString())
+//                saveUsername(requireContext(), binding.etNameInput.text.toString())
+//                sendUserInfo(getAccessToken(requireContext()), getUsername(requireContext()))
 
-                sendUserInfo(getAccessToken(requireContext()), getUsername(requireContext()))
+                viewLifecycleOwner.lifecycleScope.launch {
+                    val bearerAccessToken =
+                        CoNetApplication.getInstance().getDataStore().bearerAccessToken.first()
+                    sendUserInfo(bearerAccessToken, binding.etNameInput.text.toString())
+                }
+
+//                sendUserInfo(getAccessToken(requireContext()), binding.etNameInput.text.toString())
 
                 val intent = Intent(requireContext(), ConetMainActivity::class.java)
                 startActivity(intent)
@@ -122,7 +130,7 @@ class JoinMembershipNaming : Fragment() {
 
     private fun sendUserInfo(accessToken: String, name: String) {
         RetrofitClient.authInstance.agreeToTermsAndConditions(
-            authorization = "Bearer $accessToken",
+            authorization = accessToken,
             userInfo = RequestAgreeToTermsAndConditions(
                 name = name,
             )

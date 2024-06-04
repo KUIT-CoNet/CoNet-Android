@@ -9,16 +9,15 @@ import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import com.kuit.conet.Network.RetrofitClient
 import com.kuit.conet.UI.Home.RecyclerView.ConfirmRecyclerAdapter
+import com.kuit.conet.UI.application.CoNetApplication
 import com.kuit.conet.Utils.LIFECYCLE
 import com.kuit.conet.Utils.NETWORK
 import com.kuit.conet.Utils.TAG
-import com.kuit.conet.Utils.getRefreshToken
 import com.kuit.conet.data.dto.response.plan.ResponseGetSidebarPlan
 import com.kuit.conet.databinding.FragmentPlanListBinding
 import com.kuit.conet.domain.entity.plan.DecidedPlan
 import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
@@ -86,9 +85,12 @@ class PlanListFragment(
     }
 
     private suspend fun showSideConfirmplaninfo(): List<DecidedPlan> { // 지난 약속
+        val bearerAccessToken =
+            CoNetApplication.getInstance().getDataStore().bearerAccessToken.first()
+
         return suspendCoroutine { continuation2 ->
             RetrofitClient.planInstance.getSidebarPlan(
-                authorization = "Bearer ${getRefreshToken(requireContext())}",
+                authorization = bearerAccessToken,
                 teamId = groupId.toLong(),
                 period = "past"
             ).enqueue(object : Callback<ResponseGetSidebarPlan> {
@@ -117,9 +119,13 @@ class PlanListFragment(
     }
 
     private suspend fun showSideLastPlan(): List<DecidedPlan> { // 다가오는 약속
+
+        val bearerAccessToken =
+            CoNetApplication.getInstance().getDataStore().bearerAccessToken.first()
+
         return suspendCoroutine { continuation2 ->
             RetrofitClient.planInstance.getSidebarPlan(
-                authorization = "Bearer ${getRefreshToken(requireContext())}",
+                authorization = bearerAccessToken,
                 teamId = groupId.toLong(),
                 period = "oncoming"
             ).enqueue(object : Callback<ResponseGetSidebarPlan> {

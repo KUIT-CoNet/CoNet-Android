@@ -6,12 +6,9 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.kakao.sdk.auth.model.OAuthToken
-import com.kakao.sdk.common.KakaoSdk
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
-import com.kakao.sdk.common.util.Utility
 import com.kakao.sdk.user.UserApiClient
-import com.kuit.conet.BuildConfig
 import com.kuit.conet.UI.JoinMemberShip.JoinMembershipActivity
 import com.kuit.conet.UI.ConetMainActivity
 import com.kuit.conet.Network.RetrofitClient
@@ -20,8 +17,6 @@ import com.kuit.conet.Utils.LIFECYCLE
 import com.kuit.conet.Utils.NETWORK
 import com.kuit.conet.Utils.TAG
 import com.kuit.conet.databinding.ActivityLoginBinding
-import com.kuit.conet.Utils.saveUserAccessToken
-import com.kuit.conet.Utils.saveUserRefreshToken
 import com.kuit.conet.data.dto.request.auth.RequestLogin
 import com.kuit.conet.data.dto.response.auth.ResponseLogin
 import kotlinx.coroutines.launch
@@ -156,7 +151,7 @@ class LoginActivity : AppCompatActivity() {
                     }*/
 
                 } else {
-                    Log.d(NETWORK, "LoginActivity - login() 실행결과 -  안좋음")
+                    Log.d(NETWORK, "LoginActivity - login() 실행결과 -  안좋음\nresponse : $response")
                 }
             }
 

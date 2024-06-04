@@ -14,7 +14,8 @@ import com.kuit.conet.Utils.saveIsoption
 
 
 class JoinMembershipContract : Fragment() {
-    lateinit var binding : FragmentTermsConditionsBinding
+
+    private lateinit var binding : FragmentTermsConditionsBinding
     private var checkbox = arrayOf(0,0,0) // 왼쪽부터 개인정보 수집[필수], 이용약관[필수], 푸시 알람 수신 동의[선택] 여부 0과 1로 나타냄(0은 미선택, 1은 선택)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -96,7 +97,7 @@ class JoinMembershipContract : Fragment() {
             if(checkbox[0] == 1 && checkbox[1] == 1){
                 (activity as JoinMembershipActivity).changeProgressBar(2) // 프로그래스바 변경
 
-                saveIsoption(requireContext(), checkbox[2])
+//                saveIsoption(requireContext(), checkbox[2])
                 parentFragmentManager.beginTransaction().replace(R.id.jm_fl, JoinMembershipNaming()).commit()
             }
         }

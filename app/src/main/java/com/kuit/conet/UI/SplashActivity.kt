@@ -12,14 +12,11 @@ import com.kuit.conet.UI.application.CoNetApplication
 import com.kuit.conet.Utils.LIFECYCLE
 import com.kuit.conet.Utils.NETWORK
 import com.kuit.conet.databinding.ActivitySplashBinding
-import com.kuit.conet.Utils.getRefreshToken
-import com.kuit.conet.Utils.saveUserRefreshToken
 import com.kuit.conet.data.dto.response.auth.ResponseRenewTokens
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Response
-import java.nio.charset.Charset
 
 class SplashActivity : AppCompatActivity() {
 

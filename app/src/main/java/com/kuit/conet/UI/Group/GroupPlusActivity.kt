@@ -20,19 +20,23 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.widget.doAfterTextChanged
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.google.android.material.textfield.TextInputEditText
 import com.kuit.conet.Network.RetrofitClient
+import com.kuit.conet.UI.application.CoNetApplication
 import com.kuit.conet.Utils.LIFECYCLE
 import com.kuit.conet.Utils.permission.APIDetector
 import com.kuit.conet.Utils.NETWORK
 import com.kuit.conet.Utils.TAG
 import com.kuit.conet.Utils.multipart.ContentUriRequestBody
-import com.kuit.conet.Utils.getAccessToken
 import com.kuit.conet.data.dto.response.team.ResponseCreateGroup
 import com.kuit.conet.data.dto.response.team.ResponseUpdateGroup
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Call
 import retrofit2.Response
@@ -174,39 +178,12 @@ class GroupPlusActivity : AppCompatActivity(), View.OnClickListener {
                             )
                         }
 
-                        RetrofitClient.teamInstance.updateGroup(
-                            authorization = "Bearer ${getAccessToken(this)}",
-                            file = body,
-                            request = jsonList
-                        ).enqueue(object : retrofit2.Callback<ResponseUpdateGroup> {
-                            override fun onResponse(
-                                call: Call<ResponseUpdateGroup>,
-                                response: Response<ResponseUpdateGroup>
-                            ) {
-                                if (response.isSuccessful) {
-                                    Log.d(
-                                        NETWORK,
-                                        "GroupPlusActivity - Retrofit updateGroup() 실행결과 - 성공"
-                                    )
-                                    finish()
-                                } else {
-                                    Log.d(
-                                        NETWORK,
-                                        "GroupPlusActivity - Retrofit updateGroup() 실행결과 - 안좋음"
-                                    )
-                                }
-                            }
-
-                            override fun onFailure(
-                                call: Call<ResponseUpdateGroup>,
-                                t: Throwable
-                            ) {
-                                Log.d(
-                                    NETWORK,
-                                    "GroupPlusActivity - Retrofit updateGroup() 실행결과 - 실패\nbecause : $t"
-                                )
-                            }
-                        })
+                        lifecycleScope.launch {
+                            val bearerAccessToken =
+                                CoNetApplication.getInstance()
+                                    .getDataStore().bearerAccessToken.first()
+                            updateGroup(bearerAccessToken, body, jsonList)
+                        }
                     }
 
                     else -> {   // 모임 생성하기
@@ -214,41 +191,12 @@ class GroupPlusActivity : AppCompatActivity(), View.OnClickListener {
                         val jsonList =
                             jsonString.toRequestBody("application/json".toMediaTypeOrNull())
 
-                        RetrofitClient.teamInstance.createGroup(
-                            authorization = "Bearer ${getAccessToken(this)}",
-                            file = body,
-                            request = jsonList
-                        ).enqueue(object : retrofit2.Callback<ResponseCreateGroup> {
-                            override fun onResponse(
-                                call: Call<ResponseCreateGroup>,
-                                response: Response<ResponseCreateGroup>
-                            ) {
-                                if (response.isSuccessful) {
-                                    Log.d(
-                                        NETWORK,
-                                        "GroupPlusActivity - Retrofit creatTeam() 실행결과 - 성공\n" +
-                                                "response: $response"
-                                    )
-                                    finish()
-                                } else {
-                                    Log.d(
-                                        NETWORK,
-                                        "GroupPlusActivity - Retrofit creatTeam() 실행결과 - 안좋음\n" +
-                                                "response: $response"
-                                    )
-                                }
-                            }
-
-                            override fun onFailure(
-                                call: Call<ResponseCreateGroup>,
-                                t: Throwable
-                            ) {
-                                Log.d(
-                                    NETWORK,
-                                    "GroupPlusActivity - Retrofit creatTeam() 실행결과 - 실패\nbecause : $t"
-                                )
-                            }
-                        })
+                        lifecycleScope.launch {
+                            val bearerAccessToken =
+                                CoNetApplication.getInstance()
+                                    .getDataStore().bearerAccessToken.first()
+                            createGroup(bearerAccessToken, body, jsonList)
+                        }
                     }
                 }
             }
@@ -369,5 +317,87 @@ class GroupPlusActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun validateFinish(groupName: String?, groupImg: String?) {
         binding.tvFinish.isEnabled = !(groupName.isNullOrBlank() || groupImg.isNullOrBlank())
+    }
+
+    private fun updateGroup(
+        accessToken: String,
+        imgFile: MultipartBody.Part,
+        requestBody: RequestBody
+    ) {
+        RetrofitClient.teamInstance.updateGroup(
+            authorization = accessToken,
+            file = imgFile,
+            request = requestBody
+        ).enqueue(object : retrofit2.Callback<ResponseUpdateGroup> {
+            override fun onResponse(
+                call: Call<ResponseUpdateGroup>,
+                response: Response<ResponseUpdateGroup>
+            ) {
+                if (response.isSuccessful) {
+                    Log.d(
+                        NETWORK,
+                        "GroupPlusActivity - Retrofit updateGroup() 실행결과 - 성공"
+                    )
+                    finish()
+                } else {
+                    Log.d(
+                        NETWORK,
+                        "GroupPlusActivity - Retrofit updateGroup() 실행결과 - 안좋음"
+                    )
+                }
+            }
+
+            override fun onFailure(
+                call: Call<ResponseUpdateGroup>,
+                t: Throwable
+            ) {
+                Log.d(
+                    NETWORK,
+                    "GroupPlusActivity - Retrofit updateGroup() 실행결과 - 실패\nbecause : $t"
+                )
+            }
+        })
+    }
+
+    private fun createGroup(
+        accessToken: String,
+        imgFile: MultipartBody.Part,
+        requestBody: RequestBody
+    ) {
+        RetrofitClient.teamInstance.createGroup(
+            authorization = accessToken,
+            file = imgFile,
+            request = requestBody
+        ).enqueue(object : retrofit2.Callback<ResponseCreateGroup> {
+            override fun onResponse(
+                call: Call<ResponseCreateGroup>,
+                response: Response<ResponseCreateGroup>
+            ) {
+                if (response.isSuccessful) {
+                    Log.d(
+                        NETWORK,
+                        "GroupPlusActivity - Retrofit creatTeam() 실행결과 - 성공\n" +
+                                "response: $response"
+                    )
+                    finish()
+                } else {
+                    Log.d(
+                        NETWORK,
+                        "GroupPlusActivity - Retrofit creatTeam() 실행결과 - 안좋음\n" +
+                                "response: $response"
+                    )
+                }
+            }
+
+            override fun onFailure(
+                call: Call<ResponseCreateGroup>,
+                t: Throwable
+            ) {
+                Log.d(
+                    NETWORK,
+                    "GroupPlusActivity - Retrofit creatTeam() 실행결과 - 실패\nbecause : $t"
+                )
+            }
+        })
     }
 }

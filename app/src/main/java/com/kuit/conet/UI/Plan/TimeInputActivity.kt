@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import com.kuit.conet.Network.AvailableDateTimes
 import com.kuit.conet.Network.InputMyTime
 import com.kuit.conet.Network.ResponseInputMyTime
@@ -15,12 +16,12 @@ import com.kuit.conet.Network.ShowMyTime
 import com.kuit.conet.Network.UserAvailableTimeDTO
 import com.kuit.conet.Network.getRetrofit
 import com.kuit.conet.R
+import com.kuit.conet.UI.application.CoNetApplication
 import com.kuit.conet.Utils.NETWORK
-import com.kuit.conet.Utils.TAG
 import com.kuit.conet.databinding.ActivityTimeInputBinding
-import com.kuit.conet.Utils.getRefreshToken
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Response
@@ -211,12 +212,15 @@ class TimeInputActivity : AppCompatActivity() {
 
     private suspend fun getFrame(planId: Int) {
         Log.d(NETWORK, "Get ShowMyTime api 실행 중")
+
+        val bearerAccessToken =
+            CoNetApplication.getInstance().getDataStore().bearerAccessToken.first()
+
         return suspendCoroutine {
             val showMyTimeService = getRetrofit().create(RetrofitInterface::class.java)
-            val refreshToken = getRefreshToken(this)
             showMyTimeService.ShowMyTime(
-                "Bearer $refreshToken",
-                planId
+                authorization = bearerAccessToken,
+                planId = planId
             ).enqueue(object : retrofit2.Callback<ShowMyTime> {
                 override fun onResponse(
                     call: Call<ShowMyTime>,
@@ -444,7 +448,8 @@ class TimeInputActivity : AppCompatActivity() {
         }
     }
 
-    private fun pdtToTable( //저장된 PossibleDateTime 정보를 받아 이를 바탕으로 화면 구성
+    private fun pdtToTable(
+        //저장된 PossibleDateTime 정보를 받아 이를 바탕으로 화면 구성
         day: Int, //시작 날이 1,4,7
     ) {
         var pdt1: AvailableDateTimes
@@ -595,26 +600,30 @@ class TimeInputActivity : AppCompatActivity() {
     }
 
     private fun inputTime(inputMyTime: InputMyTime) {
-        val refreshToken = getRefreshToken(this)
         val inputTimeService = getRetrofit().create(RetrofitInterface::class.java)
 
-        inputTimeService.InputMyTime(
-            "Bearer $refreshToken",
-            inputMyTime
-        ).enqueue(object : retrofit2.Callback<ResponseInputMyTime> {
-            override fun onResponse(
-                call: Call<ResponseInputMyTime>,
-                response: Response<ResponseInputMyTime>
-            ) {
-                if (response.isSuccessful) {
-                    val resp = response.body()
-                    Log.d(NETWORK, resp.toString())
-                }
-            }
+        lifecycleScope.launch {
+            val bearerAccessToken =
+                CoNetApplication.getInstance().getDataStore().bearerAccessToken.first()
 
-            override fun onFailure(call: Call<ResponseInputMyTime>, t: Throwable) {
-                Log.d(NETWORK, t.message.toString())
-            }
-        })
+            inputTimeService.InputMyTime(
+                authorization = bearerAccessToken,
+                inputMyTime = inputMyTime,
+            ).enqueue(object : retrofit2.Callback<ResponseInputMyTime> {
+                override fun onResponse(
+                    call: Call<ResponseInputMyTime>,
+                    response: Response<ResponseInputMyTime>
+                ) {
+                    if (response.isSuccessful) {
+                        val resp = response.body()
+                        Log.d(NETWORK, resp.toString())
+                    }
+                }
+
+                override fun onFailure(call: Call<ResponseInputMyTime>, t: Throwable) {
+                    Log.d(NETWORK, t.message.toString())
+                }
+            })
+        }
     }
 }

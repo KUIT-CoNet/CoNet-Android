@@ -9,21 +9,24 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.textfield.TextInputEditText
 import com.kuit.conet.Network.RetrofitClient
 import com.kuit.conet.R
 import com.kuit.conet.UI.Plan.dialog.DateDialog
 import com.kuit.conet.UI.Plan.dialog.TimeDialog
+import com.kuit.conet.UI.application.CoNetApplication
 import com.kuit.conet.Utils.LIFECYCLE
 import com.kuit.conet.Utils.NETWORK
 import com.kuit.conet.Utils.TAG
-import com.kuit.conet.Utils.getRefreshToken
 import com.kuit.conet.Utils.intent.intentSerializable
 import com.kuit.conet.data.dto.request.plan.RequestUpdateFixedPlan
 import com.kuit.conet.data.dto.response.plan.ResponseUpdateFixedPlan
 import com.kuit.conet.databinding.ActivityDetailEditFixBinding
 import com.kuit.conet.domain.entity.member.Member
 import com.kuit.conet.domain.entity.plan.PlanDetail
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Response
 
@@ -112,45 +115,51 @@ class DetailEditFixActivity
                         .map { it.id }
                         .sorted()
 
-//                  TODO 서버에 내용 전달하기 -> /plan/update/fixed
-                    RetrofitClient.planInstance.updateFixedPlan(
-                        authorization = "Bearer ${getRefreshToken(this)}",
-                        planDetail = RequestUpdateFixedPlan(
-                            planId = data.id,
-                            planName = binding.nameTf.text.toString(),
-                            date = binding.dateTf.text.toString(),
-                            time = binding.timeTf.text.toString(),
-                            membersIds = members
-                        )
-                    ).enqueue(object : retrofit2.Callback<ResponseUpdateFixedPlan> {
-                        override fun onResponse(
-                            call: Call<ResponseUpdateFixedPlan>,
-                            response: Response<ResponseUpdateFixedPlan>
-                        ) {
-                            if (response.isSuccessful) {
+                    lifecycleScope.launch {
+                        val bearerAccessToken =
+                            CoNetApplication.getInstance().getDataStore().bearerAccessToken.first()
+
+                        RetrofitClient.planInstance.updateFixedPlan(
+                            authorization = bearerAccessToken,
+                            planDetail = RequestUpdateFixedPlan(
+                                planId = data.id,
+                                planName = binding.nameTf.text.toString(),
+                                date = binding.dateTf.text.toString(),
+                                time = binding.timeTf.text.toString(),
+                                membersIds = members
+                            )
+                        ).enqueue(object : retrofit2.Callback<ResponseUpdateFixedPlan> {
+                            override fun onResponse(
+                                call: Call<ResponseUpdateFixedPlan>,
+                                response: Response<ResponseUpdateFixedPlan>
+                            ) {
+                                if (response.isSuccessful) {
+                                    Log.d(
+                                        NETWORK,
+                                        "DetailEditPastActivity - Retrofit updatePlanDetail() 실행 결과 - 성공"
+                                    )
+                                    finish()
+                                } else {
+                                    Log.d(
+                                        NETWORK,
+                                        "DetailEditPastActivity - Retrofit updatePlanDetail() 실행 결과 - 안좋음"
+                                    )
+                                }
+                            }
+
+                            override fun onFailure(
+                                call: Call<ResponseUpdateFixedPlan>,
+                                t: Throwable
+                            ) {
                                 Log.d(
                                     NETWORK,
-                                    "DetailEditPastActivity - Retrofit updatePlanDetail() 실행 결과 - 성공"
-                                )
-                                finish()
-                            } else {
-                                Log.d(
-                                    NETWORK,
-                                    "DetailEditPastActivity - Retrofit updatePlanDetail() 실행 결과 - 안좋음"
+                                    "DetailEditPastActivity - Retrofit updatePlanDetail() 실행 결과 - 실패\nbecause : $t"
                                 )
                             }
-                        }
+                        })
 
-                        override fun onFailure(call: Call<ResponseUpdateFixedPlan>, t: Throwable) {
-                            Log.d(
-                                NETWORK,
-                                "DetailEditPastActivity - Retrofit updatePlanDetail() 실행 결과 - 실패\nbecause : $t"
-                            )
-                        }
-
-                    })
-
-                    finish()
+                        finish()
+                    }
                 }
             }
 
