@@ -111,10 +111,7 @@ class DataStoreModule(
         }
     }
 
-    /*// TODO 미사용시 삭제 요망
     private val userNameKey = stringPreferencesKey("USER_NAME")
-    private val userImgKey = stringPreferencesKey("USER_IMG")
-    private val userEmailKey = stringPreferencesKey("USER_EMAIL")
 
     val userName: Flow<String> = context.dataStore.data
         .catch { exception ->
@@ -127,6 +124,18 @@ class DataStoreModule(
         .map { preferences ->
             preferences[userNameKey] ?: ""
         }
+
+    suspend fun setUserName(userName: String) {
+        context.dataStore.edit { preferences ->
+            preferences[userNameKey] = userName
+        }
+    }
+
+    /*// TODO 미사용시 삭제 요망
+    private val userImgKey = stringPreferencesKey("USER_IMG")
+    private val userEmailKey = stringPreferencesKey("USER_EMAIL")
+
+
 
     val userImg: Flow<String> = context.dataStore.data
         .catch { exception ->
@@ -151,12 +160,6 @@ class DataStoreModule(
         .map { preferences ->
             preferences[userEmailKey] ?: ""
         }
-
-    suspend fun setUserName(userName: String) {
-        context.dataStore.edit { preferences ->
-            preferences[userNameKey] = userName
-        }
-    }
 
     suspend fun setUserImg(userImg: String) {
         context.dataStore.edit { preferences ->
