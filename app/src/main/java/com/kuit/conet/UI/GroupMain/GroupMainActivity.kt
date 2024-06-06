@@ -14,14 +14,13 @@ import com.kuit.conet.UI.Group.GroupAdapter
 import com.kuit.conet.UI.GroupMain.dialog.AllMembersDialog
 import com.kuit.conet.UI.Plan.CreatePlanActivity
 import com.kuit.conet.UI.Plan.detail.PlanListActivity
-import com.kuit.conet.UI.Plan.dialog.MembersDialog
+import com.kuit.conet.UI.application.CoNetApplication
 import com.kuit.conet.Utils.*
 import com.kuit.conet.databinding.ActivityGroupMainBinding
-import com.kuit.conet.Utils.getAccessToken
 import com.kuit.conet.data.dto.request.member.RequestPostBookmark
 import com.kuit.conet.data.dto.response.member.ResponsePostBookmark
 import com.kuit.conet.data.dto.response.team.ResponseGetGroupDetail
-import com.kuit.conet.domain.entity.member.Member
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Response
@@ -40,77 +39,12 @@ class GroupMainActivity : AppCompatActivity() {
         setContentView(binding.root)
         Log.d(LIFECYCLE, "GroupMainActivity - onCreate() called")
 
-        RetrofitClient.teamInstance.getGroupDetail(
-            authorization = "Bearer ${getAccessToken(this)}",
-            groupId = groupId
-        ).enqueue(object : retrofit2.Callback<ResponseGetGroupDetail> {
-            override fun onResponse(
-                call: Call<ResponseGetGroupDetail>,
-                response: Response<ResponseGetGroupDetail>
-            ) {
-                if (response.isSuccessful) {
-                    Log.d(NETWORK, "GroupMainActivity - getGroupDetail()실행 결과 - 성공")
+        lifecycleScope.launch {
+            val bearerAccessToken =
+                CoNetApplication.getInstance().getDataStore().bearerAccessToken.first()
+            getGroupDetail(bearerAccessToken, groupId)
+        }
 
-                    val resp =
-                        requireNotNull(response.body()) { "GroupMainActivity's getGroupDetail 결과 불러오기 실패" }
-                    val groupData = resp.result.asGroup()
-
-                    binding.tvGroupName.text = groupData.name
-                    binding.tvCount.text = "${groupData.memberCount} 명"
-                    checkFavoriteTag(groupData.isFavorite)
-                    Glide.with(this@GroupMainActivity)
-                        .load(groupData.imageUrl) // 불러올 이미지 url
-                        .centerCrop()
-                        .placeholder(R.drawable.profile_purple) // 이미지 로딩 시작하기 전 표시할 이미지
-                        .error(R.drawable.profile_purple) // 로딩 에러 발생 시 표시할 이미지
-                        .fallback(R.drawable.profile_purple) // 로드할 url 이 비어있을(null 등) 경우 표시할 이미지
-                        .into(binding.ivGroupImage) // 이미지를 넣을 뷰
-
-                    binding.ivMenuBtn.setOnClickListener {
-                        val sideBar = SideBar(
-                            groupData.name,
-                            groupData.memberCount,
-                            groupData.id,
-                            this@GroupMainActivity,
-                            groupData.imageUrl
-                        )
-
-                        fragmentManager.commit {
-                            add(R.id.fl_sidebar_menu, sideBar)
-                            binding.flSidebarMenu.visibility = View.VISIBLE
-                            setCustomAnimations(R.anim.to_left, R.anim.from_right)
-                        }
-
-                        sideBar.setOnItemClickListener(object : SideBar.OnItemClickListener {
-                            override fun onItemClick(option: Int) {
-                                showDetail(option, groupId.toInt())
-                            }
-
-                            override fun exitSidebar() {
-                                fragmentManager.commit {
-                                    val sideBarFragment =
-                                        fragmentManager.findFragmentById(R.id.fl_sidebar_menu) as SideBar
-                                    binding.flSidebarMenu.visibility = View.GONE
-                                    remove(sideBarFragment)
-                                }
-                            }
-                        })
-                    }
-                } else {
-                    Log.d(
-                        NETWORK,
-                        "GroupMainActivity - getGroupDetail()실행 결과 - 안좋음\nresponse : $response"
-                    )
-                    finish()
-                }
-            }
-
-            override fun onFailure(call: Call<ResponseGetGroupDetail>, t: Throwable) {
-                Log.d(NETWORK, "GroupMainActivity - getGroupDetail()실행 결과 - 실패\nbecause: $t")
-                finish()
-            }
-
-        })
 
         binding.ivBackBtn.setOnClickListener {
             finish()
@@ -119,66 +53,21 @@ class GroupMainActivity : AppCompatActivity() {
         binding.ivStar.setOnClickListener {     // 북마크 삭제
             binding.ivStar.visibility = View.GONE
             binding.ivStarUn.visibility = View.VISIBLE
-            RetrofitClient.memberInstance.postBookmark(
-                authorization = "Bearer ${getAccessToken(this)}",
-                request = RequestPostBookmark(
-                    teamId = groupId
-                )
-            ).enqueue(object : retrofit2.Callback<ResponsePostBookmark> {
-                override fun onResponse(
-                    call: Call<ResponsePostBookmark>,
-                    response: Response<ResponsePostBookmark>
-                ) {
-                    if (response.isSuccessful) {
-                        val result = response.body()?.result ?: "실행결과 불러오기 실패"
-                        Log.d(
-                            NETWORK,
-                            "GroupAdapter - Retrofit postBookmark() 북마크 삭제 실행결과 - 성공\nresult : $result"
-                        )
-                    } else {
-                        Log.d(
-                            NETWORK,
-                            "GroupAdapter - Retrofit postBookmark() 북마크 삭제 실행결과 - 안좋음"
-                        )
-                    }
-                }
-
-                override fun onFailure(call: Call<ResponsePostBookmark>, t: Throwable) {
-                    Log.d(NETWORK, "GroupAdapter - Retrofit postBookmark() 북마크 삭제 실행결과 - 실패")
-                }
-            })
+            lifecycleScope.launch {
+                val bearerAccessToken =
+                    CoNetApplication.getInstance().getDataStore().bearerAccessToken.first()
+                postBookmark(bearerAccessToken, groupId)
+            }
         }
         binding.ivStarUn.setOnClickListener {       // 북마크 등록
             binding.ivStar.visibility = View.VISIBLE
             binding.ivStarUn.visibility = View.GONE
-            RetrofitClient.memberInstance.postBookmark(
-                authorization = "Bearer ${getAccessToken(this)}",
-                request = RequestPostBookmark(
-                    teamId = groupId
-                )
-            ).enqueue(object : retrofit2.Callback<ResponsePostBookmark> {
-                override fun onResponse(
-                    call: Call<ResponsePostBookmark>,
-                    response: Response<ResponsePostBookmark>
-                ) {
-                    if (response.isSuccessful) {
-                        val result = response.body()?.result ?: "실행결과 불러오기 실패"
-                        Log.d(
-                            NETWORK,
-                            "GroupAdapter - Retrofit postBookmark() 북마크 등록 실행결과 - 성공\nresult : $result"
-                        )
-                    } else {
-                        Log.d(
-                            NETWORK,
-                            "GroupAdapter - Retrofit postBookmark() 북마크 등록 실행결과 - 안좋음"
-                        )
-                    }
-                }
 
-                override fun onFailure(call: Call<ResponsePostBookmark>, t: Throwable) {
-                    Log.d(NETWORK, "GroupAdapter - Retrofit postBookmark() 북마크 등록 실행결과 - 실패")
-                }
-            })
+            lifecycleScope.launch {
+                val bearerAccessToken =
+                    CoNetApplication.getInstance().getDataStore().bearerAccessToken.first()
+                postBookmark(bearerAccessToken, groupId)
+            }
         }
 
         binding.tvPlanMaker.setOnClickListener {
@@ -261,6 +150,111 @@ class GroupMainActivity : AppCompatActivity() {
             binding.ivStar.visibility = View.GONE
             binding.ivStarUn.visibility = View.VISIBLE
         }
+    }
+
+    private fun getGroupDetail(accessToken: String, groupId: Long) {
+        RetrofitClient.teamInstance.getGroupDetail(
+            authorization = accessToken,
+            groupId = groupId
+        ).enqueue(object : retrofit2.Callback<ResponseGetGroupDetail> {
+            override fun onResponse(
+                call: Call<ResponseGetGroupDetail>,
+                response: Response<ResponseGetGroupDetail>
+            ) {
+                if (response.isSuccessful) {
+                    Log.d(NETWORK, "GroupMainActivity - getGroupDetail()실행 결과 - 성공")
+
+                    val resp =
+                        requireNotNull(response.body()) { "GroupMainActivity's getGroupDetail 결과 불러오기 실패" }
+                    val groupData = resp.result.asGroup()
+
+                    binding.tvGroupName.text = groupData.name
+                    binding.tvCount.text = "${groupData.memberCount} 명"
+                    checkFavoriteTag(groupData.isFavorite)
+                    Glide.with(this@GroupMainActivity)
+                        .load(groupData.imageUrl) // 불러올 이미지 url
+                        .centerCrop()
+                        .placeholder(R.drawable.profile_purple) // 이미지 로딩 시작하기 전 표시할 이미지
+                        .error(R.drawable.profile_purple) // 로딩 에러 발생 시 표시할 이미지
+                        .fallback(R.drawable.profile_purple) // 로드할 url 이 비어있을(null 등) 경우 표시할 이미지
+                        .into(binding.ivGroupImage) // 이미지를 넣을 뷰
+
+                    binding.ivMenuBtn.setOnClickListener {
+                        val sideBar = SideBar(
+                            groupData.name,
+                            groupData.memberCount,
+                            groupData.id,
+                            this@GroupMainActivity,
+                            groupData.imageUrl
+                        )
+
+                        fragmentManager.commit {
+                            add(R.id.fl_sidebar_menu, sideBar)
+                            binding.flSidebarMenu.visibility = View.VISIBLE
+                            setCustomAnimations(R.anim.to_left, R.anim.from_right)
+                        }
+
+                        sideBar.setOnItemClickListener(object : SideBar.OnItemClickListener {
+                            override fun onItemClick(option: Int) {
+                                showDetail(option, groupId.toInt())
+                            }
+
+                            override fun exitSidebar() {
+                                fragmentManager.commit {
+                                    val sideBarFragment =
+                                        fragmentManager.findFragmentById(R.id.fl_sidebar_menu) as SideBar
+                                    binding.flSidebarMenu.visibility = View.GONE
+                                    remove(sideBarFragment)
+                                }
+                            }
+                        })
+                    }
+                } else {
+                    Log.d(
+                        NETWORK,
+                        "GroupMainActivity - getGroupDetail()실행 결과 - 안좋음\nresponse : $response"
+                    )
+                    finish()
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseGetGroupDetail>, t: Throwable) {
+                Log.d(NETWORK, "GroupMainActivity - getGroupDetail()실행 결과 - 실패\nbecause: $t")
+                finish()
+            }
+
+        })
+    }
+
+    private fun postBookmark(accessToken: String, groupId: Long) {
+        RetrofitClient.memberInstance.postBookmark(
+            authorization = accessToken,
+            request = RequestPostBookmark(
+                teamId = groupId
+            )
+        ).enqueue(object : retrofit2.Callback<ResponsePostBookmark> {
+            override fun onResponse(
+                call: Call<ResponsePostBookmark>,
+                response: Response<ResponsePostBookmark>
+            ) {
+                if (response.isSuccessful) {
+                    val result = response.body()?.result ?: "실행결과 불러오기 실패"
+                    Log.d(
+                        NETWORK,
+                        "GroupAdapter - Retrofit postBookmark() 북마크 등록 실행결과 - 성공\nresult : $result"
+                    )
+                } else {
+                    Log.d(
+                        NETWORK,
+                        "GroupAdapter - Retrofit postBookmark() 북마크 등록 실행결과 - 안좋음"
+                    )
+                }
+            }
+
+            override fun onFailure(call: Call<ResponsePostBookmark>, t: Throwable) {
+                Log.d(NETWORK, "GroupAdapter - Retrofit postBookmark() 북마크 등록 실행결과 - 실패")
+            }
+        })
     }
 
     companion object {

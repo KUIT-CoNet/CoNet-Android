@@ -15,20 +15,22 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.kuit.conet.*
 import com.kuit.conet.Network.RetrofitClient
+import com.kuit.conet.UI.application.CoNetApplication
 import com.kuit.conet.Utils.LIFECYCLE
 import com.kuit.conet.Utils.NETWORK
 import com.kuit.conet.Utils.TAG
-import com.kuit.conet.Utils.getRefreshToken
-import com.kuit.conet.Utils.getUsername
 import com.kuit.conet.Utils.intent.intentSerializable
 import com.kuit.conet.Utils.multipart.ContentUriRequestBody
 import com.kuit.conet.Utils.permission.APIDetector
 import com.kuit.conet.data.dto.response.member.ResponseEditUserImg
 import com.kuit.conet.databinding.ActivityInfoBinding
 import com.kuit.conet.domain.entity.user.User
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -59,28 +61,34 @@ class InfoActivity : AppCompatActivity() {
                 //creating a file
                 val requestBody = ContentUriRequestBody(this, uri)
 
-                RetrofitClient.memberInstance.editUserImg(
-                    authorization = "Bearer ${getRefreshToken(this)}",
-                    image = requestBody.toFormData("file")
-                ).enqueue(object : Callback<ResponseEditUserImg> {
-                    override fun onResponse(
-                        call: Call<ResponseEditUserImg>,
-                        response: Response<ResponseEditUserImg>
-                    ) {
-                        if (response.isSuccessful) {
-                            Log.d(NETWORK, "InfoActivity - editUserImg 호출 결과 - 성공")
-                        } else {
-                            Log.d(NETWORK, "InfoActivity - editUserImg 호출 결과 - 안좋음")
-                        }
-                    }
+                lifecycleScope.launch {
+                    val bearerAccessToken =
+                        CoNetApplication.getInstance().getDataStore().bearerAccessToken.first()
 
-                    override fun onFailure(call: Call<ResponseEditUserImg>, t: Throwable) {
-                        Log.d(
-                            NETWORK,
-                            "InfoActivity - editUserImg 호출 결과 - 실패\nbecause : ${t.message}"
-                        )
-                    }
-                })
+                    RetrofitClient.memberInstance.editUserImg(
+                        authorization = bearerAccessToken,
+                        image = requestBody.toFormData("file")
+                    ).enqueue(object : Callback<ResponseEditUserImg> {
+                        override fun onResponse(
+                            call: Call<ResponseEditUserImg>,
+                            response: Response<ResponseEditUserImg>
+                        ) {
+                            if (response.isSuccessful) {
+                                Log.d(NETWORK, "InfoActivity - editUserImg 호출 결과 - 성공")
+                            } else {
+                                Log.d(NETWORK, "InfoActivity - editUserImg 호출 결과 - 안좋음")
+                            }
+                        }
+
+                        override fun onFailure(call: Call<ResponseEditUserImg>, t: Throwable) {
+                            Log.d(
+                                NETWORK,
+                                "InfoActivity - editUserImg 호출 결과 - 실패\nbecause : ${t.message}"
+                            )
+                        }
+                    })
+                }
+
 
             } else {
                 Toast.makeText(this, "예기치 못한 오류가 발생하였습니다.", Toast.LENGTH_SHORT).show()
@@ -102,8 +110,11 @@ class InfoActivity : AppCompatActivity() {
     private var nameChangeActivityResultLauncher: ActivityResultLauncher<Intent> =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
             if (result.resultCode == RESULT_OK) {
-                val data = result.data?.getStringExtra(NameChangeActivity.INTENT_TAG_NAME) ?: getUsername(this)
-                binding.tvInfoUsername.text = data
+                lifecycleScope.launch {
+                    val data = result.data?.getStringExtra(NameChangeActivity.INTENT_TAG_NAME)
+                        ?: CoNetApplication.getInstance().getDataStore().userName.first()
+                    binding.tvInfoUsername.text = data
+                }
             }
         }
 
@@ -132,8 +143,8 @@ class InfoActivity : AppCompatActivity() {
         }*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        binding = ActivityInfoBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
+        binding = ActivityInfoBinding.inflate(layoutInflater)
         setContentView(binding.root)
         Log.d(LIFECYCLE, "InfoActivity: onCreate called")
 
@@ -201,7 +212,7 @@ class InfoActivity : AppCompatActivity() {
 
     /*private fun sendImage(imageFile: File) {
         var responseImage = getRetrofit().create(RetrofitInterface::class.java)
-        var refreshToken = getRefreshToken(this)
+        var refreshToken = getAccessToken(this)
 
         var requestFile = imageFile.asRequestBody("image/png".toMediaTypeOrNull())
         var filePart = MultipartBody.Part.createFormData("file", imageFile.name, requestFile)
@@ -243,7 +254,7 @@ class InfoActivity : AppCompatActivity() {
 
     /*private fun callUserInfo() {
         val responseUser = getRetrofit().create(RetrofitInterface::class.java)
-        val refreshToken = getRefreshToken(this)
+        val refreshToken = getAccessToken(this)
 
         responseUser.showuser(
             "Bearer $refreshToken"

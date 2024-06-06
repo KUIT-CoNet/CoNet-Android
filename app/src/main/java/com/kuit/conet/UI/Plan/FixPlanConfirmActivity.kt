@@ -4,15 +4,18 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.kuit.conet.Network.RetrofitClient
 import com.kuit.conet.UI.GroupMain.GroupMainActivity
 import com.kuit.conet.UI.Plan.detail.ParticipantAdapter
+import com.kuit.conet.UI.application.CoNetApplication
 import com.kuit.conet.Utils.LIFECYCLE
 import com.kuit.conet.Utils.NETWORK
 import com.kuit.conet.Utils.TAG
 import com.kuit.conet.databinding.ActivityFixPlanConfirmBinding
-import com.kuit.conet.Utils.getRefreshToken
 import com.kuit.conet.data.dto.response.plan.ResponseGetPlanDetail
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Response
 
@@ -46,9 +49,17 @@ class FixPlanConfirmActivity : AppCompatActivity() {
     }
 
     private fun setFrame(planId: Long) {
+        lifecycleScope.launch {
+            val bearerAccessToken =
+                CoNetApplication.getInstance().getDataStore().bearerAccessToken.first()
+            getPlanDetail(bearerAccessToken, planId)
+        }
+    }
+
+    private fun getPlanDetail(accessToken: String, planId: Long) {
         RetrofitClient.planInstance.getPlanDetail(
-            authorization = "Bearer ${getRefreshToken(this)}",
-            planId = planId
+            authorization = accessToken,
+            planId = planId,
         ).enqueue(object : retrofit2.Callback<ResponseGetPlanDetail> {
             override fun onResponse(
                 call: Call<ResponseGetPlanDetail>,

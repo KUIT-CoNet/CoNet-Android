@@ -6,17 +6,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.kuit.conet.Network.ResponseDeletePlan
 import com.kuit.conet.Network.RetrofitInterface
 import com.kuit.conet.Network.getRetrofit
+import com.kuit.conet.UI.application.CoNetApplication
 import com.kuit.conet.Utils.NETWORK
 import com.kuit.conet.databinding.DialogDeletePlanBinding
-import com.kuit.conet.Utils.getRefreshToken
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Response
 
 class DeletePlanDialog : Fragment() {
-    lateinit var binding: DialogDeletePlanBinding
+
+    private lateinit var binding: DialogDeletePlanBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -24,6 +28,11 @@ class DeletePlanDialog : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = DialogDeletePlanBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         val planId = requireArguments().getInt("planId")
 
@@ -34,18 +43,22 @@ class DeletePlanDialog : Fragment() {
         }
 
         binding.tvDialogDeleteBtnDelete.setOnClickListener {
-            deletePlan(planId)
+            viewLifecycleOwner.lifecycleScope.launch {
+                val bearerAccessToken =
+                    CoNetApplication.getInstance().getDataStore().bearerAccessToken.first()
+                deletePlan(bearerAccessToken, planId)
+            }
+
             requireActivity().finish()
         }
-
-        return binding.root
     }
 
-    private fun deletePlan(planId: Int) {
+    private fun deletePlan(accessToken: String, planId: Int) {
         val deletePlanService = getRetrofit().create(RetrofitInterface::class.java)
+
         deletePlanService.deletePlan(
-            "Bearer ${getRefreshToken(requireContext())}",
-            planId
+            authorization = accessToken,
+            planId = planId
         ).enqueue(object : retrofit2.Callback<ResponseDeletePlan> {
             override fun onResponse(
                 call: Call<ResponseDeletePlan>,

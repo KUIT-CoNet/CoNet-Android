@@ -5,18 +5,21 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.lifecycle.lifecycleScope
 import com.kuit.conet.Network.RetrofitClient
 import com.kuit.conet.R
 import com.kuit.conet.UI.Plan.dialog.DeletingPlanDialog
 import com.kuit.conet.UI.Plan.dialog.EditTrashDialog
+import com.kuit.conet.UI.application.CoNetApplication
 import com.kuit.conet.Utils.LIFECYCLE
 import com.kuit.conet.Utils.NETWORK
 import com.kuit.conet.Utils.TAG
 import com.kuit.conet.databinding.ActivityDetailFixBinding
-import com.kuit.conet.Utils.getRefreshToken
 import com.kuit.conet.data.dto.response.plan.ResponseDeletePlan
 import com.kuit.conet.data.dto.response.plan.ResponseGetPlanDetail
 import com.kuit.conet.domain.entity.plan.PlanDetail
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Response
 
@@ -64,47 +67,52 @@ class DetailFixActivity
         super.onResume()
         Log.d(LIFECYCLE, "DetailFixActivity - onResume() 실행")
 
-        RetrofitClient.planInstance.getPlanDetail(
-            authorization = "Bearer ${getRefreshToken(this)}",
-            planId = planId
-        ).enqueue(object : retrofit2.Callback<ResponseGetPlanDetail> {
-            override fun onResponse(
-                call: Call<ResponseGetPlanDetail>,
-                response: Response<ResponseGetPlanDetail>
-            ) {
-                if (response.isSuccessful) {
-                    Log.d(NETWORK, "DetailFixActivity - getPlanDetail() 실행 결과 - 성공")
+        lifecycleScope.launch {
+            val bearerAccessToken =
+                CoNetApplication.getInstance().getDataStore().bearerAccessToken.first()
 
-                    val resp =
-                        requireNotNull(response.body()) { "DetailFixActivity - getPlanDetail() 실행 결과 불러오기 실패" }
+            RetrofitClient.planInstance.getPlanDetail(
+                authorization = bearerAccessToken,
+                planId = planId
+            ).enqueue(object : retrofit2.Callback<ResponseGetPlanDetail> {
+                override fun onResponse(
+                    call: Call<ResponseGetPlanDetail>,
+                    response: Response<ResponseGetPlanDetail>
+                ) {
+                    if (response.isSuccessful) {
+                        Log.d(NETWORK, "DetailFixActivity - getPlanDetail() 실행 결과 - 성공")
 
-                    data = resp.result.asPlanDetail()
+                        val resp =
+                            requireNotNull(response.body()) { "DetailFixActivity - getPlanDetail() 실행 결과 불러오기 실패" }
 
-                    binding.tfDetailFixPlanName.setText(resp.result.planName)
-                    binding.tfDetailFixPlanDate.setText(resp.result.date)
-                    binding.tfDetailFixPlanTime.setText(resp.result.time)
+                        data = resp.result.asPlanDetail()
 
-                    val participantList = resp.result.members
-                    val participantAdapter = ParticipantAdapter(
-                        context = this@DetailFixActivity,
-                        membersList = participantList.map { it.asMember() }.toMutableList(),
-                        option = 0
-                    )
-                    participantAdapter.planId = planId
-                    binding.rvDetailFixPlanParticipants.adapter = participantAdapter
+                        binding.tfDetailFixPlanName.setText(resp.result.planName)
+                        binding.tfDetailFixPlanDate.setText(resp.result.date)
+                        binding.tfDetailFixPlanTime.setText(resp.result.time)
 
-                } else {
-                    Log.d(NETWORK, "DetailPastActivity - Retrofit getPlanDetail() 실행 결과 - 안좋음")
+                        val participantList = resp.result.members
+                        val participantAdapter = ParticipantAdapter(
+                            context = this@DetailFixActivity,
+                            membersList = participantList.map { it.asMember() }.toMutableList(),
+                            option = 0
+                        )
+                        participantAdapter.planId = planId
+                        binding.rvDetailFixPlanParticipants.adapter = participantAdapter
+
+                    } else {
+                        Log.d(NETWORK, "DetailPastActivity - Retrofit getPlanDetail() 실행 결과 - 안좋음")
+                    }
                 }
-            }
 
-            override fun onFailure(call: Call<ResponseGetPlanDetail>, t: Throwable) {
-                Log.d(
-                    NETWORK,
-                    "DetailPastActivity - Retrofit getPlanDetail() 실행 결과 - 실패\nbecause : $t"
-                )
-            }
-        })
+                override fun onFailure(call: Call<ResponseGetPlanDetail>, t: Throwable) {
+                    Log.d(
+                        NETWORK,
+                        "DetailPastActivity - Retrofit getPlanDetail() 실행 결과 - 실패\nbecause : $t"
+                    )
+                }
+            })
+        }
     }
 
     override fun onEditButtonClick() {      // EditTrashDialog - 수정하기 버튼 클릭
@@ -120,31 +128,36 @@ class DetailFixActivity
     }
 
     override fun onDeleteButtonClick() {    // DeletingPlanDialog - 삭제하기 버튼 클릭
-        RetrofitClient.planInstance.deletePlan(
-            authorization = "Bearer ${getRefreshToken(this)}",
-            planId = planId
-        ).enqueue(object : retrofit2.Callback<ResponseDeletePlan> {
-            override fun onResponse(
-                call: Call<ResponseDeletePlan>,
-                response: Response<ResponseDeletePlan>
-            ) {
-                if (response.isSuccessful) {
-                    Log.d(
-                        NETWORK, "DetailFixActivity - deletePlan() 실행결과 성공\n" +
-                                "result : ${response.body()}"
-                    )
-                    finish()
-                } else {
-                    Log.d(NETWORK, "DetailFixActivity - deletePlan() 실행결과 안좋음")
-                }
-            }
+        lifecycleScope.launch {
+            val bearerAccessToken =
+                CoNetApplication.getInstance().getDataStore().bearerAccessToken.first()
 
-            override fun onFailure(call: Call<ResponseDeletePlan>, t: Throwable) {
-                Log.d(
-                    NETWORK, "DetailFixActivity - deletePlan() 실행결과 실패\nbecause : $t"
-                )
-            }
-        })
+            RetrofitClient.planInstance.deletePlan(
+                authorization = bearerAccessToken,
+                planId = planId
+            ).enqueue(object : retrofit2.Callback<ResponseDeletePlan> {
+                override fun onResponse(
+                    call: Call<ResponseDeletePlan>,
+                    response: Response<ResponseDeletePlan>
+                ) {
+                    if (response.isSuccessful) {
+                        Log.d(
+                            NETWORK, "DetailFixActivity - deletePlan() 실행결과 성공\n" +
+                                    "result : ${response.body()}"
+                        )
+                        finish()
+                    } else {
+                        Log.d(NETWORK, "DetailFixActivity - deletePlan() 실행결과 안좋음")
+                    }
+                }
+
+                override fun onFailure(call: Call<ResponseDeletePlan>, t: Throwable) {
+                    Log.d(
+                        NETWORK, "DetailFixActivity - deletePlan() 실행결과 실패\nbecause : $t"
+                    )
+                }
+            })
+        }
     }
 
     companion object {

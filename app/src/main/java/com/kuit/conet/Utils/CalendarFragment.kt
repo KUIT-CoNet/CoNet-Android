@@ -6,16 +6,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.kuit.conet.Network.HomePlanShow
 import com.kuit.conet.Network.RetrofitClient
 import com.kuit.conet.R
 import com.kuit.conet.UI.Home.MonthPicker
 import com.kuit.conet.UI.Home.Calendar.*
+import com.kuit.conet.UI.application.CoNetApplication
 import com.kuit.conet.data.dto.response.home.ResponseGetMonthlyPlan
 import com.kuit.conet.databinding.FragmentCalendarBinding
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.first
 import retrofit2.Call
 import retrofit2.Response
 import kotlin.collections.ArrayList
@@ -64,8 +65,8 @@ class CalendarFragment : Fragment() {
             val year = today.year.toString()
             val month = if (today.month < 9) "0${today.month + 1}" else "${today.month + 1}"
 
-            binding.viewCanlendar.setTitleFormatter { "${today.year}년  ${today.month}월" }
-            val promiseDates = UpdatePlanDates("$year-$month")
+            binding.viewCanlendar.setTitleFormatter { "${today.year}년  ${today.month + 1}월" }
+            val promiseDates = updateDate("$year-$month")
             binding.viewCanlendar.addDecorator(sundayDecorator)
             eventDecorator = planDotDecorator(
                 requireContext(),
@@ -93,19 +94,23 @@ class CalendarFragment : Fragment() {
             Log.d(TAG, "CalendarFragment - calendar 월 변경 event $date")
             val year = date.year
             val month = if (date.month < 9) "0${date.month + 1}" else "${date.month + 1}"
+            binding.viewCanlendar.setTitleFormatter { "${date.year}년  ${date.month + 1}월" }
 
             CoroutineScope(Dispatchers.Main).launch {
-                val promiseDates = UpdatePlanDates("$year-$month")
+                val promiseDates = updateDate("$year-$month")
                 Log.d(TAG, "CalendarFragment - 데코 지우기")
                 binding.viewCanlendar.removeDecorator(eventDecorator)
-                eventDecorator = planDotDecorator(requireContext(), R.color.mainsub1, promiseDates as ArrayList<Int>)
+                eventDecorator = planDotDecorator(
+                    requireContext(),
+                    R.color.mainsub1,
+                    promiseDates as ArrayList<Int>
+                )
                 binding.viewCanlendar.addDecorator(eventDecorator)
                 binding.viewCanlendar.removeDecorator(onedayDecorator)
                 onedayDecorator = OnedayDecorator()
                 binding.viewCanlendar.addDecorator(onedayDecorator)
                 binding.viewCanlendar.invalidateDecorators()
             }
-            //UpdatePlanDates(callDate)
         }
 
     }
@@ -132,12 +137,15 @@ class CalendarFragment : Fragment() {
             .commitAllowingStateLoss()
     }
 
-    private suspend fun UpdatePlanDates(callDate: String): List<Int> {
+    private suspend fun updateDate(callDate: String): List<Int> {
+        val bearerAccessToken =
+            CoNetApplication.getInstance().getDataStore().bearerAccessToken.first()
+
         return suspendCoroutine { continuation ->
-            Log.d(TAG, "CalendarFragment - UpdatePlanDates() called\n요청 날짜 : $callDate")
+            Log.d(TAG, "CalendarFragment - updateDate() called\n요청 날짜 : $callDate")
 
             RetrofitClient.homeInstance.getMonthlyPlan(
-                authorization = "Bearer ${getRefreshToken(requireContext())}",
+                authorization = bearerAccessToken,
                 searchDate = callDate,
             ).enqueue(object : retrofit2.Callback<ResponseGetMonthlyPlan> {
                 override fun onResponse(
@@ -160,35 +168,7 @@ class CalendarFragment : Fragment() {
                     Log.d(NETWORK, "CalendarFragment - getMonthlyPlan() 실행 결과 - 실패\nbecause : $t")
                     continuation.resumeWithException(t)
                 }
-
             })
-
-            /*RetrofitClient.instance.homepromiseshow(
-                authorization = "Bearer ${getRefreshToken(requireContext())}",
-                searchDate = callDate
-            ).enqueue(object :
-                retrofit2.Callback<HomePlanShow> {
-                override fun onResponse(
-                    call: Call<HomePlanShow>,
-                    response: Response<HomePlanShow>
-                ) {
-                    if (response.isSuccessful) {
-                        Log.d(NETWORK, "CalendarFragment - homepromiseshow() 실행결과 - 성공")
-                        val resp =
-                            requireNotNull(response.body()) { "CalendarFragment - homepromiseshow() 실행결과 불러오기 실패" }
-                        val promiseDates = resp.result.dates
-                        continuation.resume(promiseDates)
-                    } else {
-                        Log.d(NETWORK, "CalendarFragment - homepromiseshow() 실행결과 - 안좋음")
-                        continuation.resumeWithException(Exception("Response not successful"))
-                    }
-                }
-
-                override fun onFailure(call: Call<HomePlanShow>, t: Throwable) { // 통신에 실패했을 경우
-                    Log.d(NETWORK, "CalendarFragment - homepromiseshow() 실행결과 - 실패\nbecause : $t")
-                    continuation.resumeWithException(t)
-                }
-            })*/
         }
     }
 

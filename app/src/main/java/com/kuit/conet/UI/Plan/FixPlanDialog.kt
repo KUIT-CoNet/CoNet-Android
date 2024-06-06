@@ -8,13 +8,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.kuit.conet.Network.FixPlan
 import com.kuit.conet.Network.ResponseFixPlan
 import com.kuit.conet.Network.RetrofitInterface
 import com.kuit.conet.Network.getRetrofit
+import com.kuit.conet.UI.application.CoNetApplication
 import com.kuit.conet.Utils.NETWORK
 import com.kuit.conet.databinding.DialogFixPlanBinding
-import com.kuit.conet.Utils.getRefreshToken
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Response
 import kotlin.collections.ArrayList
@@ -92,26 +95,31 @@ class FixPlanDialog : Fragment() {
 
     private fun postFixPlan(fixPlan: FixPlan) {
         val fixPlanService = getRetrofit().create(RetrofitInterface::class.java)
-        val refreshToken = getRefreshToken(requireContext())
-        val authHeader = "Bearer $refreshToken"
-        fixPlanService.FixPlan(
-            authHeader,
-            fixPlan
-        ).enqueue(object : retrofit2.Callback<ResponseFixPlan> {
-            override fun onResponse(
-                call: Call<ResponseFixPlan>,
-                response: Response<ResponseFixPlan>
-            ) {
-                if (response.isSuccessful) {
-                    val resp = response.body()
-                    Log.d(NETWORK, "FixPlan api Successful\n$resp")
+        viewLifecycleOwner.lifecycleScope.launch {
+            val bearerAccessToken =
+                CoNetApplication.getInstance().getDataStore().bearerAccessToken.first()
+
+            fixPlanService.FixPlan(
+                authorization = bearerAccessToken,
+                fixPlan = fixPlan,
+            ).enqueue(object : retrofit2.Callback<ResponseFixPlan> {
+                override fun onResponse(
+                    call: Call<ResponseFixPlan>,
+                    response: Response<ResponseFixPlan>
+                ) {
+                    if (response.isSuccessful) {
+                        val resp = response.body()
+                        Log.d(NETWORK, "FixPlan api Successful\n$resp")
+                    }
                 }
-            }
 
-            override fun onFailure(call: Call<ResponseFixPlan>, t: Throwable) {
-                Log.d(NETWORK, "FixPlan api Failure\n${t.message}")
-            }
+                override fun onFailure(call: Call<ResponseFixPlan>, t: Throwable) {
+                    Log.d(NETWORK, "FixPlan api Failure\n${t.message}")
+                }
 
-        })
+            })
+
+
+        }
     }
 }

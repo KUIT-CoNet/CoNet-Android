@@ -5,16 +5,18 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.kuit.conet.Network.RetrofitClient
 import com.kuit.conet.R
 import com.kuit.conet.UI.GroupMain.GroupMainActivity
+import com.kuit.conet.UI.application.CoNetApplication
 import com.kuit.conet.Utils.LIFECYCLE
 import com.kuit.conet.Utils.NETWORK
-import com.kuit.conet.Utils.getAccessToken
 import com.kuit.conet.data.dto.response.team.ResponseGetGroupMembers
 import com.kuit.conet.databinding.DialogAllMembersBinding
-import com.kuit.conet.domain.entity.member.Member
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -54,8 +56,22 @@ class AllMembersDialog : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         Log.d(LIFECYCLE, "AllMembersDialog - onViewCreated() called")
 
+        viewLifecycleOwner.lifecycleScope.launch {
+            val bearerAccessToken =
+                CoNetApplication.getInstance().getDataStore().bearerAccessToken.first()
+            getGroupMembers(bearerAccessToken, groupId)
+        }
+    }
+
+    override fun onDestroyView() {
+        _binding = null
+        super.onDestroyView()
+        Log.d(LIFECYCLE, "AllMembersDialog - onDestroyView() called")
+    }
+
+    private fun getGroupMembers(accessToken: String, groupId: Long) {
         RetrofitClient.teamInstance.getGroupMembers(
-            authorization = "Bearer ${getAccessToken(requireContext())}",
+            authorization = accessToken,
             groupId = groupId,
         ).enqueue(object : Callback<ResponseGetGroupMembers> {
             override fun onResponse(
@@ -88,14 +104,6 @@ class AllMembersDialog : BottomSheetDialogFragment() {
                 )
             }
         })
-
-
-    }
-
-    override fun onDestroyView() {
-        _binding = null
-        super.onDestroyView()
-        Log.d(LIFECYCLE, "AllMembersDialog - onDestroyView() called")
     }
 
     companion object {

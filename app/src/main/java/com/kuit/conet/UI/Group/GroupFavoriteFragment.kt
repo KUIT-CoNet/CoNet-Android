@@ -6,12 +6,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.kuit.conet.Network.RetrofitClient
+import com.kuit.conet.UI.application.CoNetApplication
 import com.kuit.conet.Utils.LIFECYCLE
 import com.kuit.conet.Utils.NETWORK
 import com.kuit.conet.databinding.FragmentGroupListBinding
-import com.kuit.conet.Utils.getAccessToken
 import com.kuit.conet.data.dto.response.member.ResponseGetBookmarkGroups
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Response
 
@@ -40,8 +43,22 @@ class GroupFavoriteFragment : Fragment() {
         super.onResume()
         Log.d(LIFECYCLE, "GroupFavoriteFragment - onResume() called")
 
+        viewLifecycleOwner.lifecycleScope.launch {
+            val bearerAccessToken =
+                CoNetApplication.getInstance().getDataStore().bearerAccessToken.first()
+            getBookmarkGroups(bearerAccessToken)
+        }
+    }
+
+    override fun onDestroyView() {
+        _binding = null
+        super.onDestroyView()
+        Log.d(LIFECYCLE, "GroupAllFragment - onDestroyView() called")
+    }
+
+    private fun getBookmarkGroups(accessToken: String) {
         RetrofitClient.memberInstance.getBookmarkGroups(
-            authorization = "Bearer ${getAccessToken(requireContext())}"
+            authorization = accessToken,
         ).enqueue(object : retrofit2.Callback<ResponseGetBookmarkGroups> {
             override fun onResponse(
                 call: Call<ResponseGetBookmarkGroups>,
@@ -66,11 +83,5 @@ class GroupFavoriteFragment : Fragment() {
                 Log.d(NETWORK, "GroupFavoriteFragment - Retrofit getBookmarkGroups()실행 결과 - 실패")
             }
         })
-    }
-
-    override fun onDestroyView() {
-        _binding = null
-        super.onDestroyView()
-        Log.d(LIFECYCLE, "GroupAllFragment - onDestroyView() called")
     }
 }

@@ -8,15 +8,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.kuit.conet.Network.RetrofitClient
 import com.kuit.conet.R
+import com.kuit.conet.UI.application.CoNetApplication
 import com.kuit.conet.Utils.LIFECYCLE
 import com.kuit.conet.Utils.NETWORK
-import com.kuit.conet.Utils.getRefreshToken
 import com.kuit.conet.data.dto.response.member.ResponseGetUserInfo
 import com.kuit.conet.databinding.FragmentUserBinding
 import com.kuit.conet.domain.entity.user.User
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 
 
 class UserFragment : Fragment() {
@@ -77,8 +80,17 @@ class UserFragment : Fragment() {
         super.onStart()
         Log.d(LIFECYCLE, "UserFragment: onStart called")
 
+        viewLifecycleOwner.lifecycleScope.launch {
+            val bearerAccessToken =
+                CoNetApplication.getInstance().getDataStore().bearerAccessToken.first()
+
+            getUserInfo(bearerAccessToken)
+        }
+    }
+
+    private fun getUserInfo(accessToken: String) {
         RetrofitClient.memberInstance.getUserInfo(
-            authorization = "Bearer ${getRefreshToken(requireActivity())}"
+            authorization = accessToken,
         ).enqueue(object : retrofit2.Callback<ResponseGetUserInfo> {
             override fun onResponse(
                 call: retrofit2.Call<ResponseGetUserInfo>,

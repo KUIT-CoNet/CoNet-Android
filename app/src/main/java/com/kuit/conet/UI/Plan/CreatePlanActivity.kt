@@ -11,11 +11,12 @@ import androidx.appcompat.app.AppCompatActivity
 import com.kuit.conet.Network.*
 import com.kuit.conet.R
 import com.kuit.conet.UI.Plan.dialog.CalenderDialog
+import com.kuit.conet.UI.application.CoNetApplication
 import com.kuit.conet.Utils.NETWORK
 import com.kuit.conet.databinding.ActivityCreatePlanBinding
-import com.kuit.conet.Utils.getRefreshToken
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
@@ -117,13 +118,19 @@ class CreatePlanActivity : AppCompatActivity() {
         }
     }
 
-    private suspend fun makePlan(planName: String, teamId: Int, planStartDate: String, intent: Intent) {
+    private suspend fun makePlan(
+        planName: String,
+        teamId: Int,
+        planStartDate: String,
+        intent: Intent
+    ) {
+        val accessToken = CoNetApplication.getInstance().getDataStore().accessToken.first()
+
         return suspendCoroutine {
-            val refreshToken = getRefreshToken(this)
             val planStartDate = planStartDate.replace(".", "-")
             val responsePlan = getRetrofit().create(RetrofitInterface::class.java)
             responsePlan.makePlan(
-                "Bearer $refreshToken",
+                "Bearer $accessToken",
                 MakePlanInfo(
                     teamId,
                     planName,

@@ -4,12 +4,12 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ResponseRenewalRefreshToken(
+data class ResponseRenewTokens(
     @SerialName("result")
-    val result: ResultData,
+    val result: ResultRenewTokens,
 ) {
     @Serializable
-    data class ResultData(
+    data class ResultRenewTokens(
         @SerialName("email")
         val email: String,
         @SerialName("accessToken")

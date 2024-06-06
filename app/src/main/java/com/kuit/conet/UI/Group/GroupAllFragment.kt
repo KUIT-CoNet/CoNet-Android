@@ -6,12 +6,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.kuit.conet.Network.RetrofitClient
+import com.kuit.conet.UI.application.CoNetApplication
 import com.kuit.conet.Utils.LIFECYCLE
 import com.kuit.conet.Utils.NETWORK
 import com.kuit.conet.databinding.FragmentGroupListBinding
-import com.kuit.conet.Utils.getAccessToken
 import com.kuit.conet.data.dto.response.team.ResponseGetGroups
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Response
 
@@ -41,8 +44,22 @@ class GroupAllFragment : Fragment() {
         super.onResume()
         Log.d(LIFECYCLE, "GroupAllFragment - onResume() 실행")
 
+        viewLifecycleOwner.lifecycleScope.launch {
+            val bearerAccessToken =
+                CoNetApplication.getInstance().getDataStore().bearerAccessToken.first()
+            getGroups(bearerAccessToken)
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+        Log.d(LIFECYCLE, "GroupAllFragment - onDestroyView() called")
+    }
+
+    private fun getGroups(accessToken: String) {
         RetrofitClient.teamInstance.getGroups(
-            authorization = "Bearer ${getAccessToken(requireContext())}"
+            authorization = accessToken,
         ).enqueue(object : retrofit2.Callback<ResponseGetGroups> {
             override fun onResponse(
                 call: Call<ResponseGetGroups>,
@@ -67,12 +84,6 @@ class GroupAllFragment : Fragment() {
                 Log.d(NETWORK, "GroupAllFragment - getTeam()실행 결과 - 실패\nbecause: $t")
             }
         })
-    }
-
-    override fun onDestroyView() {
-        _binding = null
-        super.onDestroyView()
-        Log.d(LIFECYCLE, "GroupAllFragment - onDestroyView() called")
     }
 
 }
