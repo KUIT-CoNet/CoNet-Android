@@ -50,7 +50,7 @@ class Todolist(
         super.onViewCreated(view, savedInstanceState)
         Log.d(LIFECYCLE, "Todolist - onViewCreated() called")
 
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             val plans = if (groupId < 0) {      // HomeFragment
                 showplaninfo(date)
             } else {                            // GroupMainActivity

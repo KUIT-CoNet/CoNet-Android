@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.kuit.conet.Network.RetrofitClient
 import com.kuit.conet.UI.Home.RecyclerView.AllTodoRecyclerAdapter
 import com.kuit.conet.UI.application.CoNetApplication
@@ -55,7 +56,7 @@ class OncallList(
         super.onResume()
         Log.d(LIFECYCLE, "OncallList - onResume() called")
 
-        CoroutineScope(Dispatchers.Main).launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             val oncall = if (groupId < 0) {
                 showOncall()
             } else {

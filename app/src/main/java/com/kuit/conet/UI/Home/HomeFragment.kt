@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.kuit.conet.Utils.CalendarFragment
 import com.kuit.conet.R
 import com.kuit.conet.Utils.LIFECYCLE
@@ -70,7 +71,7 @@ class HomeFragment : Fragment() {
             .replace(R.id.fl_oncalllist, oncallList)
             .commitAllowingStateLoss()
 
-        CoroutineScope(Dispatchers.Main).launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             oncallList.waitForInit()
             binding.tvPromiseallCount.text = oncallList.returnsize().toString()
         }
@@ -81,7 +82,7 @@ class HomeFragment : Fragment() {
             .replace(R.id.fl_todolist, todolist)
             .commitAllowingStateLoss()
 
-        CoroutineScope(Dispatchers.Main).launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             todolist.waitForInit()
             binding.tvPromiseCount.text = todolist.returnsize().toString()
         }

@@ -13,6 +13,8 @@ import com.kuit.conet.Utils.LIFECYCLE
 import com.kuit.conet.Utils.NETWORK
 import com.kuit.conet.databinding.FragmentGroupListBinding
 import com.kuit.conet.data.dto.response.team.ResponseGetGroups
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import retrofit2.Call
@@ -44,7 +46,12 @@ class GroupAllFragment : Fragment() {
         super.onResume()
         Log.d(LIFECYCLE, "GroupAllFragment - onResume() 실행")
 
-        viewLifecycleOwner.lifecycleScope.launch {
+        val handler = CoroutineExceptionHandler { coroutineContext, throwable ->
+            Log.e("Error", "GroupAllFragment - CoroutineExceptionHandler : $throwable")
+            coroutineContext.cancel()
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch(handler) {
             val bearerAccessToken =
                 CoNetApplication.getInstance().getDataStore().bearerAccessToken.first()
             getGroups(bearerAccessToken)

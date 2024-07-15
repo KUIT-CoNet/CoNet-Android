@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.kuit.conet.Network.RetrofitClient
 import com.kuit.conet.R
 import com.kuit.conet.UI.Home.MonthPicker
@@ -61,7 +62,7 @@ class CalendarFragment : Fragment() {
             showDialog()
         }
 
-        CoroutineScope(Dispatchers.Main).launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             val year = today.year.toString()
             val month = if (today.month < 9) "0${today.month + 1}" else "${today.month + 1}"
 
