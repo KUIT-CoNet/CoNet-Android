@@ -89,9 +89,19 @@ class GroupFragment : Fragment(), View.OnClickListener, GroupEnrollDialog.GroupP
     }
 
     override fun onDestroyView() {
-        _binding = null
         super.onDestroyView()
-        Log.d(LIFECYCLE, "GroupAllFragment - onDestroyView() called")
+        _binding = null
+        Log.d(LIFECYCLE, "GroupFragment - onDestroyView() called")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.d(LIFECYCLE, "GroupFragment - onStop() called")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d(LIFECYCLE, "GroupFragment - onDestroy() called")
     }
 
     private fun toggleFab() {

@@ -84,14 +84,25 @@ class HomeFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             todolist.waitForInit()
-            binding.tvPromiseCount.text = todolist.returnsize().toString()
+            binding.tvPromiseCount.text =
+                todolist.returnsize().toString()
         }
     }
 
     override fun onDestroyView() {
-        _binding = null
         super.onDestroyView()
+        _binding = null
         Log.d(LIFECYCLE, "HomeFragment - onDestroyView() called")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.d(LIFECYCLE, "HomeFragment - onStop() called")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d(LIFECYCLE, "HomeFragment - onDestroy() called")
     }
 
     private fun dateString(

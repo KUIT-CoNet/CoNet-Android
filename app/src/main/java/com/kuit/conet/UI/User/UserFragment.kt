@@ -88,6 +88,22 @@ class UserFragment : Fragment() {
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+        Log.d(LIFECYCLE, "UserFragment: onDestroyView called")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.d(LIFECYCLE, "UserFragment: onStop called")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d(LIFECYCLE, "UserFragment: onDestroy called")
+    }
+
     private fun getUserInfo(accessToken: String) {
         RetrofitClient.memberInstance.getUserInfo(
             authorization = accessToken,
