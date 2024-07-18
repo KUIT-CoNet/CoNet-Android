@@ -9,14 +9,11 @@ import com.kuit.conet.Utils.CalendarFragment
 import com.kuit.conet.R
 import com.kuit.conet.Utils.LIFECYCLE
 import com.kuit.conet.Utils.OncallList
-import com.kuit.conet.Utils.TAG
 import com.kuit.conet.Utils.Todolist
 import com.kuit.conet.Utils.calendar.compareWithLocalDate
 import com.kuit.conet.Utils.calendar.toString
 import com.kuit.conet.databinding.FragmentHomeBinding
 import com.prolificinteractive.materialcalendarview.CalendarDay
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -42,7 +39,7 @@ class HomeFragment : Fragment() {
         Log.d(LIFECYCLE, "HomeFragment - onViewCreated() called")
 
         val calendarFragment = CalendarFragment()
-//        CalendarFragment의 달력 화면에서 일/월을 변경하였을 때
+
         calendarFragment.setOnDateChangedListener { widget, date, selected ->
             val today = LocalDate.now()
 
@@ -53,21 +50,22 @@ class HomeFragment : Fragment() {
             }
 
             val todolist = Todolist(date, -1)
-            parentFragmentManager.beginTransaction()
+            childFragmentManager.beginTransaction()
                 .replace(R.id.fl_todolist, todolist)
                 .commitAllowingStateLoss()
-            CoroutineScope(Dispatchers.Main).launch {
+
+            viewLifecycleOwner.lifecycleScope.launch {
                 todolist.waitForInit()
                 binding.tvPromiseCount.text = todolist.returnsize().toString()
             }
         }
 
-        parentFragmentManager.beginTransaction()
+        childFragmentManager.beginTransaction()
             .replace(R.id.fl_calendarView, calendarFragment)
             .commitAllowingStateLoss()
 
         val oncallList = OncallList(-1, 1)
-        parentFragmentManager.beginTransaction()
+        childFragmentManager.beginTransaction()
             .replace(R.id.fl_oncalllist, oncallList)
             .commitAllowingStateLoss()
 
@@ -78,7 +76,7 @@ class HomeFragment : Fragment() {
 
         val today = CalendarDay.today() // 오늘 날짜
         val todolist = Todolist(today, -1)
-        parentFragmentManager.beginTransaction()
+        childFragmentManager.beginTransaction()
             .replace(R.id.fl_todolist, todolist)
             .commitAllowingStateLoss()
 
