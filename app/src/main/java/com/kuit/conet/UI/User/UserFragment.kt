@@ -20,6 +20,9 @@ import com.kuit.conet.databinding.FragmentUserBinding
 import com.kuit.conet.domain.entity.user.User
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 
 
 class UserFragment : Fragment() {
@@ -84,7 +87,16 @@ class UserFragment : Fragment() {
             val bearerAccessToken =
                 CoNetApplication.getInstance().getDataStore().bearerAccessToken.first()
 
-            getUserInfo(bearerAccessToken)
+            userInfo = getUserInfo(bearerAccessToken)
+
+            binding.tvUserName.text = userInfo.name
+            Glide.with(requireContext())
+                .load(userInfo.imgUrl)
+                .placeholder(R.drawable.profile_purple)
+                .error(R.drawable.profile_purple)
+                .fallback(R.drawable.profile_purple)
+                .circleCrop()
+                .into(binding.ivUserProfile)
         }
     }
 
@@ -104,39 +116,41 @@ class UserFragment : Fragment() {
         Log.d(LIFECYCLE, "UserFragment: onDestroy called")
     }
 
-    private fun getUserInfo(accessToken: String) {
-        RetrofitClient.memberInstance.getUserInfo(
-            authorization = accessToken,
-        ).enqueue(object : retrofit2.Callback<ResponseGetUserInfo> {
-            override fun onResponse(
-                call: retrofit2.Call<ResponseGetUserInfo>,
-                response: retrofit2.Response<ResponseGetUserInfo>
-            ) {
-                if (response.isSuccessful) {
-                    Log.d(NETWORK, "UserFragment - getUserInfo 호출 결과 - 성공")
+    private suspend fun getUserInfo(accessToken: String): User =
+        suspendCancellableCoroutine { continuation ->
 
-                    val resp =
-                        requireNotNull(response.body()) { "UserFragment - getUserInfo 호출 결과 불러오기 실패" }
-                    userInfo = resp.result.asUser()
+            val call = RetrofitClient.memberInstance.getUserInfo(
+                authorization = accessToken,
+            )
 
-                    binding.tvUserName.text = userInfo.name
-                    Glide.with(requireContext())
-                        .load(userInfo.imgUrl)
-                        .placeholder(R.drawable.profile_purple)
-                        .error(R.drawable.profile_purple)
-                        .fallback(R.drawable.profile_purple)
-                        .circleCrop()
-                        .into(binding.ivUserProfile)
-                } else {
-                    Log.d(NETWORK, "UserFragment - getUserInfo 호출 결과 - 안좋음")
+            continuation.invokeOnCancellation {
+                Log.d(NETWORK, "UserFragment - getUserInfo 호출 취소됨")
+                call.cancel()
+            }
+
+            call.enqueue(object : retrofit2.Callback<ResponseGetUserInfo> {
+                override fun onResponse(
+                    call: retrofit2.Call<ResponseGetUserInfo>,
+                    response: retrofit2.Response<ResponseGetUserInfo>
+                ) {
+                    if (response.isSuccessful) {
+                        Log.d(NETWORK, "UserFragment - getUserInfo 호출 결과 - 성공")
+
+                        val resp =
+                            requireNotNull(response.body()) { "UserFragment - getUserInfo 호출 결과 불러오기 실패" }
+                        continuation.resume(resp.result.asUser())
+                    } else {
+                        Log.d(NETWORK, "UserFragment - getUserInfo 호출 결과 - 안좋음")
+                        continuation.resume(User.EMPTY_USER)
+                    }
                 }
-            }
 
-            override fun onFailure(call: retrofit2.Call<ResponseGetUserInfo>, t: Throwable) {
-                Log.d(NETWORK, "UserFragment - getUserInfo 호출 결과 - 실패\nbecause : ${t.message}")
-            }
-        })
-    }
+                override fun onFailure(call: retrofit2.Call<ResponseGetUserInfo>, t: Throwable) {
+                    Log.d(NETWORK, "UserFragment - getUserInfo 호출 결과 - 실패\nbecause : ${t.message}")
+                    continuation.resumeWithException(t)
+                }
+            })
+        }
 
     companion object {
         const val INTENT_TAG_USER = "userInfo"

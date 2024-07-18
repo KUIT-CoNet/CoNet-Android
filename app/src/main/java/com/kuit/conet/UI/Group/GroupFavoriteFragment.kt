@@ -13,10 +13,14 @@ import com.kuit.conet.Utils.LIFECYCLE
 import com.kuit.conet.Utils.NETWORK
 import com.kuit.conet.databinding.FragmentGroupListBinding
 import com.kuit.conet.data.dto.response.member.ResponseGetBookmarkGroups
+import com.kuit.conet.domain.entity.group.GroupSimple
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
 import retrofit2.Call
 import retrofit2.Response
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 
 class GroupFavoriteFragment : Fragment() {
 
@@ -46,7 +50,9 @@ class GroupFavoriteFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             val bearerAccessToken =
                 CoNetApplication.getInstance().getDataStore().bearerAccessToken.first()
-            getBookmarkGroups(bearerAccessToken)
+            val groupList = getBookmarkGroups(bearerAccessToken)
+            GroupFragment.binding.tvGroupCount.text = groupList.count().toString()
+            binding.rvGroupList.adapter = GroupAdapter(requireContext(), groupList)
         }
     }
 
@@ -56,32 +62,47 @@ class GroupFavoriteFragment : Fragment() {
         Log.d(LIFECYCLE, "GroupAllFragment - onDestroyView() called")
     }
 
-    private fun getBookmarkGroups(accessToken: String) {
-        RetrofitClient.memberInstance.getBookmarkGroups(
-            authorization = accessToken,
-        ).enqueue(object : retrofit2.Callback<ResponseGetBookmarkGroups> {
-            override fun onResponse(
-                call: Call<ResponseGetBookmarkGroups>,
-                response: Response<ResponseGetBookmarkGroups>
-            ) {
-                if (response.isSuccessful) {
-                    Log.d(NETWORK, "GroupFavoriteFragment - Retrofit getBookmarkGroups()실행 결과 - 성공")
-                    val resp =
-                        requireNotNull(response.body()) { "GroupFavoriteFragment's getBookmarkGroups 결과 불러오기 실패" }
-                    val groupList = resp.result.map { it.asGroupSimple() }
-                    GroupFragment.binding.tvGroupCount.text = groupList.count().toString()
-                    binding.rvGroupList.adapter = GroupAdapter(requireContext(), groupList)
-                } else {
-                    Log.d(
-                        NETWORK,
-                        "GroupFavoriteFragment - Retrofit getBookmarkGroups()실행 결과 - 안좋음"
-                    )
-                }
+    private suspend fun getBookmarkGroups(accessToken: String): List<GroupSimple> =
+        suspendCancellableCoroutine { continuation ->
+
+            val call = RetrofitClient.memberInstance.getBookmarkGroups(
+                authorization = accessToken,
+            )
+
+            continuation.invokeOnCancellation {
+                Log.e(NETWORK, "GroupFavoriteFragment - getBookmarkGroups() 취소됨")
+                call.cancel()
             }
 
-            override fun onFailure(call: Call<ResponseGetBookmarkGroups>, t: Throwable) {
-                Log.d(NETWORK, "GroupFavoriteFragment - Retrofit getBookmarkGroups()실행 결과 - 실패")
-            }
-        })
-    }
+            call.enqueue(object : retrofit2.Callback<ResponseGetBookmarkGroups> {
+                override fun onResponse(
+                    call: Call<ResponseGetBookmarkGroups>,
+                    response: Response<ResponseGetBookmarkGroups>
+                ) {
+                    if (response.isSuccessful) {
+                        Log.d(
+                            NETWORK,
+                            "GroupFavoriteFragment - Retrofit getBookmarkGroups()실행 결과 - 성공"
+                        )
+                        val resp =
+                            requireNotNull(response.body()) { "GroupFavoriteFragment's getBookmarkGroups 결과 불러오기 실패" }
+                        val groupList = resp.result.map { it.asGroupSimple() }
+                        continuation.resume(groupList)
+                        /*GroupFragment.binding.tvGroupCount.text = groupList.count().toString()
+                        binding.rvGroupList.adapter = GroupAdapter(requireContext(), groupList)*/
+                    } else {
+                        Log.d(
+                            NETWORK,
+                            "GroupFavoriteFragment - Retrofit getBookmarkGroups()실행 결과 - 안좋음"
+                        )
+                        continuation.resume(GroupSimple.EMPTY_LIST)
+                    }
+                }
+
+                override fun onFailure(call: Call<ResponseGetBookmarkGroups>, t: Throwable) {
+                    Log.d(NETWORK, "GroupFavoriteFragment - Retrofit getBookmarkGroups()실행 결과 - 실패")
+                    continuation.resumeWithException(t)
+                }
+            })
+        }
 }
