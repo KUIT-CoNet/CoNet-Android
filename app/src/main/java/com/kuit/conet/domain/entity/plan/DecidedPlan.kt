@@ -8,4 +8,8 @@ data class DecidedPlan(
     val time: String,
     val participant: Boolean = false,
     val dday: Int = 0,
-)
+) {
+    companion object {
+        fun emptyList() = kotlin.collections.emptyList<DecidedPlan>()
+    }
+}
