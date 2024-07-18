@@ -15,16 +15,14 @@ import com.kuit.conet.data.dto.response.plan.ResponseGetGroupWaitingPlan
 import com.kuit.conet.databinding.FragmentOncallBinding
 import com.kuit.conet.domain.entity.plan.UndecidedPlan
 import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
-import kotlin.coroutines.suspendCoroutine
 
 class OncallList(
     private val groupId: Int,   // -1 : HomeFragment, 1 이상(groupId) : GroupMainActivity
@@ -58,7 +56,9 @@ class OncallList(
 
         viewLifecycleOwner.lifecycleScope.launch {
             val oncall = if (groupId < 0) {
-                showOncall()
+                val bearerAccessToken =
+                    CoNetApplication.getInstance().getDataStore().bearerAccessToken.first()
+                showOncall(bearerAccessToken)
             } else {
                 showGroupOncall()
             }
@@ -74,14 +74,19 @@ class OncallList(
         Log.d(LIFECYCLE, "OncallList - onDestroyView() called")
     }
 
-    private suspend fun showOncall(): List<UndecidedPlan> {
-        val bearerAccessToken =
-            CoNetApplication.getInstance().getDataStore().bearerAccessToken.first()
+    private suspend fun showOncall(bearerAccessToken: String): List<UndecidedPlan> =
+        suspendCancellableCoroutine { continuation ->
 
-        return suspendCoroutine { continuation ->
-            RetrofitClient.homeInstance.getWaitingPlan(
+            val call = RetrofitClient.homeInstance.getWaitingPlan(
                 authorization = bearerAccessToken,
-            ).enqueue(object : Callback<ResponseGetWaitingPlan> {
+            )
+
+            continuation.invokeOnCancellation {
+                Log.d(NETWORK, "OncallList - getWaitingPlan() 실행결과 - 취소됨")
+                call.cancel()
+            }
+
+            call.enqueue(object : Callback<ResponseGetWaitingPlan> {
                 override fun onResponse(
                     call: Call<ResponseGetWaitingPlan>,
                     response: Response<ResponseGetWaitingPlan>
@@ -93,7 +98,7 @@ class OncallList(
                         continuation.resume(resp.result.plans.map { it.asUndecidedPlan() })
                     } else {
                         Log.d(NETWORK, "OncallList - getWaitingPlan() 실행결과 - 안좋음")
-                        continuation.resumeWithException(Exception("Response not successful"))
+                        continuation.resume(UndecidedPlan.emptyList())
                     }
                 }
 
@@ -105,13 +110,18 @@ class OncallList(
             })
         }
 
-    }
+    private suspend fun showGroupOncall(): List<UndecidedPlan> =
+        suspendCancellableCoroutine { continuation ->
 
-    private suspend fun showGroupOncall(): List<UndecidedPlan> {
-        return suspendCoroutine { continuation ->
-            RetrofitClient.planInstance.getGroupWaitingPlan(
+            val call = RetrofitClient.planInstance.getGroupWaitingPlan(
                 teamId = groupId.toLong()
-            ).enqueue(object : Callback<ResponseGetGroupWaitingPlan> {
+            )
+
+            continuation.invokeOnCancellation {
+                Log.d(NETWORK, "OncallList - getGroupWaitingPlan() 실행결과 - 취소됨")
+                call.cancel()
+            }
+            call.enqueue(object : Callback<ResponseGetGroupWaitingPlan> {
                 override fun onResponse(
                     call: Call<ResponseGetGroupWaitingPlan>,
                     response: Response<ResponseGetGroupWaitingPlan>
@@ -123,7 +133,7 @@ class OncallList(
                         continuation.resume(resp.result.plans.map { it.asUndecidedPlan() })
                     } else {
                         Log.d(NETWORK, "OncallList - getGroupWaitingPlan() 실행결과 - 안좋음")
-                        continuation.resumeWithException(Exception("Response not successful"))
+                        continuation.resume(UndecidedPlan.emptyList())
                     }
                 }
 
@@ -134,11 +144,9 @@ class OncallList(
 
             })
         }
-    }
 
     private fun initAllRecycler(oncall: List<UndecidedPlan>) {
-        val data = oncall.ifEmpty { listOf() }
-        allTodoRecyclerAdapter = AllTodoRecyclerAdapter(data, option, requireActivity())
+        allTodoRecyclerAdapter = AllTodoRecyclerAdapter(oncall, option, requireActivity())
         binding.rvAlltodolist.adapter = allTodoRecyclerAdapter
     }
 

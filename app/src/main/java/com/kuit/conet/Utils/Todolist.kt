@@ -18,12 +18,12 @@ import com.prolificinteractive.materialcalendarview.CalendarDay
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
-import kotlin.coroutines.suspendCoroutine
 
 class Todolist(
     private val date: CalendarDay,
@@ -52,9 +52,11 @@ class Todolist(
 
         viewLifecycleOwner.lifecycleScope.launch {
             val plans = if (groupId < 0) {      // HomeFragment
-                showplaninfo(date)
+                val bearerAccessToken =
+                    CoNetApplication.getInstance().getDataStore().bearerAccessToken.first()
+                getPlans(bearerAccessToken, date)
             } else {                            // GroupMainActivity
-                showGroupplaninfo(date)
+                getGroupPlans(date)
             }
 
             initRecycler(plans)
@@ -68,55 +70,66 @@ class Todolist(
         Log.d(LIFECYCLE, "Todolist - onDestroyView() called")
     }
 
-    private suspend fun showplaninfo(date: CalendarDay): List<DecidedPlan> {
-        val bearerAccessToken =
-            CoNetApplication.getInstance().getDataStore().bearerAccessToken.first()
+    private suspend fun getPlans(
+        bearerAccessToken: String,
+        date: CalendarDay
+    ): List<DecidedPlan> = suspendCancellableCoroutine { continuation ->
+        val year = (date.year).toString()
+        val month = if (date.month < 9) "0${date.month + 1}" else "${date.month + 1}"
+        val day = if (date.day < 10) "0${date.day}" else "${date.day}"
 
-        return suspendCoroutine { continuation2 ->
+        val call = RetrofitClient.homeInstance.getDailyPlan(
+            authorization = bearerAccessToken,
+            searchDate = "$year-$month-$day",
+        )
 
-            val year = (date.year).toString()
-            val month = if (date.month < 9) "0${date.month + 1}" else "${date.month + 1}"
-            val day = if (date.day < 10) "0${date.day}" else "${date.day}"
-
-            RetrofitClient.homeInstance.getDailyPlan(
-                authorization = bearerAccessToken,
-                searchDate = "$year-$month-$day",
-            ).enqueue(object : Callback<ResponseGetDailyPlan> {
-                override fun onResponse(
-                    call: Call<ResponseGetDailyPlan>,
-                    response: Response<ResponseGetDailyPlan>
-                ) {
-                    if (response.isSuccessful) {
-                        Log.d(NETWORK, "Todolist - getDailyPlan() 실행 결과 - 성공")
-                        val resp =
-                            requireNotNull(response.body()) { "Todolist - getDailyPlan() 실행 결과 불러오기 실패" }
-                        continuation2.resume(resp.result.plans.map { it.asDecidedPlan() })
-                    } else {
-                        Log.d(NETWORK, "Todolist - getDailyPlan() 실행 결과 - 안좋음")
-                        continuation2.resumeWithException(Exception("Response not successful"))
-                    }
-                }
-
-                override fun onFailure(call: Call<ResponseGetDailyPlan>, t: Throwable) {
-                    Log.d(NETWORK, "Todolist - getDailyPlan() 실행 결과 - 실해\nbecause : $t")
-                    continuation2.resumeWithException(t)
-                }
-
-            })
+        continuation.invokeOnCancellation {
+            Log.d(NETWORK, "Todolist - getDailyPlan() 실행 취소됨")
+            call.cancel()
         }
+
+        call.enqueue(object : Callback<ResponseGetDailyPlan> {
+            override fun onResponse(
+                call: Call<ResponseGetDailyPlan>,
+                response: Response<ResponseGetDailyPlan>
+            ) {
+                if (response.isSuccessful) {
+                    Log.d(NETWORK, "Todolist - getDailyPlan() 실행 결과 - 성공")
+                    val resp =
+                        requireNotNull(response.body()) { "Todolist - getDailyPlan() 실행 결과 불러오기 실패" }
+                    continuation.resume(resp.result.plans.map { it.asDecidedPlan() })
+                } else {
+                    Log.d(NETWORK, "Todolist - getDailyPlan() 실행 결과 - 안좋음")
+                    continuation.resume(DecidedPlan.emptyList())
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseGetDailyPlan>, t: Throwable) {
+                Log.d(NETWORK, "Todolist - getDailyPlan() 실행 결과 - 실해\nbecause : $t")
+                continuation.resumeWithException(t)
+            }
+
+        })
     }
 
-    private suspend fun showGroupplaninfo(date: CalendarDay): List<DecidedPlan> {
-        return suspendCoroutine { continuation2 ->
 
+    private suspend fun getGroupPlans(date: CalendarDay): List<DecidedPlan> =
+        suspendCancellableCoroutine { continuation ->
             val year = date.year
             val month = if (date.month < 9) "0${date.month + 1}" else "${date.month + 1}"
             val day = if (date.day < 10) "0${date.day}" else "${date.day}"
 
-            RetrofitClient.planInstance.getGroupDailyDecidedPlan(
+            val call = RetrofitClient.planInstance.getGroupDailyDecidedPlan(
                 teamId = groupId.toLong(),
                 searchDate = "$year-$month-$day",
-            ).enqueue(object : Callback<ResponseGetGroupDailyDecidedPlan> {
+            )
+
+            continuation.invokeOnCancellation {
+                Log.d(NETWORK, "Todolist - getGroupDailyDecidedPlan() 실행 취소됨")
+                call.cancel()
+            }
+
+            call.enqueue(object : Callback<ResponseGetGroupDailyDecidedPlan> {
                 override fun onResponse(
                     call: Call<ResponseGetGroupDailyDecidedPlan>,
                     response: Response<ResponseGetGroupDailyDecidedPlan>
@@ -125,20 +138,20 @@ class Todolist(
                         Log.d(NETWORK, "Todolist - getGroupDailyDecidedPlan() 실행 결과 - 성공")
                         val resp =
                             requireNotNull(response.body()) { "Todolist - getGroupDailyDecidedPlan() 실행 결과 불러오기 실패" }
-                        continuation2.resume(resp.result.plans.map { it.asDecidedPlan() })
+                        continuation.resume(resp.result.plans.map { it.asDecidedPlan() })
                     } else {
                         Log.d(NETWORK, "Todolist - getGroupDailyDecidedPlan() 실행 결과 - 안좋음")
-                        continuation2.resumeWithException(Exception("Response not successful"))
+                        continuation.resume(DecidedPlan.emptyList())
                     }
                 }
 
                 override fun onFailure(call: Call<ResponseGetGroupDailyDecidedPlan>, t: Throwable) {
                     Log.d(NETWORK, "Todolist - getGroupDailyDecidedPlan() 실행 결과 - 실패\nbacause : $t")
-                    continuation2.resumeWithException(t)
+                    continuation.resumeWithException(t)
                 }
             })
         }
-    }
+
 
     private fun initRecycler(plans: List<DecidedPlan>) {
         todoRecyclerAdapter = TodoRecyclerAdapter(requireContext(), plans)
