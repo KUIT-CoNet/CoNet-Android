@@ -18,7 +18,7 @@ import retrofit2.Call
 import retrofit2.Response
 
 class NoticeActivity : AppCompatActivity() {
-    lateinit var binding: com.kuit.conet.databinding.ActivityNoticeBinding
+    lateinit var binding: ActivityNoticeBinding
     private var noticeList: ArrayList<NoticeInfo> = arrayListOf()
     private var noticeAdapter: NoticeAdapter? = null
 
