@@ -17,7 +17,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CoNet"
         android:usesCleartextTraffic="true"
-        tools:targetApi="31">
+        tools:targetApi="34">
         <activity
             android:name=".UI.Plan.detail.PlanListActivity"
             android:exported="false"

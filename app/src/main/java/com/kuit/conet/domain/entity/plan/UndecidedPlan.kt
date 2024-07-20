@@ -6,4 +6,8 @@ data class UndecidedPlan(
     val groupName: String,
     val startDate: String,
     val endDate: String,
-)
+) {
+    companion object {
+        fun emptyList() = kotlin.collections.emptyList<UndecidedPlan>()
+    }
+}

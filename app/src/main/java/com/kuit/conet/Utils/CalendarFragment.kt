@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.kuit.conet.Network.RetrofitClient
 import com.kuit.conet.R
 import com.kuit.conet.UI.Home.MonthPicker
@@ -22,7 +23,6 @@ import retrofit2.Response
 import kotlin.collections.ArrayList
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
-import kotlin.coroutines.suspendCoroutine
 
 class CalendarFragment : Fragment() {
 
@@ -61,20 +61,24 @@ class CalendarFragment : Fragment() {
             showDialog()
         }
 
-        CoroutineScope(Dispatchers.Main).launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             val year = today.year.toString()
             val month = if (today.month < 9) "0${today.month + 1}" else "${today.month + 1}"
 
             binding.viewCanlendar.setTitleFormatter { "${today.year}년  ${today.month + 1}월" }
-            val promiseDates = updateDate("$year-$month")
             binding.viewCanlendar.addDecorator(sundayDecorator)
+            binding.viewCanlendar.addDecorator(onedayDecorator)
+
+            val bearerAccessToken =
+                CoNetApplication.getInstance().getDataStore().bearerAccessToken.first()
+            val promiseDates = updateDate(bearerAccessToken, "$year-$month")
             eventDecorator = planDotDecorator(
                 requireContext(),
                 R.color.mainsub1,
                 promiseDates as ArrayList<Int>
             ) // 일정 있으면 날짜 밑에 점 찍기
+
             binding.viewCanlendar.addDecorator(eventDecorator)
-            binding.viewCanlendar.addDecorator(onedayDecorator)
         }
 
         val selectionDecortor = SelectionDecortor(requireContext(), R.color.purpleCircle)
@@ -92,12 +96,15 @@ class CalendarFragment : Fragment() {
 
         binding.viewCanlendar.setOnMonthChangedListener { widget, date ->
             Log.d(TAG, "CalendarFragment - calendar 월 변경 event $date")
+
             val year = date.year
             val month = if (date.month < 9) "0${date.month + 1}" else "${date.month + 1}"
             binding.viewCanlendar.setTitleFormatter { "${date.year}년  ${date.month + 1}월" }
 
-            CoroutineScope(Dispatchers.Main).launch {
-                val promiseDates = updateDate("$year-$month")
+            viewLifecycleOwner.lifecycleScope.launch {
+                val bearerAccessToken =
+                    CoNetApplication.getInstance().getDataStore().bearerAccessToken.first()
+                val promiseDates = updateDate(bearerAccessToken, "$year-$month")
                 Log.d(TAG, "CalendarFragment - 데코 지우기")
                 binding.viewCanlendar.removeDecorator(eventDecorator)
                 eventDecorator = planDotDecorator(
@@ -116,9 +123,9 @@ class CalendarFragment : Fragment() {
     }
 
     override fun onDestroyView() {
+        super.onDestroyView()
         _binding = null
         _onDateChangedListener = null
-        super.onDestroyView()
         Log.d(LIFECYCLE, "CalendarFragment - onDestroyView() called")
     }
 
@@ -137,17 +144,20 @@ class CalendarFragment : Fragment() {
             .commitAllowingStateLoss()
     }
 
-    private suspend fun updateDate(callDate: String): List<Int> {
-        val bearerAccessToken =
-            CoNetApplication.getInstance().getDataStore().bearerAccessToken.first()
+    private suspend fun updateDate(bearerAccessToken: String, callDate: String): List<Int> =
+        suspendCancellableCoroutine { continuation ->
 
-        return suspendCoroutine { continuation ->
-            Log.d(TAG, "CalendarFragment - updateDate() called\n요청 날짜 : $callDate")
-
-            RetrofitClient.homeInstance.getMonthlyPlan(
+            val call = RetrofitClient.homeInstance.getMonthlyPlan(
                 authorization = bearerAccessToken,
                 searchDate = callDate,
-            ).enqueue(object : retrofit2.Callback<ResponseGetMonthlyPlan> {
+            )
+
+            continuation.invokeOnCancellation {
+                Log.d(NETWORK, "CalendarFragment - getMonthlyPlan() 실행 취소됨")
+                call.cancel()
+            }
+
+            call.enqueue(object : retrofit2.Callback<ResponseGetMonthlyPlan> {
                 override fun onResponse(
                     call: Call<ResponseGetMonthlyPlan>,
                     response: Response<ResponseGetMonthlyPlan>
@@ -169,8 +179,8 @@ class CalendarFragment : Fragment() {
                     continuation.resumeWithException(t)
                 }
             })
+
         }
-    }
 
     private fun initUpdatePlan(today: CalendarDay) {
         binding.viewCanlendar.setTitleFormatter { "${today.year}년  ${today.month + 1}월" }

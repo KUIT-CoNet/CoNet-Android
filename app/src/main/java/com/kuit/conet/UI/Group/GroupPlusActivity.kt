@@ -30,6 +30,7 @@ import com.kuit.conet.Utils.permission.APIDetector
 import com.kuit.conet.Utils.NETWORK
 import com.kuit.conet.Utils.TAG
 import com.kuit.conet.Utils.multipart.ContentUriRequestBody
+import com.kuit.conet.Utils.view.setOnSingleClickListener
 import com.kuit.conet.data.dto.response.team.ResponseCreateGroup
 import com.kuit.conet.data.dto.response.team.ResponseUpdateGroup
 import kotlinx.coroutines.flow.first
@@ -41,25 +42,20 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Call
 import retrofit2.Response
 
-class GroupPlusActivity : AppCompatActivity(), View.OnClickListener {
+class GroupPlusActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityGroupPlusBinding
     lateinit var body: MultipartBody.Part
     private val option: Int by lazy {
-        intent.getIntExtra(
-            "option",
-            0
-        )
+        intent.getIntExtra("option", 0)
     }     // 0: 그룹 추가하기 , 1: 그룹 수정하기
     private val groupId: Long by lazy { intent.getLongExtra("groupId", 0) }
-    private var groupName: String? = null
-    private var groupImage: String? = null
     private lateinit var galleryApiDetector: APIDetector
 
     private val activityResult: ActivityResultLauncher<Intent> =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
-                Log.d(TAG, "okay")
+                Log.d(TAG, "GroupPlusActivity - 갤러리 사진 선택 결과 : 성공")
                 val uri = result.data?.data
 
                 if (uri == null) {
@@ -78,14 +74,10 @@ class GroupPlusActivity : AppCompatActivity(), View.OnClickListener {
                 //creating a file
                 val requestBody = ContentUriRequestBody(this, uri)
                 body = requestBody.toFormData("file")
-                /*val file = File(getRealFilePath(uri))
-                val requestBody: RequestBody = file.asRequestBody("image/png".toMediaTypeOrNull())
-//            val requestBody : RequestBody = file.asRequestBody("image/png".toMediaType())
-//            val requestBody: RequestBody.create(MediaType.parse("image/png"), file)
-                body = MultipartBody.Part.createFormData("file", file.name, requestBody)*/
 
-                validateFinish(groupName, groupImage)
+                validateFinish()
             } else {    // 화면 전환 후 아무것도 고르지 않고 뒤로가기를 눌렀을 때
+                Log.d(TAG, "GroupPlusActivity - 갤러리 사진 선택 결과 : 실패")
                 setImageSection(true)
             }
         }
@@ -99,8 +91,7 @@ class GroupPlusActivity : AppCompatActivity(), View.OnClickListener {
                     this,
                     "갤러리 사용이 거부 되었습니다. 설정에 들어가서 사진 사용을 허가해 주세요",
                     Toast.LENGTH_SHORT
-                )
-                    .show()
+                ).show()
             }
         }
 
@@ -111,38 +102,57 @@ class GroupPlusActivity : AppCompatActivity(), View.OnClickListener {
         Log.d(LIFECYCLE, "GroupPlusActivity - onCreate() called")
         selectOption(option = option)
 
-        binding.ivClose.setOnClickListener(this)
-        binding.imagePlusBtn.setOnClickListener(this)
-        binding.tvFinish.setOnClickListener(this)
+        binding.ivClose.setOnSingleClickListener {
+            finish()
+        }
+        binding.imagePlusBtn.setOnSingleClickListener {
+            galleryApiDetector = APIDetector(
+                this,
+                highCode = {
+                    checkGalleryPermission(Manifest.permission.READ_MEDIA_IMAGES)
+                },
+                lowCode = {
+                    checkGalleryPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+                }
+            )
+            galleryApiDetector.setThreadApi(Build.VERSION_CODES.TIRAMISU)
+            galleryApiDetector.executeCode()
+        }
+        binding.tvFinish.setOnSingleClickListener {
+            when (option) {
+                1 -> {  // 모임 수정하기
+                    val jsonString =
+                        "{\"teamId\" : ${groupId}, \"teamName\" : \"${binding.tfGroupName.text.toString()}\"}"
+                    val jsonList =
+                        jsonString.toRequestBody("application/json".toMediaTypeOrNull())
+
+                    lifecycleScope.launch {
+                        val bearerAccessToken =
+                            CoNetApplication.getInstance()
+                                .getDataStore().bearerAccessToken.first()
+                        updateGroup(bearerAccessToken, body, jsonList)
+                    }
+                }
+
+                else -> {   // 모임 생성하기
+                    val jsonString =
+                        "{\"teamName\" : \"${binding.tfGroupName.text.toString()}\"}"
+                    val jsonList =
+                        jsonString.toRequestBody("application/json".toMediaTypeOrNull())
+
+                    lifecycleScope.launch {
+                        val bearerAccessToken =
+                            CoNetApplication.getInstance()
+                                .getDataStore().bearerAccessToken.first()
+                        createGroup(bearerAccessToken, body, jsonList)
+                    }
+                }
+            }
+        }
 
         binding.tfGroupName.doAfterTextChanged {
-            val name = binding.tfGroupName.text ?: ""
-
-            if (name.count() > 20) {
-                binding.tilGroupName.error = " "
-
-                binding.tvFinish.isEnabled = false
-                binding.tvFinish.setTextColor(getColor(R.color.gray200))
-
-                binding.tvGroupNameHint.visibility = View.GONE
-            } else if (name.isEmpty()) {
-                binding.tilGroupName.error = null
-
-                binding.tvFinish.isEnabled = false
-                binding.tvFinish.setTextColor(getColor(R.color.gray200))
-
-                binding.tvGroupNameHint.visibility = View.VISIBLE
-            } else {
-                binding.tilGroupName.error = null
-
-                binding.tvFinish.isEnabled = true
-                binding.tvFinish.setTextColor(getColor(R.color.purpleMain))
-
-                binding.tvGroupNameHint.visibility = View.GONE
-
-                groupName = name.toString()
-                validateFinish(groupName, groupImage)
-            }
+            setGroupNameTextField()
+            validateFinish()
         }
 
         binding.tfGroupName.setOnFocusChangeListener { _, hasFocus ->
@@ -153,90 +163,22 @@ class GroupPlusActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
-    override fun onClick(v: View?) {
-        when (v?.id) {
-            R.id.iv_close -> finish()
-
-            R.id.tv_finish -> {
-                when (option) {
-                    1 -> {  // 모임 수정하기
-
-                        val jsonString =
-                            "{\"teamId\" : ${groupId}, \"teamName\" : \"${groupName}\"}"
-                        val jsonList =
-                            jsonString.toRequestBody("application/json".toMediaTypeOrNull())
-
-                        if (!this::body.isInitialized) {
-
-                            val imageUrl =
-                                requireNotNull(groupImage) { "GroupPlusActivity's body 초기화 안됨, groupImage's value is null" }
-
-                            body = MultipartBody.Part.createFormData(
-                                "file",
-                                "file",
-                                imageUrl.toRequestBody()
-                            )
-                        }
-
-                        lifecycleScope.launch {
-                            val bearerAccessToken =
-                                CoNetApplication.getInstance()
-                                    .getDataStore().bearerAccessToken.first()
-                            updateGroup(bearerAccessToken, body, jsonList)
-                        }
-                    }
-
-                    else -> {   // 모임 생성하기
-                        val jsonString = "{\"teamName\" : \"${groupName}\"}"
-                        val jsonList =
-                            jsonString.toRequestBody("application/json".toMediaTypeOrNull())
-
-                        lifecycleScope.launch {
-                            val bearerAccessToken =
-                                CoNetApplication.getInstance()
-                                    .getDataStore().bearerAccessToken.first()
-                            createGroup(bearerAccessToken, body, jsonList)
-                        }
-                    }
-                }
-            }
-
-            R.id.image_plus_btn -> {
-                galleryApiDetector = APIDetector(
-                    this,
-                    highCode = {
-                        checkGalleryPermission(Manifest.permission.READ_MEDIA_IMAGES)
-                    },
-                    lowCode = {
-                        checkGalleryPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
-                    }
-                )
-                galleryApiDetector.setThreadApi(Build.VERSION_CODES.TIRAMISU)
-                galleryApiDetector.executeCode()
-            }
-        }
-    }
-
     private fun selectOption(option: Int) {
         when (option) {
             1 -> {  // 모임 수정시
                 binding.tvTitle.text = "모임 수정하기"
                 binding.imagePlusBtn.text = getString(R.string.edit)
-                binding.tvFinish.isEnabled = true
-                binding.tvGroupNameHint.visibility = View.INVISIBLE
 
                 intent.apply {
-                    groupName = this.getStringExtra("groupName")
-                    groupImage = this.getStringExtra("groupImage")
+                    binding.tfGroupName.setText(this.getStringExtra("groupName"))
+                    Glide.with(this@GroupPlusActivity)
+                        .load(this.getStringExtra("groupImage"))
+                        .centerCrop()
+                        .into(binding.ivGroupPicture)
                 }
 
-                binding.tfGroupName.setText(groupName)
-                Glide.with(this@GroupPlusActivity)
-                    .load(groupImage)
-                    .centerCrop()
-                    .into(binding.ivGroupPicture)
-
-                body = MultipartBody.Part.createFormData("file", "", "".toRequestBody())
+                setGroupNameTextField()
+                validateFinish()
             }
 
             else -> {   // 모임 생성시
@@ -264,17 +206,32 @@ class GroupPlusActivity : AppCompatActivity(), View.OnClickListener {
         return super.dispatchTouchEvent(ev)
     }
 
-    private fun setImageSection(isDone: Boolean) {
+    private fun setImageSection(isDone: Boolean) =
         if (isDone) {
             binding.ivGroupPicture.setBackgroundResource(R.drawable.border_line)
             binding.llGroupPlusLoadingPicture.visibility = View.INVISIBLE
             binding.llGroupPlusInputPicture.visibility = View.VISIBLE
-            return
+        } else {
+            binding.ivGroupPicture.setBackgroundResource(R.drawable.border_dotted_line)
+            binding.llGroupPlusLoadingPicture.visibility = View.VISIBLE
+            binding.llGroupPlusInputPicture.visibility = View.INVISIBLE
         }
 
-        binding.ivGroupPicture.setBackgroundResource(R.drawable.border_dotted_line)
-        binding.llGroupPlusLoadingPicture.visibility = View.VISIBLE
-        binding.llGroupPlusInputPicture.visibility = View.INVISIBLE
+    private fun setGroupNameTextField(): Unit = when (binding.tfGroupName.text.toString().length) {
+        0 -> {
+            binding.tilGroupName.error = null
+            binding.tvGroupNameHint.visibility = View.VISIBLE
+        }
+
+        in 1..20 -> {
+            binding.tilGroupName.error = null
+            binding.tvGroupNameHint.visibility = View.GONE
+        }
+
+        else -> {
+            binding.tilGroupName.error = " "
+            binding.tvGroupNameHint.visibility = View.GONE
+        }
     }
 
     private fun executeGallery() {
@@ -315,9 +272,16 @@ class GroupPlusActivity : AppCompatActivity(), View.OnClickListener {
 
     }
 
-    private fun validateFinish(groupName: String?, groupImg: String?) {
-        binding.tvFinish.isEnabled = !(groupName.isNullOrBlank() || groupImg.isNullOrBlank())
+    private fun validateFinish() {
+        binding.tvFinish.isEnabled = validateName() && validateImage()
     }
+
+    private fun validateName(): Boolean = when (binding.tfGroupName.text.toString().length) {
+        in 1..20 -> true
+        else -> false
+    }
+
+    private fun validateImage(): Boolean = this::body.isInitialized
 
     private fun updateGroup(
         accessToken: String,

@@ -16,6 +16,8 @@ import com.kuit.conet.UI.Plan.CreatePlanActivity
 import com.kuit.conet.UI.Plan.detail.PlanListActivity
 import com.kuit.conet.UI.application.CoNetApplication
 import com.kuit.conet.Utils.*
+import com.kuit.conet.Utils.calendar.compareWithLocalDate
+import com.kuit.conet.Utils.calendar.toString
 import com.kuit.conet.databinding.ActivityGroupMainBinding
 import com.kuit.conet.data.dto.request.member.RequestPostBookmark
 import com.kuit.conet.data.dto.response.member.ResponsePostBookmark
@@ -24,13 +26,11 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Response
-import java.text.SimpleDateFormat
-import java.util.*
+import java.time.LocalDate
 
 class GroupMainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityGroupMainBinding
-    private val fragmentManager = supportFragmentManager
     private val groupId: Long by lazy { intent.getLongExtra(GroupAdapter.INTENT_GROUP_ID, 0) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -76,15 +76,6 @@ class GroupMainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        /*val todolist = Todolist(CalendarDay.today(), groupData.groupId)
-        fragmentManager.commit {
-            replace(R.id.fl_todolist, todolist)
-        }
-        CoroutineScope(Dispatchers.Main).launch {
-            todolist.waitForInit()
-            binding.tvGroupMainSelectPromiseCount.text = todolist.returnsize().toString()
-        }*/
-
         binding.llGroupMainMembers.setOnClickListener {
             val allMembersDialog = AllMembersDialog()
             allMembersDialog.arguments = Bundle().apply {
@@ -100,17 +91,15 @@ class GroupMainActivity : AppCompatActivity() {
 
         val groupCalendarFragment = GroupCalendarFragment(groupId.toInt())
         groupCalendarFragment.setOnDateChangedListener { widget, date, selected ->
-            val selectedDateString = dateString(date.date, 1)
-            val today = Date() // 오늘 날짜
-            val todayString = dateString(today, 1)
-            if (todayString == selectedDateString) {
-                binding.tvGroupMainSelectDayTitle.text = R.string.today_plan.toString()
+            val today = LocalDate.now()
+            if (date.compareWithLocalDate(today)) {
+                binding.tvGroupMainSelectDayTitle.text = getString(R.string.today_plan)
             } else {
-                binding.tvGroupMainSelectDayTitle.text = selectedDateString + "의 약속"
+                binding.tvGroupMainSelectDayTitle.text = "${date.toString(false)}의 약속"
             }
 
             val todolist = Todolist(date, groupId.toInt())
-            fragmentManager.commit {
+            supportFragmentManager.commit {
                 replace(R.id.fl_todolist, todolist)
             }
             lifecycleScope.launch {
@@ -118,21 +107,10 @@ class GroupMainActivity : AppCompatActivity() {
                 binding.tvGroupMainSelectPromiseCount.text = todolist.returnsize().toString()
             }
         }
-        fragmentManager.commit {
+
+        supportFragmentManager.commit {
             replace(R.id.fl_group_calendar, groupCalendarFragment)
         }
-    }
-
-    private fun dateString(
-        date: Date,
-        option: Int
-    ): String { // option이 1이면 m월 d일 형식, option이 2면 yyyy년 m월 d일 형식
-        val dateFormat: SimpleDateFormat = if (option == 1) {
-            SimpleDateFormat("M월 d일", Locale.getDefault())
-        } else {
-            SimpleDateFormat("yyyy년 M월 d일", Locale.getDefault())
-        }
-        return dateFormat.format(date)
     }
 
     fun showDetail(option: Int, groupId: Int) {
@@ -188,7 +166,7 @@ class GroupMainActivity : AppCompatActivity() {
                             groupData.imageUrl
                         )
 
-                        fragmentManager.commit {
+                        supportFragmentManager.commit {
                             add(R.id.fl_sidebar_menu, sideBar)
                             binding.flSidebarMenu.visibility = View.VISIBLE
                             setCustomAnimations(R.anim.to_left, R.anim.from_right)
@@ -200,9 +178,9 @@ class GroupMainActivity : AppCompatActivity() {
                             }
 
                             override fun exitSidebar() {
-                                fragmentManager.commit {
+                                supportFragmentManager.commit {
                                     val sideBarFragment =
-                                        fragmentManager.findFragmentById(R.id.fl_sidebar_menu) as SideBar
+                                        supportFragmentManager.findFragmentById(R.id.fl_sidebar_menu) as SideBar
                                     binding.flSidebarMenu.visibility = View.GONE
                                     remove(sideBarFragment)
                                 }
