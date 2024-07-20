@@ -11,12 +11,12 @@ def kakao_SDK_Appkey = properties.getProperty('kakao.app.key')
 
 android {
     namespace 'com.kuit.conet'
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "konkuk.kuit.conet"
         minSdk 28
-        targetSdk 33
+        targetSdk 34
         versionCode 6
         versionName "1.0"
 
