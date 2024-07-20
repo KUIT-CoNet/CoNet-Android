@@ -42,9 +42,8 @@ class HomeFragment : Fragment() {
 
         calendarFragment.setOnDateChangedListener { widget, date, selected ->
             val today = LocalDate.now()
-
             if (date.compareWithLocalDate(today)) {
-                binding.tvPromiseDate.text = "오늘의 약속"
+                binding.tvPromiseDate.text = getString(R.string.today_plan)
             } else {
                 binding.tvPromiseDate.text = "${date.toString(false)} 의 약속"
             }
@@ -101,17 +100,6 @@ class HomeFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         Log.d(LIFECYCLE, "HomeFragment - onDestroy() called")
-    }
-
-    private fun dateString(
-        date: Date,
-        isyear: Boolean,
-    ): String { // option이 1이면 m월 d일 형식, option이 2면 yyyy년 m월 d일 형식
-        return if (isyear) {
-            SimpleDateFormat("yyyy년 MM월 dd일", Locale.getDefault()).format(date)
-        } else {
-            SimpleDateFormat("MM월 dd일", Locale.getDefault()).format(date)
-        }
     }
 
 }
