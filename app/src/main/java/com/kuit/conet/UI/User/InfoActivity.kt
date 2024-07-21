@@ -19,6 +19,7 @@ import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.kuit.conet.*
 import com.kuit.conet.Network.RetrofitClient
+import com.kuit.conet.UI.User.NameChangeActivity.Companion.INTENT_TAG_NAME
 import com.kuit.conet.UI.application.CoNetApplication
 import com.kuit.conet.Utils.LIFECYCLE
 import com.kuit.conet.Utils.NETWORK
@@ -183,7 +184,6 @@ class InfoActivity : AppCompatActivity() {
         super.onStart()
         Log.d(LIFECYCLE, "InfoActivity: onStart called")
 
-        binding.tvInfoUsername.text = userInfo.name
         Glide.with(this)
             .load(userInfo.imgUrl)
             .placeholder(R.drawable.profile_purple)
@@ -191,6 +191,15 @@ class InfoActivity : AppCompatActivity() {
             .fallback(R.drawable.profile_purple)
             .circleCrop()
             .into(binding.ivInfoPhoto)
+
+        binding.tvInfoUsername.text = userInfo.name
+        binding.tvInfoAccount.text = userInfo.emails[0].email
+        if (userInfo.emails[0].platform == "KAKAO") {
+            binding.ivInfoKakaoBtn.setImageResource(R.drawable.btn_kakao_logo)
+        } else {
+            //카카오 아닌 계정 연결 시 다른 이미지로 변경
+            binding.ivInfoKakaoBtn.setImageResource(R.drawable.ic_error_red)
+        }
     }
 
     private fun openGallery() {

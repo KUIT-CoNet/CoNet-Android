@@ -114,6 +114,11 @@ class PlanTimeActivity : AppCompatActivity() {
         }
     }
 
+    override fun onRestart() {
+        super.onRestart()
+        onResume()
+    }
+
     override fun onResume() {
         super.onResume()
         val coroutineScope = CoroutineScope(Dispatchers.IO)

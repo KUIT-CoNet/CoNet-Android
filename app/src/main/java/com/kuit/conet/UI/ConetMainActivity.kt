@@ -18,6 +18,8 @@ class ConetMainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityKonetMainBinding
     private val fragmentManager = supportFragmentManager
 
+    private var exitMills: Long = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityKonetMainBinding.inflate(layoutInflater)
@@ -31,7 +33,7 @@ class ConetMainActivity : AppCompatActivity() {
             override fun handleOnBackPressed() {
                 val fragment = fragmentManager.findFragmentById(R.id.main_fragment)
                 if (fragment is HomeFragment) { // Home 프레그먼트에서 뒤로 가기 누르면
-                    killapp() // 앱 종료
+                    killApp() // 앱 종료
                 } else {
                     binding.mainBnv.selectedItemId = R.id.home_menu // 선택된 프레그먼트를 강제로 홈 프레그먼트로
                 }
@@ -75,10 +77,9 @@ class ConetMainActivity : AppCompatActivity() {
         }
     }
 
-    fun killapp() { // 뒤로가기 2초안에 두번 눌러야 종료되게
-        var exit_mills: Long = 0
-        if (System.currentTimeMillis() - exit_mills > 2000) { //System.currentTimeMillis()현재 시간을 밀리초로 변환한것
-            exit_mills = System.currentTimeMillis()
+    fun killApp() {
+        if (System.currentTimeMillis() - exitMills > 2000) { //System.currentTimeMillis()현재 시간을 밀리초로 변환한것
+            exitMills = System.currentTimeMillis()
             Toast.makeText(this, "뒤로 버튼을 한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT).show()
         } else {
             moveTaskToBack(true)                        // 태스크를 백그라운드로 이동
